@@ -296,7 +296,6 @@ public class MM2
         			TempN = b[b.length-1];
         			Nokori = i * (int)Frequencyss[3] + j - onecool;
         		}
-        		if(i * (int)Frequencyss[3] + j < onecool) System.out.println(b[(int) (i * (int)Frequencyss[3] + j)]);
         	}
 			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
 		}

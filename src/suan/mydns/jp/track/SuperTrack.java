@@ -9,9 +9,10 @@ public abstract class SuperTrack
 {
 	public ArrayList<Byte	> Volume = new ArrayList<>();
 	public ArrayList<Double	> Freque = new ArrayList<>();
+	public ArrayList<Integer> FrequI = new ArrayList<>();
 	public ArrayList<Long	> Time	 = new ArrayList<>();
 	public ArrayList<Integer> SoundT = new ArrayList<>();
-	public ArrayList<Integer> Duty	 = new ArrayList<>();
+	public ArrayList<Float	> Duty	 = new ArrayList<>();
 	public ArrayList<Double	> Voldow = new ArrayList<>();
 	public ArrayList<Double	> Fredow = new ArrayList<>();
 	public int ShiftX = 0;
@@ -24,11 +25,12 @@ public abstract class SuperTrack
 	protected boolean OnpuSet = false;
 	protected boolean OnpuSet2 = false;
 	protected String OnpuSetA = "4";
-	protected String[] Param = {"16", "0.0", "0.0", "1.0"};
-	protected String[] ParamName = {"Volume", "Frequency", "VolChange", "FreChange"};
-	protected boolean[] ParamB = {false, false, false, false};
+	protected String[] Param = {"16", "0.0", "0.0", "1.0", "140.0"};
+	protected String[] ParamName = {"Volume", "Frequency", "VolChange", "FreChange", "Tempo"};
+	protected boolean[] ParamB = {false, false, false, false, false};
 	protected byte Vol = 16;
 	protected double Fre = 0.0, VolD = 0.0, FreD = 1.0;
+	protected double Tempo = 140.0;
 
 	public void Draw(Thoone th)
 	{
@@ -36,13 +38,39 @@ public abstract class SuperTrack
 		th.rect(1280/6, 720/4, 1280/6*5, 720/4*3);
 	}
 
+	protected void Music(Thoone th)
+	{
+		for(int i = 0; i < this.Volume.size(); i++)
+		{
+			th.fill(0x00, 0xFF, 0x00);
+			th.rect((this.Time.get(i) + 1280/6 + 60)/th.mm2.HzMu + this.ShiftX, this.FrequI.get(i)*-20+this.ShiftY-20, (1280/6.0f)*(this.SoundT.get(i)/((60.0f/(float)this.Tempo)*th.mm2.HzMu*4)), 20);
+		}
+	}
+
+	private boolean Clicked = false;
+
+	protected void Norts(Thoone th, int i, int j, int Channel)
+	{
+		if(!Clicked && th.kmState.MLeft)
+		{
+			this.Volume.add(this.Vol);
+			this.Freque.add(th.mm2.Sn[j][i] + this.Fre);
+			this.FrequI.add(i+j*12);
+			this.Time.add((long)((th.kmState.Mouse[0]-60-1280/6)*th.mm2.HzMu-this.ShiftX));
+			this.SoundT.add((int) ((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag));
+			this.Duty.add(this.fr[Channel == 3 ? 1 : 0][this.freq]);
+			this.Voldow.add(this.VolD);
+			this.Fredow.add(this.FreD);
+
+			Clicked = true;
+		}
+	}
+
 	protected void Mouse(Thoone th)
 	{
 		if(th.kmState.IsMouseIn(1280/6+60, 720/4, 1280/6*5-60, 720/4*3))
 		{
 			int i = (th.kmState.Mouse[0]+(this.ShiftX+60))/(1280/6/Nag)*(1280/6/Nag);
-			System.out.println(th.kmState.Mouse[0]-60+this.ShiftX);
-			System.err.println(i);
 			th.fill(0xFF, 0x90, 0x90);
 			th.rect(i, (th.kmState.Mouse[1]/20)*20, 1280/6/Nag, 20);
 		}
@@ -50,28 +78,28 @@ public abstract class SuperTrack
 
 	protected void parameter(Thoone th)
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 5; i++)
 		{
 			th.fill(255);
-			if(th.kmState.IsMouseIn(1280/6*4+1280/12*i, 720/8, 1280/12, 720/8))
+			if(th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
 			{
 				th.fill(0xFF, 0x00, 0x00);
 			}
-			if(this.ParamB[i] && th.kmState.IsMouseIn(1280/6*4+1280/12*i, 720/8, 1280/12, 720/8))
+			if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
 			{
 				th.fill(0x00, 0xFF, 0x00);
 			}
-			th.rect(1280/6*4+1280/12*i, 720/8, 1280/12, 720/8);
+			th.rect(1280/12*(i+7), 720/8, 1280/12, 720/8);
 			th.fill(0);
 			th.textSize(15);
-			th.text(this.ParamName[i] + "\n" + this.Param[i], 1280/6*4+1280/12*i+10, 720/8 + 20);
+			th.text(this.ParamName[i] + "\n" + this.Param[i], 1280/12*(i+7)+10, 720/8 + 20);
 
-			if(th.kmState.MLeft && !this.ParamB[i] && th.kmState.IsMouseIn(1280/6*4+1280/12*i, 720/8, 1280/12, 720/8))
+			if(th.kmState.MLeft && !this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
 			{
 				this.ParamB[i] = true;
 				this.Param[i] = "";
 			}
-			else if(this.ParamB[i] && th.kmState.IsMouseIn(1280/6*4+1280/12*i, 720/8, 1280/12, 720/8))
+			else if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
 			{
 				if(!this.OnpuSet2 && th.keyPressed)
 				{
@@ -119,6 +147,9 @@ public abstract class SuperTrack
 						break;
 					case 3:
 						this.FreD = Double.parseDouble(this.Param[i]);
+						break;
+					case 4:
+						this.Tempo = Double.parseDouble(this.Param[i]);
 						break;
 					}
 				}
@@ -197,6 +228,9 @@ public abstract class SuperTrack
 				th.text(Math.abs(this.ShiftX/(1280/6))+k, 1280/6*(k+1)+60+this.ShiftX%(1280/6), 720/4+20);
 			}
 		}
+
+		this.Music(th);
+
 		th.fill(0x00, 0xFF, 0x00);
 		th.rect(1280/6, 720/4, 60, 720/4*3);
 
@@ -213,12 +247,14 @@ public abstract class SuperTrack
 					{
 						music = true;
 						th.mm2.ChStat(th.mm2.Sn[j][i] + this.Fre, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel);
+						this.Norts(th, i, j, Channel);
 					}
 				}
 			}
 		}
 		if(!music && th.kmState.IsMouseIn(1280/6, 720/4, 1280/6*5, 750/4*3))
 		{
+			this.Clicked = false;
 			temp = R.nextInt(50)+2;
 			th.mm2.ChStat(Channel == 3 ? 0 : -1, 0.5f, 16, 0, 0, false, 1, Channel);
 		}
