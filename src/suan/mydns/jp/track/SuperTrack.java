@@ -43,7 +43,7 @@ public abstract class SuperTrack
 		for(int i = 0; i < this.Volume.size(); i++)
 		{
 			th.fill(0x00, 0xFF, 0x00);
-			th.rect((this.Time.get(i) + 1280/6 + 60)/th.mm2.HzMu + this.ShiftX, this.FrequI.get(i)*-20+this.ShiftY-20, (1280/6.0f)*(this.SoundT.get(i)/((60.0f/(float)this.Tempo)*th.mm2.HzMu*4)), 20);
+			th.rect(this.Time.get(i)/this.SoundT.get(i) + 1280/6 + 60 + this.ShiftX, this.FrequI.get(i)*-20+this.ShiftY-20, (1280/6.0f)*(this.SoundT.get(i)/((60.0f/(float)this.Tempo)*th.mm2.HzMu*4)), 20);
 		}
 	}
 
@@ -51,12 +51,26 @@ public abstract class SuperTrack
 
 	protected void Norts(Thoone th, int i, int j, int Channel)
 	{
-		if(!Clicked && th.kmState.MLeft)
+		if(!Clicked && th.kmState.MLeft && th.kmState.IsMouseIn(1280/6+60, 720/4, 1280/6*5-60, 720/4*3))
 		{
+			int a = (th.kmState.Mouse[0]-1280/6-60+this.ShiftX);
+			int k = this.ShiftX/(1280/6)*this.Nag;
+			while(true)
+			{
+				if(k*(1280/6)/Nag <= a && (k+1)*(1280/6)/Nag > a)
+				{
+					System.out.println(k);
+					break;
+				}
+				k++;
+			}
+			long b = (long) ((k/**(1280/6.0)/Nag*/)*((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag));
+			System.out.println(b + " " + (60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag);
+
 			this.Volume.add(this.Vol);
 			this.Freque.add(th.mm2.Sn[j][i] + this.Fre);
 			this.FrequI.add(i+j*12);
-			this.Time.add((long)((th.kmState.Mouse[0]-60-1280/6)*th.mm2.HzMu-this.ShiftX));
+			this.Time.add((long)(b));
 			this.SoundT.add((int) ((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag));
 			this.Duty.add(this.fr[Channel == 3 ? 1 : 0][this.freq]);
 			this.Voldow.add(this.VolD);
@@ -66,13 +80,22 @@ public abstract class SuperTrack
 		}
 	}
 
+	protected int shift = 0;
+
 	protected void Mouse(Thoone th)
 	{
 		if(th.kmState.IsMouseIn(1280/6+60, 720/4, 1280/6*5-60, 720/4*3))
 		{
-			int i = (th.kmState.Mouse[0]+(this.ShiftX+60))/(1280/6/Nag)*(1280/6/Nag);
+			int i = (th.kmState.Mouse[0]-1280/6-60+this.ShiftX);
+			int k = this.ShiftX/(1280/6)*this.Nag;
+			while(true)
+			{
+				if(k*(1280/6)/Nag <= i && (k+1)*(1280/6)/Nag > i) break;
+				k++;
+			}
+			int j = k*(1280/6)/Nag+1280/6+60-this.ShiftX;
 			th.fill(0xFF, 0x90, 0x90);
-			th.rect(i, (th.kmState.Mouse[1]/20)*20, 1280/6/Nag, 20);
+			th.rect(j, (th.kmState.Mouse[1]/20)*20, 1280/6/Nag, 20);
 		}
 	}
 

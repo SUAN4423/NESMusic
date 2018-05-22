@@ -3,6 +3,7 @@ package suan.mydns.jp;
 import processing.core.PApplet;
 import suan.mydns.jp.channel.Channel;
 import suan.mydns.jp.music.MM2;
+import suan.mydns.jp.music.MSTART;
 import suan.mydns.jp.state.KMState;
 import suan.mydns.jp.track.FourCh;
 import suan.mydns.jp.track.OneCh;
@@ -16,6 +17,7 @@ public class Thoone extends PApplet
 	public KMState kmState = new KMState(this);
 	public Channel ch = new Channel();
 	public SuperTrack[] SPT = new SuperTrack[4];
+	public MSTART musics = new MSTART();
 
 	public static void main(String[] args)
 	{
@@ -45,8 +47,13 @@ public class Thoone extends PApplet
 		rect(0, 0, 1280, 720);
 		SPT[ch.GetChannel()].Draw(this);
 		ch.Draw(this);
+		musics.Play(this);
 		kmState.Mouse[0] = this.mouseX;
 		kmState.Mouse[1] = this.mouseY;
+		if(this.kmState.KeyC.get(' '))
+		{
+			this.musics.start = true;
+		}
 	}
 
 	@Override
