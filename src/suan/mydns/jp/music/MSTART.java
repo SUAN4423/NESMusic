@@ -8,7 +8,7 @@ public class MSTART
 	private boolean starts = false;
 	private long starttime = 0;
 	private long time = 0;
-	private int[] nowNotes = {0, 0, 0, 0};
+	public int[] nowNotes = {0, 0, 0, 0};
 
 	public void Play(Thoone th)
 	{

@@ -30,7 +30,7 @@ public abstract class SuperTrack
 	protected boolean[] ParamB = {false, false, false, false, false};
 	protected byte Vol = 16;
 	protected double Fre = 0.0, VolD = 0.0, FreD = 1.0;
-	protected double Tempo = 140.0;
+	public double Tempo = 140.0;
 
 	public void Draw(Thoone th)
 	{
