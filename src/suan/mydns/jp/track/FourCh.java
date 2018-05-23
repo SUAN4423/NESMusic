@@ -33,7 +33,7 @@ public class FourCh extends SuperTrack
 		}
 		if(!music && th.kmState.IsMouseIn(1280/6, 0, 1280/6*2, 720/8))
 		{
-			th.mm2.ChStat(0, 0.0f, 16, 0, 1, false, 1, 3);
+			if(!th.musics.start) th.mm2.ChStat(0, 0.0f, 16, 0, 1, false, 1, 3);
 		}
 
 		this.Shift(th);
@@ -49,12 +49,15 @@ public class FourCh extends SuperTrack
 			for(int k = -1; k < 6; k++)
 			{
 				th.fill(0xF0, 0xF0, 0xF0);
-				th.rect(1280/6*(k+1)+60+this.ShiftX%(1280/6), (j+1)*12*-20+this.ShiftY, 1280/6, 12*20);
+				th.rect(1280/6*(k+1)+60-Math.abs(this.ShiftX)%(1280/6), (j+1)*12*-20+this.ShiftY, 1280/6, 12*20);
 				th.fill(0);
 				th.textSize(20);
 				th.text(Math.abs(this.ShiftX/(1280/6))+k, 1280/6*(k+1)+60+this.ShiftX%(1280/6), 720/4+20);
 			}
 		}
+
+		this.Music(th);
+
 		th.fill(0x00, 0xFF, 0x00);
 		th.rect(1280/6, 720/4, 60, 720/4*3);
 
@@ -71,14 +74,23 @@ public class FourCh extends SuperTrack
 					{
 						music = true;
 						th.mm2.ChStat(i + j * 12, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel);
+						this.Norts(th, i, j, Channel);
+					}
+				}
+				if(th.kmState.MRight && (i+1+j*12)*-20+this.ShiftY + 20 > 720 / 4)
+				{
+					if(th.kmState.IsMouseIn(1280/6, (i+1+j*12)*-20+this.ShiftY, 1280/6*5, 20))
+					{
+						this.Norts(th, i, j, Channel);
 					}
 				}
 			}
 		}
 		if(!music && th.kmState.IsMouseIn(1280/6, 720/4, 1280/6*5, 750/4*3))
 		{
+			this.Clicked = false;
 			temp = R.nextInt(50)+2;
-			th.mm2.ChStat(Channel == 3 ? 0 : -1, 0.5f, this.Vol, this.VolD, this.FreD, true, temp, Channel);
+			if(!th.musics.start) th.mm2.ChStat(Channel == 3 ? 0 : -1, 0.5f, this.Vol, this.VolD, this.FreD, true, temp, Channel);
 		}
 
 		th.fill(255);

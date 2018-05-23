@@ -32,7 +32,7 @@ public class TwoCh extends SuperTrack
 		}
 		if(!music && th.kmState.IsMouseIn(1280/6, 0, 1280/6*4, 720/8))
 		{
-			th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, 1, 1);
+			if(!th.musics.start) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, 1, 1);
 		}
 
 		this.Shift(th);

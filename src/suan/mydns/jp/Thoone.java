@@ -5,6 +5,7 @@ import suan.mydns.jp.channel.Channel;
 import suan.mydns.jp.music.MM2;
 import suan.mydns.jp.music.MSTART;
 import suan.mydns.jp.state.KMState;
+import suan.mydns.jp.state.Sort;
 import suan.mydns.jp.track.FourCh;
 import suan.mydns.jp.track.OneCh;
 import suan.mydns.jp.track.SuperTrack;
@@ -18,6 +19,7 @@ public class Thoone extends PApplet
 	public Channel ch = new Channel();
 	public SuperTrack[] SPT = new SuperTrack[4];
 	public MSTART musics = new MSTART();
+	public Sort sort = new Sort();
 
 	public static void main(String[] args)
 	{
@@ -46,6 +48,7 @@ public class Thoone extends PApplet
 		fill(255);
 		rect(0, 0, 1280, 720);
 		SPT[ch.GetChannel()].Draw(this);
+		sort.Draw(this);
 		ch.Draw(this);
 		musics.Play(this);
 		kmState.Mouse[0] = this.mouseX;

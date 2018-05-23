@@ -31,7 +31,6 @@ public class MSTART
 				if(this.nowNotes[i] < th.SPT[i].Volume.size())
 				{
 					b = true;
-					System.out.println(th.SPT[i].Time.get(this.nowNotes[i]) + " " + this.time);
 					if(th.SPT[i].Time.get(this.nowNotes[i]) <= this.time)
 					{
 						th.mm2.ChStat(th.SPT[i].Freque.get(this.nowNotes[i]), th.SPT[i].Duty.get(this.nowNotes[i]), th.SPT[i].Volume.get(this.nowNotes[i]), th.SPT[i].Voldow.get(this.nowNotes[i]), th.SPT[i].Fredow.get(this.nowNotes[i]), true, this.nowNotes[i], i);
@@ -44,6 +43,10 @@ public class MSTART
 					{
 						th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i);
 					}
+				}
+				else
+				{
+					th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i);
 				}
 			}
 			if(!b)
