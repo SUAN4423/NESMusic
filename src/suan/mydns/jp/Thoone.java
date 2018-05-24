@@ -5,6 +5,7 @@ import suan.mydns.jp.channel.Channel;
 import suan.mydns.jp.io.SaveLoad;
 import suan.mydns.jp.music.MM2;
 import suan.mydns.jp.music.MSTART;
+import suan.mydns.jp.state.DeleteOverlap;
 import suan.mydns.jp.state.KMState;
 import suan.mydns.jp.state.Sort;
 import suan.mydns.jp.track.FourCh;
@@ -22,6 +23,7 @@ public class Thoone extends PApplet
 	public MSTART musics = new MSTART();
 	public Sort sort = new Sort();
 	public SaveLoad sl = new SaveLoad();
+	public DeleteOverlap DO = new DeleteOverlap();
 	private boolean pressed = false;
 
 	public static void main(String[] args)
@@ -52,6 +54,7 @@ public class Thoone extends PApplet
 		rect(0, 0, 1280, 720);
 		SPT[ch.GetChannel()].Draw(this);
 		sort.Draw(this);
+		DO.Draw(this);
 		sl.Draw(this);
 		ch.Draw(this);
 		musics.Play(this);
