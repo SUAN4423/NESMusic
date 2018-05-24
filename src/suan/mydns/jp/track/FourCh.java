@@ -17,13 +17,13 @@ public class FourCh extends SuperTrack
 		{
 			th.fill(255);
 			if(freq == i) th.fill(0xFF, 0x20, 0x00);
-			th.rect(1280/6*(i+1), 0, 1280/6, 720/8);
+			th.rect(1280/12*(i+2), 0, 1280/12, 720/8);
 			th.textSize(25);
 			th.fill(0);
-			th.text(Dutys[1][i], 1280/6*(i+1)+20, 720/8/2+10);
+			th.text(Dutys[1][i], 1280/12*(i+2)+20, 720/8/2+10);
 			if(th.kmState.MLeft)
 			{
-				if(th.kmState.IsMouseIn(1280/6*(i+1), 0, 1280/6, 720/8))
+				if(th.kmState.IsMouseIn(1280/12*(i+2), 0, 1280/12, 720/8))
 				{
 					music = true;
 					freq = i;
