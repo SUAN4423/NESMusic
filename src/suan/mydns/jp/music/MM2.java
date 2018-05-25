@@ -81,13 +81,13 @@ public class MM2
 		T5.scheduleAtFixedRate(new Audio4Task(), 0, 1000 / (HzMu / onecool));
 	}
 
-	private double[] MFreq = {0, 0, 0, 0};
-	private float[] MDuty = {0f, 0f, 0f, 0f};
-	private byte[] MVolu = {0, 0, 0, 0};
-	private double[] MVDow = {0, 0, 0, 0};
-	private double[] MModu = {0, 0, 0, 0};
-	private boolean[] MMEna = {false, false, false, false};
-	private byte[] MNumb = {0, 0, 0, 0};
+	double[] MFreq = {0, 0, 0, 0};
+	float[] MDuty = {0f, 0f, 0f, 0f};
+	byte[] MVolu = {0, 0, 0, 0};
+	double[] MVDow = {0, 0, 0, 0};
+	double[] MModu = {0, 0, 0, 0};
+	boolean[] MMEna = {false, false, false, false};
+	byte[] MNumb = {0, 0, 0, 0};
 	private long Tempsample = 0;
 
 	public void ChStat(double Fr, float Du, int Vo, double VD, double Mo, boolean ME, int Nu, int Ch)

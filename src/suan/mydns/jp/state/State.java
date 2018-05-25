@@ -1,6 +1,8 @@
 package suan.mydns.jp.state;
 
+import processing.core.PApplet;
 import suan.mydns.jp.Thoone;
+import suan.mydns.jp.music.Wave;
 
 public class State
 {
@@ -18,9 +20,32 @@ public class State
 	private boolean pressed = false;
 	private boolean sub_pressed = false;
 	private String NortsStr = "1.0";
+	private boolean keypressed = false;
+	private boolean wave = false;
+	public static Wave wv;
 
 	public void Draw(Thoone th)
 	{
+		if(th.kmState.Key.get(114) && !keypressed)
+		{
+			keypressed = true;
+			if(!wave)
+			{
+				wave = true;
+				PApplet.main("suan.mydns.jp.music.Wave");
+				Wave.th = th;
+			}
+			else
+			{
+				wv.changeVisible();
+			}
+			if(Wave.Visible) th.kmState.Key.put(114, false);
+		}
+		else if(!th.kmState.Key.get(114) && keypressed)
+		{
+			keypressed = false;
+		}
+
 		th.fill(255);
 		if(th.kmState.IsMouseIn(1280/6*4, 0, 1280/12, 720/8))
 		{
