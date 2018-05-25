@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import suan.mydns.jp.Thoone;
+import suan.mydns.jp.state.State;
 
 public abstract class SuperTrack
 {
@@ -25,7 +26,7 @@ public abstract class SuperTrack
 	protected boolean OnpuSet = false;
 	protected boolean OnpuSet2 = false;
 	protected String OnpuSetA = "4";
-	protected String[] Param = {"16", "0.0", "0.0", "1.0", "140.0"};
+	public String[] Param = {"16", "0.0", "0.0", "1.0", "140.0"};
 	protected String[] ParamName = {"Volume", "Frequency", "VolChange", "FreChange", "Tempo"};
 	protected boolean[] ParamB = {false, false, false, false, false};
 	protected byte Vol = 16;
@@ -74,7 +75,7 @@ public abstract class SuperTrack
 			else this.Freque.add(i+j*12 + this.Fre);
 			this.FrequI.add(i+j*12);
 			this.Time.add((long)(b));
-			this.SoundT.add((int) ((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag));
+			this.SoundT.add((int) (((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag)*State.NortsSize));
 			this.Duty.add(this.fr[Channel == 3 ? 1 : 0][this.freq]);
 			this.Voldow.add(this.VolD);
 			this.Fredow.add(this.FreD);
@@ -100,7 +101,7 @@ public abstract class SuperTrack
 
 			for(int n = 0; n < this.Volume.size(); n++)
 			{
-				if(this.Time.get(n) == b)
+				if(this.Time.get(n).equals(b))
 				{
 					this.Volume.remove(n);
 					this.Freque.remove(n);
@@ -134,7 +135,7 @@ public abstract class SuperTrack
 			long b = (long) ((k)*((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag));
 
 			th.fill(0xFF, 0x90, 0x90);
-			th.rect(b/((60.0f / (float)this.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + this.ShiftX, (th.kmState.Mouse[1]/20)*20, 1280/6/Nag, 20);
+			th.rect(b/((60.0f / (float)this.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + this.ShiftX, (th.kmState.Mouse[1]/20)*20, (float)((1280/6/Nag)*State.NortsSize), 20);
 		}
 	}
 
@@ -212,6 +213,7 @@ public abstract class SuperTrack
 						break;
 					case 4:
 						this.Tempo = Double.parseDouble(this.Param[i]);
+						th.state.TempoSet(th, this.Tempo);
 						break;
 					}
 				}

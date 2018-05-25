@@ -118,6 +118,7 @@ public class SaveLoad
 				th.SPT[i].Tempo = Double.parseDouble(str);
 				str = br.readLine();
 			}
+			th.state.TempoSet(th, th.SPT[0].Tempo);
 
 			while(str != null)
 			{
