@@ -199,7 +199,7 @@ public class MM2
 		{
 			Frequencyss[Ch - 1] = Frequency;
 			Numbers[Ch - 1] = 0;
-			Volumes[Ch - 1] = (VolumeR+0.999) * 1.0;
+			Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
 		}
 		for(int i = 0; i < b.length; i++)
         {
@@ -279,7 +279,7 @@ public class MM2
 			Nokori = 0;
 			Frequencyss[3] = Frequency;
 			Numbers[3] = 0;
-			Volumes[3] = (VolumeR+0.999) * 1.0;
+			Volumes[3] = (VolumeR+0.5) * 1.0;
 		}
 
 		for(int i = (int) (Nokori / Frequencyss[3]); i < b.length / Frequencyss[3]; i++)
