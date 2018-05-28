@@ -73,6 +73,8 @@ public class Thoone extends PApplet
 				{
 					this.musics.nowNotes[i] = 0;
 				}
+				this.mm2.resk = true;
+				this.mm2.resktime = System.currentTimeMillis();
 			}
 		}
 		else if(pressed && !this.kmState.KeyC.get(' '))
@@ -83,6 +85,7 @@ public class Thoone extends PApplet
 			}
 			pressed = false;
 		}
+		if(this.mm2.resk && System.currentTimeMillis() - this.mm2.resktime > 100) this.mm2.resk = false;
 	}
 
 	@Override

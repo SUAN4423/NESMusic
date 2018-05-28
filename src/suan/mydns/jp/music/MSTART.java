@@ -87,6 +87,12 @@ public class MSTART
 						{
 							th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i);
 						}
+						for(int i = 0; i < 4; i++)
+						{
+							nowNotes[i] = 0;
+						}
+						th.mm2.resk = true;
+						th.mm2.resktime = System.currentTimeMillis();
 						start = false;
 						this.cancel();
 					}

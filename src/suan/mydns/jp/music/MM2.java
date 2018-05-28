@@ -19,6 +19,9 @@ public class MM2
 	public static SourceDataLine Th = null;
 	public static SourceDataLine Fo = null;
 
+	public boolean resk = false;
+	public long resktime = 0;
+
 	public static int HzMu = 48000;
 
 	public static int onecool = 480;
@@ -138,7 +141,7 @@ public class MM2
 		public void run()
 		{
 			// TODO 自動生成されたメソッド・スタブ
-			On.write(Square(Frequencys[0], Dutys[0], Volume[0], VDown[0], Mod[0], Mods[0], MNum[0], (byte)1), 0, onecool);
+			if(!resk) On.write(Square(Frequencys[0], Dutys[0], Volume[0], VDown[0], Mod[0], Mods[0], MNum[0], (byte)1), 0, onecool);
 		}
 	}
 
@@ -148,7 +151,7 @@ public class MM2
 		public void run()
 		{
 			// TODO 自動生成されたメソッド・スタブ
-			Tw.write(Square(Frequencys[1], Dutys[1], Volume[1], VDown[1], Mod[1], Mods[1], MNum[1], (byte)2), 0, onecool);
+			if(!resk) Tw.write(Square(Frequencys[1], Dutys[1], Volume[1], VDown[1], Mod[1], Mods[1], MNum[1], (byte)2), 0, onecool);
 		}
 	}
 
@@ -158,7 +161,7 @@ public class MM2
 		public void run()
 		{
 			// TODO 自動生成されたメソッド・スタブ
-			Th.write(Triangle(Frequencys[2], Dutys[2], Volume[2], VDown[2], Mod[2], Mods[2], MNum[2], (byte)3), 0, onecool);
+			if(!resk) Th.write(Triangle(Frequencys[2], Dutys[2], Volume[2], VDown[2], Mod[2], Mods[2], MNum[2], (byte)3), 0, onecool);
 		}
 	}
 
@@ -168,7 +171,7 @@ public class MM2
 		public void run()
 		{
 			// TODO 自動生成されたメソッド・スタブ
-			Fo.write(Noise(Frequencys[3], Dutys[3], Volume[3], VDown[3], Mod[3], Mods[3], MNum[3], (byte)4), 0, onecool);
+			if(!resk) Fo.write(Noise(Frequencys[3], Dutys[3], Volume[3], VDown[3], Mod[3], Mods[3], MNum[3], (byte)4), 0, onecool);
 		}
 	}
 
