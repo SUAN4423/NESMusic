@@ -162,4 +162,75 @@ public class SaveLoad
 		}
 		this.time[1] = System.currentTimeMillis();
 	}
+
+	public void Load(Thoone th, String path)
+	{
+		File file = new File(path);
+		BufferedReader br = null;
+		String str = null;
+		try
+		{
+			br = new BufferedReader(new FileReader(file));
+			str = br.readLine();
+			for(int i = 0; i < 4; i++)
+			{
+				th.SPT[i].Tempo = Double.parseDouble(str);
+				str = br.readLine();
+			}
+			th.state.TempoSet(th, th.SPT[0].Tempo);
+
+			for(int i = 0; i < 4; i++)
+			{
+				th.SPT[i].Volume.clear();
+				th.SPT[i].Freque.clear();
+				th.SPT[i].FrequI.clear();
+				th.SPT[i].Time.clear();
+				th.SPT[i].SoundT.clear();
+				th.SPT[i].Duty.clear();
+				th.SPT[i].Voldow.clear();
+				th.SPT[i].Fredow.clear();
+			}
+
+			while(str != null)
+			{
+				int a = Integer.parseInt(str.substring(0, str.indexOf(",")));
+				int b = str.indexOf(",");
+				int c = Integer.parseInt(str.substring(b+1, str.indexOf(",", b+1)));
+				b = str.indexOf(",", b+1);
+				double d = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+				b = str.indexOf(",", b+1);
+				int e = Integer.parseInt(str.substring(b+1, str.indexOf(",", b+1)));
+				b = str.indexOf(",", b+1);
+				long f = Long.parseLong(str.substring(b+1, str.indexOf(",", b+1)));
+				b = str.indexOf(",", b+1);
+				int g = Integer.parseInt(str.substring(b+1, str.indexOf(",", b+1)));
+				b = str.indexOf(",", b+1);
+				double h = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+				b = str.indexOf(",", b+1);
+				double i = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+				b = str.indexOf(",", b+1);
+				double j = Double.parseDouble(str.substring(b+1));
+
+				th.SPT[a].Volume.add((byte)c);
+				th.SPT[a].Freque.add(d);
+				th.SPT[a].FrequI.add(e);
+				th.SPT[a].Time.add(f);
+				th.SPT[a].SoundT.add(g);
+				th.SPT[a].Duty.add((float)h);
+				th.SPT[a].Voldow.add(i);
+				th.SPT[a].Fredow.add(j);
+
+				str = br.readLine();
+			}
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		this.time[1] = System.currentTimeMillis();
+	}
 }
