@@ -13,6 +13,8 @@ public class MSTART
 	private long time = 0;
 	public int[] nowNotes = {0, 0, 0, 0};
 	private Thoone th;
+	private boolean pressed = false;
+	private boolean autoMove = false;
 
 	public void Play(Thoone th)
 	{
@@ -32,12 +34,51 @@ public class MSTART
 				T2.scheduleAtFixedRate(new AudioTask(), 0, 1000 / (th.mm2.HzMu / th.mm2.onecool));
 			}
 
+			if(this.autoMove)
+			{
+				if(time/((60.0f / (float)th.SPT[th.ch.GetChannel()].Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + th.SPT[th.ch.GetChannel()].ShiftX < 1280/6 + 60)
+				{
+					th.SPT[th.ch.GetChannel()].ShiftX += 1280/6*4;
+					if(th.SPT[th.ch.GetChannel()].ShiftX > 0) th.SPT[th.ch.GetChannel()].ShiftX = 0;
+				}
+				else if(time/((60.0f / (float)th.SPT[th.ch.GetChannel()].Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + th.SPT[th.ch.GetChannel()].ShiftX > 1280)
+				{
+					th.SPT[th.ch.GetChannel()].ShiftX -= 1280/6*4;
+				}
+			}
+
 			th.rect(time/((60.0f / (float)th.SPT[th.ch.GetChannel()].Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + th.SPT[th.ch.GetChannel()].ShiftX, 720/4, 0, 720/4*3);
 		}
 		else if(this.starts)
 		{
 			this.starts = false;
 		}
+	}
+
+	public void Draw(Thoone th)
+	{
+		th.fill(0xFF);
+		if(th.kmState.IsMouseIn(1280/3, 720/8, 1280/12, 720/8))
+		{
+			th.fill(0xFF, 0x00, 0x00);
+			if(th.kmState.MLeft && !this.pressed)
+			{
+				this.pressed = true;
+				this.autoMove = !this.autoMove;
+			}
+			else if(!th.kmState.MLeft && this.pressed)
+			{
+				this.pressed = false;
+			}
+		}
+		else if(this.autoMove)
+		{
+			th.fill(0x00, 0xFF, 0x00);
+		}
+		th.rect(1280/3, 720/8, 1280/12, 720/8);
+		th.fill(0);
+		th.textSize(20);
+		th.text("Auto\nScroll", 1280/3+10, 720/8+25);
 	}
 
 	class AudioTask extends TimerTask

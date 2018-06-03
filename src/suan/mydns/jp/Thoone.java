@@ -120,6 +120,7 @@ public class Thoone extends PApplet
 		sl.Draw(this);
 		ch.Draw(this);
 		mv.Draw(this);
+		musics.Draw(this);
 		musics.Play(this);
 		kmState.Mouse[0] = this.mouseX;
 		kmState.Mouse[1] = this.mouseY;

@@ -13,20 +13,23 @@ public class Move
 
 	public void move(Thoone th, SuperTrack st)
 	{
-		int a = (th.kmState.Mouse[0]-1280/6-60-st.ShiftX);
-		int k = -st.ShiftX/(1280/6)*st.Nag;
-		while(true)
+		long b = 0;
+		if(th.kmState.IsMouseIn(1280/6, 720/3, 1280/6*5, 720/3*2))
 		{
-			if(k*(1280/6)/st.Nag <= a && (k+1)*(1280/6)/st.Nag > a)
+			int a = (th.kmState.Mouse[0]-1280/6-60-st.ShiftX);
+			int k = -st.ShiftX/(1280/6)*st.Nag;
+			while(true)
 			{
-				break;
+				if(k*(1280/6)/st.Nag <= a && (k+1)*(1280/6)/st.Nag > a)
+				{
+					break;
+				}
+				k++;
 			}
-			k++;
+			b = (long) ((k)*((60.0 / st.Tempo) * th.mm2.HzMu * 4 / st.Nag));
 		}
-		long b = (long) ((k)*((60.0 / st.Tempo) * th.mm2.HzMu * 4 / st.Nag));
 
-
-		if(th.kmState.IsMouseIn((int)(x[0]/((60.0f / (float)st.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + st.ShiftX), 720/4, (int)((x[1] - x[0])/((60.0f / (float)st.Tempo) * th.mm2.HzMu * 4) * (1280 / 6)), 720/4*3))
+		if(!this.first && th.kmState.IsMouseIn((int)(x[0]/((60.0f / (float)st.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + st.ShiftX), 720/4, (int)((x[1] - x[0])/((60.0f / (float)st.Tempo) * th.mm2.HzMu * 4) * (1280 / 6)), 720/4*3))
 		{
 
 		}
@@ -34,6 +37,7 @@ public class Move
 		{
 			if(th.kmState.MLeft)
 			{
+
 				if(!this.first)
 				{
 					this.first = true;
