@@ -22,7 +22,7 @@ public abstract class SuperTrack
 	int freq = 0;
 	String[][] Dutys = {{"1:7", "1:3", "1:1", "3:1"},{"Long", "Short", "", ""}};
 	float[][] fr = {{0.125f, 0.25f, 0.5f, 0.75f},{0.0f, 1.0f, 0.0f, 0.0f}};
-	int Nag = 4;
+	public int Nag = 4;
 	protected boolean OnpuSet = false;
 	protected boolean OnpuSet2 = false;
 	protected String OnpuSetA = "4";
@@ -136,6 +136,7 @@ public abstract class SuperTrack
 
 			th.fill(0xFF, 0x90, 0x90);
 			th.rect(b/((60.0f / (float)this.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + this.ShiftX, (th.kmState.Mouse[1]/20)*20, (float)((1280/6/Nag)*State.NortsSize), 20);
+			th.rect(b/((60.0f / (float)this.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + this.ShiftX, 720/4, 0, 720/4*3);
 		}
 	}
 
@@ -157,67 +158,70 @@ public abstract class SuperTrack
 			th.textSize(15);
 			th.text(this.ParamName[i] + "\n" + this.Param[i], 1280/12*(i+7)+10, 720/8 + 20);
 
-			if(th.kmState.MLeft && !this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
+			if(!th.mv.enableMove)
 			{
-				this.ParamB[i] = true;
-				this.Param[i] = "";
-			}
-			else if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
-			{
-				if(!this.OnpuSet2 && th.keyPressed)
+				if(th.kmState.MLeft && !this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
 				{
-					if(i != 0 && th.key == '.')
+					this.ParamB[i] = true;
+					this.Param[i] = "";
+				}
+				else if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
+				{
+					if(!this.OnpuSet2 && th.keyPressed)
 					{
-						this.Param[i] += th.key;
-					}
-					else if(th.key == '-')
-					{
-						this.Param[i] += th.key;
-					}
-					else
-					{
-						try
+						if(i != 0 && th.key == '.')
 						{
-							Integer.parseInt(th.key + "");
 							this.Param[i] += th.key;
 						}
-						catch(Exception e)
+						else if(th.key == '-')
 						{
+							this.Param[i] += th.key;
+						}
+						else
+						{
+							try
+							{
+								Integer.parseInt(th.key + "");
+								this.Param[i] += th.key;
+							}
+							catch(Exception e)
+							{
 
+							}
+						}
+						this.OnpuSet2 = true;
+					}
+					else if(this.OnpuSet2 && !th.keyPressed)
+					{
+						this.OnpuSet2 = false;
+					}
+				}
+				else if(this.ParamB[i])
+				{
+					if(this.Param[i] != "")
+					{
+						switch(i)
+						{
+						case 0:
+							this.Vol = Byte.parseByte(this.Param[i]);
+							break;
+						case 1:
+							this.Fre = Double.parseDouble(this.Param[i]);
+							break;
+						case 2:
+							this.VolD = Double.parseDouble(this.Param[i]);
+							break;
+						case 3:
+							this.FreD = Double.parseDouble(this.Param[i]);
+							break;
+						case 4:
+							this.Tempo = Double.parseDouble(this.Param[i]);
+							th.state.TempoSet(th, this.Tempo);
+							break;
 						}
 					}
-					this.OnpuSet2 = true;
+					this.ParamB[i] = false;
 				}
-				else if(this.OnpuSet2 && !th.keyPressed)
-				{
-					this.OnpuSet2 = false;
-				}
-			}
-			else if(this.ParamB[i])
-			{
-				if(this.Param[i] != "")
-				{
-					switch(i)
-					{
-					case 0:
-						this.Vol = Byte.parseByte(this.Param[i]);
-						break;
-					case 1:
-						this.Fre = Double.parseDouble(this.Param[i]);
-						break;
-					case 2:
-						this.VolD = Double.parseDouble(this.Param[i]);
-						break;
-					case 3:
-						this.FreD = Double.parseDouble(this.Param[i]);
-						break;
-					case 4:
-						this.Tempo = Double.parseDouble(this.Param[i]);
-						th.state.TempoSet(th, this.Tempo);
-						break;
-					}
-				}
-				this.ParamB[i] = false;
 			}
 		}
 		this.Mouse(th);
@@ -238,38 +242,42 @@ public abstract class SuperTrack
 		th.fill(0);
 		th.textSize(20);
 		th.text(this.OnpuSetA + "\nminutes\nnote", 1280/6*3+10, 720/8 + 20);
-		if(th.kmState.MLeft && !this.OnpuSet && th.kmState.IsMouseIn(1280/6*3, 720/8, 1280/12, 720/8))
-		{
-			this.OnpuSet = true;
-			this.OnpuSetA = "";
-		}
-		else if(this.OnpuSet && th.kmState.IsMouseIn(1280/6*3, 720/8, 1280/12, 720/8))
-		{
-			if(!this.OnpuSet2 && th.keyPressed)
-			{
-				try
-				{
-					Integer.parseInt(th.key + "");
-					this.OnpuSetA += th.key;
-				}
-				catch(Exception e)
-				{
 
-				}
-				this.OnpuSet2 = true;
-			}
-			else if(this.OnpuSet2 && !th.keyPressed)
-			{
-				this.OnpuSet2 = false;
-			}
-		}
-		else if(this.OnpuSet)
+		if(!th.mv.enableMove)
 		{
-			if(this.OnpuSetA != "")
+			if(th.kmState.MLeft && !this.OnpuSet && th.kmState.IsMouseIn(1280/6*3, 720/8, 1280/12, 720/8))
 			{
-				this.Nag = Integer.parseInt(this.OnpuSetA);
+				this.OnpuSet = true;
+				this.OnpuSetA = "";
 			}
-			this.OnpuSet = false;
+			else if(this.OnpuSet && th.kmState.IsMouseIn(1280/6*3, 720/8, 1280/12, 720/8))
+			{
+				if(!this.OnpuSet2 && th.keyPressed)
+				{
+					try
+					{
+						Integer.parseInt(th.key + "");
+						this.OnpuSetA += th.key;
+					}
+					catch(Exception e)
+					{
+
+					}
+					this.OnpuSet2 = true;
+				}
+				else if(this.OnpuSet2 && !th.keyPressed)
+				{
+					this.OnpuSet2 = false;
+				}
+			}
+			else if(this.OnpuSet)
+			{
+				if(this.OnpuSetA != "")
+				{
+					this.Nag = Integer.parseInt(this.OnpuSetA);
+				}
+				this.OnpuSet = false;
+			}
 		}
 
 		this.parameter(th);
@@ -311,14 +319,14 @@ public abstract class SuperTrack
 					{
 						music = true;
 						th.mm2.ChStat(th.mm2.Sn[j][i] + this.Fre, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel);
-						this.Norts(th, i, j, Channel);
+						if(!th.mv.enableMove) this.Norts(th, i, j, Channel);
 					}
 				}
 				if(th.kmState.MRight && (i+1+j*12)*-20+this.ShiftY + 20 > 720 / 4)
 				{
 					if(th.kmState.IsMouseIn(1280/6, (i+1+j*12)*-20+this.ShiftY, 1280/6*5, 20))
 					{
-						this.Norts(th, i, j, Channel);
+						if(!th.mv.enableMove) this.Norts(th, i, j, Channel);
 					}
 				}
 			}
@@ -352,13 +360,13 @@ public abstract class SuperTrack
 		for(int i = 0; i < 4; i++)
 		{
 			th.fill(255);
-			th.rect(1280/6+1280/12*i, 720/8, 1280/12, 720/8);
+			th.rect(1280/6+1280/24*i, 720/8, 1280/24, 720/8);
 			th.textSize(25);
 			th.fill(0);
-			th.text(Move[i], 1280/6+1280/12*i+20, 720/8/2*3+10);
+			th.text(Move[i], 1280/6+1280/24*i+20, 720/8/2*3+10);
 			if(th.kmState.MLeft)
 			{
-				if(th.kmState.IsMouseIn(1280/6+1280/12*i, 720/8, 1280/12, 720/8))
+				if(th.kmState.IsMouseIn(1280/6+1280/24*i, 720/8, 1280/24, 720/8))
 				{
 					switch(i)
 					{

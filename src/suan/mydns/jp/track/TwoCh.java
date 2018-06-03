@@ -11,6 +11,8 @@ public class TwoCh extends SuperTrack
 
 		this.Onkai(th, 1);
 
+		if(th.mv.enableMove) th.mv.move(th, this);
+
 		boolean music = false;
 		for(int i = 0; i < 4; i++)
 		{

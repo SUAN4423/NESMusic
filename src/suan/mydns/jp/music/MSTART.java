@@ -31,6 +31,8 @@ public class MSTART
 				Timer T2 = new Timer();
 				T2.scheduleAtFixedRate(new AudioTask(), 0, 1000 / (th.mm2.HzMu / th.mm2.onecool));
 			}
+
+			th.rect(time/((60.0f / (float)th.SPT[th.ch.GetChannel()].Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + th.SPT[th.ch.GetChannel()].ShiftX, 720/4, 0, 720/4*3);
 		}
 		else if(this.starts)
 		{

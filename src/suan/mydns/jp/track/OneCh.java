@@ -11,6 +11,8 @@ public class OneCh extends SuperTrack
 
 		this.Onkai(th, 0);
 
+		if(th.mv.enableMove) th.mv.move(th, this);
+
 		boolean music = false;
 		for(int i = 0; i < 4; i++)
 		{

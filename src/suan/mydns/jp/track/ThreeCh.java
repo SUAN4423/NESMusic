@@ -11,6 +11,8 @@ public class ThreeCh extends SuperTrack
 
 		this.Onkai(th, 2);
 
+		if(th.mv.enableMove) th.mv.move(th, this);
+
 		this.Shift(th);
 	}
 }

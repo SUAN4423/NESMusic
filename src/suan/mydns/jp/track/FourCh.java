@@ -12,6 +12,8 @@ public class FourCh extends SuperTrack
 
 		this.Onkai(th, 3);
 
+		if(th.mv.enableMove) th.mv.move(th, this);
+
 		boolean music = false;
 		for(int i = 0; i < 2; i++)
 		{
@@ -74,14 +76,14 @@ public class FourCh extends SuperTrack
 					{
 						music = true;
 						th.mm2.ChStat(i + j * 12, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel);
-						this.Norts(th, i, j, Channel);
+						if(!th.mv.enableMove) this.Norts(th, i, j, Channel);
 					}
 				}
 				if(th.kmState.MRight && (i+1+j*12)*-20+this.ShiftY + 20 > 720 / 4)
 				{
 					if(th.kmState.IsMouseIn(1280/6, (i+1+j*12)*-20+this.ShiftY, 1280/6*5, 20))
 					{
-						this.Norts(th, i, j, Channel);
+						if(!th.mv.enableMove) this.Norts(th, i, j, Channel);
 					}
 				}
 			}

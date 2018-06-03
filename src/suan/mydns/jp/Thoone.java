@@ -21,6 +21,7 @@ import suan.mydns.jp.music.MM2;
 import suan.mydns.jp.music.MSTART;
 import suan.mydns.jp.state.DeleteOverlap;
 import suan.mydns.jp.state.KMState;
+import suan.mydns.jp.state.Move;
 import suan.mydns.jp.state.Sort;
 import suan.mydns.jp.state.State;
 import suan.mydns.jp.track.FourCh;
@@ -40,6 +41,7 @@ public class Thoone extends PApplet
 	public SaveLoad sl = new SaveLoad();
 	public DeleteOverlap DO = new DeleteOverlap();
 	public State state = new State();
+	public Move mv = new Move();
 	private boolean pressed = false;
 
 	DropTarget dropTarget;
@@ -117,6 +119,7 @@ public class Thoone extends PApplet
 		state.Draw(this);
 		sl.Draw(this);
 		ch.Draw(this);
+		mv.Draw(this);
 		musics.Play(this);
 		kmState.Mouse[0] = this.mouseX;
 		kmState.Mouse[1] = this.mouseY;
@@ -148,6 +151,26 @@ public class Thoone extends PApplet
 		{
 			this.loads = false;
 			sl.Load(this, path);
+		}
+
+		if(kmState.Key.get(this.LEFT))
+		{
+			SPT[ch.GetChannel()].ShiftX += 20;
+			if(SPT[ch.GetChannel()].ShiftX > 0) SPT[ch.GetChannel()].ShiftX = 0;
+		}
+		if(kmState.Key.get(this.RIGHT))
+		{
+			SPT[ch.GetChannel()].ShiftX -= 20;
+		}
+		if(kmState.Key.get(this.UP))
+		{
+			SPT[ch.GetChannel()].ShiftY += 20;
+			if(SPT[ch.GetChannel()].ShiftY > 2580) SPT[ch.GetChannel()].ShiftY = 2580;
+		}
+		if(kmState.Key.get(this.DOWN))
+		{
+			SPT[ch.GetChannel()].ShiftY -= 20;
+			if(SPT[ch.GetChannel()].ShiftY < 720) SPT[ch.GetChannel()].ShiftY = 720;
 		}
 	}
 
