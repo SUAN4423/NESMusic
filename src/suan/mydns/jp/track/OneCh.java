@@ -34,7 +34,7 @@ public class OneCh extends SuperTrack
 		}
 		if(!music && th.kmState.IsMouseIn(1280/6, 0, 1280/6*2, 720/8))
 		{
-			if(!th.musics.start) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, 1, 0);
+			if(!th.musics.start) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, 0);
 		}
 
 		this.Shift(th);

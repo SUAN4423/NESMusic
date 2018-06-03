@@ -90,7 +90,7 @@ public class MM2
 	double[] MVDow = {0, 0, 0, 0};
 	double[] MModu = {0, 0, 0, 0};
 	boolean[] MMEna = {false, false, false, false};
-	byte[] MNumb = {0, 0, 0, 0};
+	byte[] MNumb = {-1, -1, -1, -1};
 	private long Tempsample = 0;
 
 	public void ChStat(double Fr, float Du, int Vo, double VD, double Mo, boolean ME, int Nu, int Ch)
@@ -171,11 +171,12 @@ public class MM2
 		public void run()
 		{
 			// TODO 自動生成されたメソッド・スタブ
+			//System.out.println(Frequencys[3] + " " + Dutys[3] + " " + Volume[3] + " " + VDown[3] + " " + Mod[3] + " " + Mods[3] + " " + MNum[3] + " " + (byte)4);
 			if(!resk) Fo.write(Noise(Frequencys[3], Dutys[3], Volume[3], VDown[3], Mod[3], Mods[3], MNum[3], (byte)4), 0, onecool);
 		}
 	}
 
-	static byte[] MusicNumbers = {0, 0, 0, 0};
+	static byte[] MusicNumbers = {-1, -1, -1, -1};
 	static double[] Frequencys = {0, 0, 0, 0};
 	static double[] Frequencyss= {0, 0, 0, 0};
 	static float[] Dutys       = {0f, 0f, 0f, 0f};

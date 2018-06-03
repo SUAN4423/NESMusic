@@ -41,8 +41,8 @@ public class Channel
 			}
 			else if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4) && !th.musics.start)
 			{
-				if(i < 3) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, 1, i);
-				else th.mm2.ChStat(0, 0.5f, 16, 0, 1, false, 1, i);
+				if(i < 3) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, i);
+				else th.mm2.ChStat(0, 0.5f, 16, 0, 1, false, -1, i);
 			}
 		}
 

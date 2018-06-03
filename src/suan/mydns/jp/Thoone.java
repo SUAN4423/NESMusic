@@ -142,7 +142,7 @@ public class Thoone extends PApplet
 		{
 			for(int i = 0; i < 4; i++)
 			{
-				this.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i);
+				this.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, -1, i);
 			}
 			pressed = false;
 		}

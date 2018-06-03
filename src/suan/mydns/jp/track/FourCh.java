@@ -35,7 +35,7 @@ public class FourCh extends SuperTrack
 		}
 		if(!music && th.kmState.IsMouseIn(1280/6, 0, 1280/6*2, 720/8))
 		{
-			if(!th.musics.start) th.mm2.ChStat(0, 0.0f, 16, 0, 1, false, 1, 3);
+			if(!th.musics.start) th.mm2.ChStat(0, 0.0f, 16, 0, 1, false, -1, 3);
 		}
 
 		this.Shift(th);

@@ -61,7 +61,7 @@ public class Wave extends PApplet
 		getSurface().setVisible(Visible);
 	}
 
-	static byte[] MusicNumbers = {0, 0, 0, 0};
+	static byte[] MusicNumbers = {-1, -1, -1, -1};
 	static double[] Frequencys = {0, 0, 0, 0};
 	static double[] Frequencyss= {0, 0, 0, 0};
 	static float[] Dutys       = {0f, 0f, 0f, 0f};
