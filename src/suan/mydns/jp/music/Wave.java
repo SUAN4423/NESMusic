@@ -94,7 +94,7 @@ public class Wave extends PApplet
         {
             double phase = (i + (MM2.onecool * Numbers[Ch - 1])) / (MM2.HzMu / Frequencyss[Ch - 1]);
             phase -= Math.floor(phase);
-            b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.min(((byte)(Volumes[Ch - 1]+0.999)*8), 127));
+            b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.min(((byte)(Volumes[Ch - 1])*8), 127));
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
 			Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
         }
