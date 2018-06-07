@@ -127,9 +127,9 @@ public class MSTART
 				for(int i = 0; i < 4; i++)
 				{
 					this.startNotes[i] = 0;
-					if(startNotes[i] < th.SPT[i].Volume.size())
+					while(true)
 					{
-						while(true)
+						if(startNotes[i] < th.SPT[i].Volume.size())
 						{
 							if(th.SPT[i].Time.get(startNotes[i]) <= startBarTime/1000.0*th.mm2.HzMu)
 							{
@@ -147,9 +147,10 @@ public class MSTART
 								break;
 							}
 						}
-					}
-					else
-					{
+						else
+						{
+							break;
+						}
 					}
 				}
 			}
