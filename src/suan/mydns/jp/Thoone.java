@@ -221,6 +221,7 @@ public class Thoone extends PApplet
 	{
 		kmState.Key.put(keyCode, true);
 		kmState.KeyC.put(key, true);
+		//System.out.println(this.key + " " + this.keyCode);
 	}
 
 	@Override
@@ -228,5 +229,13 @@ public class Thoone extends PApplet
 	{
 		kmState.Key.put(keyCode, false);
 		kmState.KeyC.put(key, false);
+	}
+
+	void keyPressed(java.awt.event.KeyEvent e)
+	{
+		int mod = e.getModifiersEx();
+		if (e.getKeyCode()==java.awt.event.KeyEvent.VK_Z&&(mod & java.awt.event.InputEvent.CTRL_DOWN_MASK) != 0) {
+			System.out.println("ctrl+z");
+		}
 	}
 }
