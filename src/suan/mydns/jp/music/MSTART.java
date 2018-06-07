@@ -15,6 +15,12 @@ public class MSTART
 	private Thoone th;
 	private boolean pressed = false;
 	private boolean autoMove = false;
+	private int startBar = 0;
+	private int[] startNotes = {0, 0, 0, 0};
+	private boolean startBarSet = false;
+	private String bar = "0";
+	private boolean keyPressed = false;
+	private long startBarTime = 0;
 
 	public void Play(Thoone th)
 	{
@@ -23,10 +29,10 @@ public class MSTART
 			if(!this.starts)
 			{
 				this.starts = true;
-				this.starttime = System.currentTimeMillis();
+				this.starttime = System.currentTimeMillis() - this.startBarTime;
 				for(int i = 0; i < 4; i++)
 				{
-					this.nowNotes[i] = 0;
+					this.nowNotes[i] = this.startNotes[i];
 				}
 				this.th = th;
 
@@ -79,6 +85,85 @@ public class MSTART
 		th.fill(0);
 		th.textSize(20);
 		th.text("Auto\nScroll", 1280/3+10, 720/8+25);
+
+		th.fill(0xFF);
+		if(th.kmState.IsMouseIn(1280/3 + 1280 / 12, 720/8, 1280/12, 720/8))
+		{
+			th.fill(0xFF, 0x00, 0x00);
+			if(th.kmState.MLeft && !this.startBarSet)
+			{
+				this.bar = "";
+				this.startBarSet = true;
+			}
+			else if(this.startBarSet)
+			{
+				if(!this.keyPressed && th.keyPressed)
+				{
+					try
+					{
+						Integer.parseInt(th.key + "");
+						this.bar += th.key;
+					}
+					catch(Exception e)
+					{
+
+					}
+					this.keyPressed = true;
+				}
+				else if(this.keyPressed && !th.keyPressed)
+				{
+					this.keyPressed = false;
+				}
+			}
+		}
+		else
+		{
+			if(this.bar != "") this.startBar = Integer.parseInt(this.bar);
+			this.bar = this.startBar + "";
+			this.startBarTime = (long)(this.startBar*(60.0 / th.SPT[th.ch.GetChannel()].Tempo * 4) * 1000);
+
+			if(this.startBarSet)
+			{
+				for(int i = 0; i < 4; i++)
+				{
+					this.startNotes[i] = 0;
+					if(startNotes[i] < th.SPT[i].Volume.size())
+					{
+						while(true)
+						{
+							if(th.SPT[i].Time.get(startNotes[i]) <= startBarTime/1000.0*th.mm2.HzMu)
+							{
+								if(startBarTime/1000.0*th.mm2.HzMu >= th.SPT[i].Time.get(startNotes[i])+th.SPT[i].SoundT.get(startNotes[i]))
+								{
+									startNotes[i]++;
+								}
+								else
+								{
+									break;
+								}
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+					else
+					{
+					}
+				}
+			}
+
+			this.startBarSet = false;
+		}
+		if(this.startBarSet)
+		{
+			th.fill(0x00, 0xFF, 0x00);
+		}
+		th.rect(1280/3 + 1280 / 12, 720/8, 1280/12, 720/8);
+		th.fill(0);
+		th.textSize(20);
+		th.text(this.bar + " Bar\nStart", 1280/3+1280/12+10, 720/8+25);
 	}
 
 	class AudioTask extends TimerTask
