@@ -20,7 +20,7 @@ public abstract class SuperTrack
 	public int ShiftY = 720;
 	String[] Move = {"Å™", "Å´", "Å©", "Å®"};
 	int freq = 0;
-	String[][] Dutys = {{"1:7", "1:3", "1:1", "3:1"},{"Long", "Short", "", ""}};
+	String[][] Dutys = {{"1:7", "1:3", "1:1", "3:1"},{"Long", "Short", "New", "Old"}};
 	float[][] fr = {{0.125f, 0.25f, 0.5f, 0.75f},{0.0f, 1.0f, 0.0f, 0.0f}};
 	public int Nag = 4;
 	protected boolean OnpuSet = false;

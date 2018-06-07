@@ -1,6 +1,7 @@
 package suan.mydns.jp.track;
 
 import suan.mydns.jp.Thoone;
+import suan.mydns.jp.music.MM2;
 
 public class FourCh extends SuperTrack
 {
@@ -15,10 +16,11 @@ public class FourCh extends SuperTrack
 		if(th.mv.enableMove) th.mv.move(th, this);
 
 		boolean music = false;
-		for(int i = 0; i < 2; i++)
+		for(int i = 0; i < 4; i++)
 		{
 			th.fill(255);
 			if(freq == i) th.fill(0xFF, 0x20, 0x00);
+			if(MM2.old == i) th.fill(0xFF, 0x20, 0x00);
 			th.rect(1280/12*(i+2), 0, 1280/12, 720/8);
 			th.textSize(25);
 			th.fill(0);
@@ -27,9 +29,16 @@ public class FourCh extends SuperTrack
 			{
 				if(th.kmState.IsMouseIn(1280/12*(i+2), 0, 1280/12, 720/8))
 				{
-					music = true;
-					freq = i;
-					th.mm2.ChStat(5, fr[1][i], 15, 0, 1, false, 1, 3);
+					if(i < 2)
+					{
+						music = true;
+						freq = i;
+						th.mm2.ChStat(5, fr[1][i], 15, 0, 1, false, 1, 3);
+					}
+					else
+					{
+						MM2.old = i;
+					}
 				}
 			}
 		}

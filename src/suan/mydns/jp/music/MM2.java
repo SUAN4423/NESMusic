@@ -259,6 +259,7 @@ public class MM2
 	static int reg = 0x8000;
 	static byte TempN = 0;
 	static int Nokori = 0;
+	public static int old = 2;
 
 	static byte[] Noise(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -289,7 +290,7 @@ public class MM2
 		for(int i = (int) (Nokori / Frequencyss[3]); i < b.length / Frequencyss[3]; i++)
 		{
 			reg >>>= 1;
-			reg |= ((reg ^ (reg >>> (Duty == 1.0f ? 6 : 1))) & 1) << 15;
+			reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
 			b[(int) (i * Frequencyss[3])] = (byte) (((reg & 1) - 0.5) * 2 * Math.min((((byte)Volumes[3])*8), 127));
         	for(int j = 1; j < Frequencyss[3]; j++)
         	{
