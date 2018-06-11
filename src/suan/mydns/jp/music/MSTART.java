@@ -184,7 +184,8 @@ public class MSTART
 						b = true;
 						if(th.SPT[i].Time.get(nowNotes[i]) <= time)
 						{
-							th.mm2.ChStat(th.SPT[i].Freque.get(nowNotes[i]), th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i);
+							if(th.ch.canPlay[i]) th.mm2.ChStat(th.SPT[i].Freque.get(nowNotes[i]), th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i);
+							else th.mm2.ChStat(i == 3 ? 0 : -1, th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i);
 							if(time >= th.SPT[i].Time.get(nowNotes[i])+th.SPT[i].SoundT.get(nowNotes[i]))
 							{
 								nowNotes[i]++;
