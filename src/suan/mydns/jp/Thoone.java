@@ -44,6 +44,8 @@ public class Thoone extends PApplet
 	public Move mv = new Move();
 	private boolean pressed = false;
 
+	public static final String Version = "1.2.4";
+
 	DropTarget dropTarget;
 	Component component;
 	String path = "";
@@ -64,6 +66,7 @@ public class Thoone extends PApplet
 	@Override
 	public void setup()
 	{
+		this.getSurface().setTitle("Thoone  Ver " + Version);
 		SPT[0] = new OneCh();
 		SPT[1] = new TwoCh();
 		SPT[2] = new ThreeCh();
