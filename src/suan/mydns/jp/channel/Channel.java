@@ -36,16 +36,16 @@ public class Channel
 			{
 				if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4))
 				{
-					if(i < 3) th.mm2.ChStat(th.mm2.Sn[4][th.mm2.C], 0.5f, 16, 0, 1, false, 1, i);
-					else th.mm2.ChStat(5, 0.0f, 16, 0, 1, false, 1, i);
+					if(i < 3) th.mm2.ChStat(th.mm2.Sn[4][th.mm2.C], 0.5f, 16, 0, 1, false, 1, i, 16);
+					else th.mm2.ChStat(5, 0.0f, 16, 0, 1, false, 1, i, 16);
 					channel = i;
 					this.canPlay[i] = true;
 				}
 			}
 			else if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4) && !th.musics.start)
 			{
-				if(i < 3) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, i);
-				else th.mm2.ChStat(0, 0.5f, 16, 0, 1, false, -1, i);
+				if(i < 3) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, i, 16);
+				else th.mm2.ChStat(0, 0.5f, 16, 0, 1, false, -1, i, 16);
 			}
 
 			if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4) && th.kmState.MRight && !this.pressed)

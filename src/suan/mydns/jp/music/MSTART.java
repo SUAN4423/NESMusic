@@ -184,8 +184,8 @@ public class MSTART
 						b = true;
 						if(th.SPT[i].Time.get(nowNotes[i]) <= time)
 						{
-							if(th.ch.canPlay[i]) th.mm2.ChStat(th.SPT[i].Freque.get(nowNotes[i]), th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i);
-							else th.mm2.ChStat(i == 3 ? 0 : -1, th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i);
+							if(th.ch.canPlay[i]) th.mm2.ChStat(th.SPT[i].Freque.get(nowNotes[i]), th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i, th.SPT[i].VolDUM.get(nowNotes[i]));
+							else th.mm2.ChStat(i == 3 ? 0 : -1, th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i, th.SPT[i].VolDUM.get(i));
 							if(time >= th.SPT[i].Time.get(nowNotes[i])+th.SPT[i].SoundT.get(nowNotes[i]))
 							{
 								nowNotes[i]++;
@@ -193,12 +193,12 @@ public class MSTART
 						}
 						else
 						{
-							th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i);
+							th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i, 16);
 						}
 					}
 					else
 					{
-						th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i);
+						th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i, 16);
 					}
 				}
 				if(!b)
@@ -215,7 +215,7 @@ public class MSTART
 					{
 						for(int i = 0; i < 4; i++)
 						{
-							th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i);
+							th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i, 16);
 						}
 						for(int i = 0; i < 4; i++)
 						{

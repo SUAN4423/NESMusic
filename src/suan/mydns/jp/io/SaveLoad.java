@@ -92,7 +92,7 @@ public class SaveLoad
 			{
 				for(int j = 0; j < th.SPT[i].Volume.size(); j++)
 				{
-					str += i + "," + th.SPT[i].Volume.get(j) + "," + th.SPT[i].Freque.get(j) + "," + th.SPT[i].FrequI.get(j) + "," + th.SPT[i].Time.get(j) + "," + th.SPT[i].SoundT.get(j) + "," + th.SPT[i].Duty.get(j) + "," + th.SPT[i].Voldow.get(j) + "," + th.SPT[i].Fredow.get(j) + "\r\n";
+					str += i + "," + th.SPT[i].Volume.get(j) + "," + th.SPT[i].Freque.get(j) + "," + th.SPT[i].FrequI.get(j) + "," + th.SPT[i].Time.get(j) + "," + th.SPT[i].SoundT.get(j) + "," + th.SPT[i].Duty.get(j) + "," + th.SPT[i].Voldow.get(j) + "," + th.SPT[i].Fredow.get(j) + "," + th.SPT[i].VolDUM.get(j) + "\r\n";
 				}
 			}
 			file.write(str);
@@ -138,7 +138,20 @@ public class SaveLoad
 				b = str.indexOf(",", b+1);
 				double i = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
 				b = str.indexOf(",", b+1);
-				double j = Double.parseDouble(str.substring(b+1));
+				double j;
+				int k;
+				try
+				{
+					j = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+					b = str.indexOf(",", b+1);
+					k = Integer.parseInt(str.substring(b+1));
+				}
+				catch(Exception es)
+				{
+					j = Double.parseDouble(str.substring(b+1));
+					if(i < 0) k = 0;
+					else k = 16;
+				}
 
 				th.SPT[a].Volume.add((byte)c);
 				th.SPT[a].Freque.add(d);
@@ -148,6 +161,7 @@ public class SaveLoad
 				th.SPT[a].Duty.add((float)h);
 				th.SPT[a].Voldow.add(i);
 				th.SPT[a].Fredow.add(j);
+				th.SPT[a].VolDUM.add(k);
 
 				str = br.readLine();
 			}
@@ -189,6 +203,7 @@ public class SaveLoad
 				th.SPT[i].Duty.clear();
 				th.SPT[i].Voldow.clear();
 				th.SPT[i].Fredow.clear();
+				th.SPT[i].VolDUM.clear();
 			}
 
 			while(str != null)
@@ -209,7 +224,20 @@ public class SaveLoad
 				b = str.indexOf(",", b+1);
 				double i = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
 				b = str.indexOf(",", b+1);
-				double j = Double.parseDouble(str.substring(b+1));
+				double j;
+				int k;
+				try
+				{
+					j = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+					b = str.indexOf(",", b+1);
+					k = Integer.parseInt(str.substring(b+1));
+				}
+				catch(Exception es)
+				{
+					j = Double.parseDouble(str.substring(b+1));
+					if(i < 0) k = 0;
+					else k = 16;
+				}
 
 				th.SPT[a].Volume.add((byte)c);
 				th.SPT[a].Freque.add(d);
@@ -219,6 +247,7 @@ public class SaveLoad
 				th.SPT[a].Duty.add((float)h);
 				th.SPT[a].Voldow.add(i);
 				th.SPT[a].Fredow.add(j);
+				th.SPT[a].VolDUM.add(k);
 
 				str = br.readLine();
 			}

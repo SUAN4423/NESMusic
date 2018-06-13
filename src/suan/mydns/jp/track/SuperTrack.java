@@ -16,6 +16,7 @@ public abstract class SuperTrack
 	public ArrayList<Float	> Duty	 = new ArrayList<>();
 	public ArrayList<Double	> Voldow = new ArrayList<>();
 	public ArrayList<Double	> Fredow = new ArrayList<>();
+	public ArrayList<Integer> VolDUM = new ArrayList<>();
 	public int ShiftX = 0;
 	public int ShiftY = 720;
 	String[] Move = {"Å™", "Å´", "Å©", "Å®"};
@@ -26,9 +27,10 @@ public abstract class SuperTrack
 	protected boolean OnpuSet = false;
 	protected boolean OnpuSet2 = false;
 	protected String OnpuSetA = "4";
-	public String[] Param = {"16", "0.0", "0.0", "1.0", "140.0"};
-	protected String[] ParamName = {"Volume", "Frequency", "VolChange", "FreChange", "Tempo"};
-	protected boolean[] ParamB = {false, false, false, false, false};
+	public String[] Param = {"16", "0.0", "0.0", "1.0", "140.0", "16"};
+	protected String[] ParamName = {"Volume", "Frequency", "VolChange", "FreChange", "Tempo", ""};
+	protected boolean[] ParamB = {false, false, false, false, false, false};
+	protected int VDUM = 16;
 	protected byte Vol = 16;
 	protected double Fre = 0.0, VolD = 0.0, FreD = 1.0;
 	public double Tempo = 140.0;
@@ -79,6 +81,7 @@ public abstract class SuperTrack
 			this.Duty.add(this.fr[Channel == 3 ? 1 : 0][this.freq]);
 			this.Voldow.add(this.VolD);
 			this.Fredow.add(this.FreD);
+			this.VolDUM.add(this.VDUM);
 
 			Clicked = true;
 		}
@@ -111,6 +114,7 @@ public abstract class SuperTrack
 					this.Duty.remove(n);
 					this.Voldow.remove(n);
 					this.Fredow.remove(n);
+					this.VolDUM.remove(n);
 				}
 			}
 		}
@@ -140,32 +144,34 @@ public abstract class SuperTrack
 		}
 	}
 
+	private final int tesi = 2;
+
 	protected void parameter(Thoone th)
 	{
 		for(int i = 0; i < 5; i++)
 		{
 			th.fill(255);
-			if(th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
+			if(th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8/((i == tesi || i == 2) ? 3 : 2) * 2))
 			{
 				th.fill(0xFF, 0x00, 0x00);
 			}
-			if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
+			if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8/((i == tesi || i == 2) ? 3 : 2) * 2))
 			{
 				th.fill(0x00, 0xFF, 0x00);
 			}
-			th.rect(1280/12*(i+7), 720/8, 1280/12, 720/8);
+			th.rect(1280/12*(i+7), 720/8, 1280/12, 720/8/((i == tesi || i == 2) ? 3 : 2) * 2);
 			th.fill(0);
 			th.textSize(15);
 			th.text(this.ParamName[i] + "\n" + this.Param[i], 1280/12*(i+7)+10, 720/8 + 20);
 
 			if(!th.mv.enableMove)
 			{
-				if(th.kmState.MLeft && !this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
+				if(th.kmState.MLeft && !this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8/((i == 1 || i == 2) ? 3 : 2) * 2))
 				{
 					this.ParamB[i] = true;
 					this.Param[i] = "";
 				}
-				else if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8))
+				else if(this.ParamB[i] && th.kmState.IsMouseIn(1280/12*(i+7), 720/8, 1280/12, 720/8/((i == tesi || i == 2) ? 3 : 2) * 2))
 				{
 					if(!this.OnpuSet2 && th.keyPressed)
 					{
@@ -224,6 +230,58 @@ public abstract class SuperTrack
 				}
 			}
 		}
+
+		th.fill(255);
+		if(th.kmState.IsMouseIn(1280/12*9, 720/8+720/8/3*2, 1280/12, 720/8/3))
+		{
+			th.fill(0xFF, 0x00, 0x00);
+		}
+		if(this.ParamB[5] && th.kmState.IsMouseIn(1280/12*9, 720/8+720/8/3*2, 1280/12, 720/8/3))
+		{
+			th.fill(0x00, 0xFF, 0x00);
+		}
+		th.rect(1280/12*9, 720/8+720/8/3*2, 1280/12, 720/8/3);
+		th.fill(0);
+		th.textSize(15);
+		th.text(this.Param[5] + "", 1280/12*9+10, 720/8+720/8/3*2 + 20);
+
+		if(!th.mv.enableMove)
+		{
+			if(th.kmState.MLeft && !this.ParamB[5] && th.kmState.IsMouseIn(1280/12*9, 720/8+720/8/3*2, 1280/12, 720/8/3))
+			{
+				this.ParamB[5] = true;
+				this.Param[5] = "";
+			}
+			else if(this.ParamB[5] && th.kmState.IsMouseIn(1280/12*9, 720/8+720/8/3*2, 1280/12, 720/8/3))
+			{
+				if(!this.OnpuSet2 && th.keyPressed)
+				{
+					try
+					{
+						Integer.parseInt(th.key + "");
+						this.Param[5] += th.key;
+					}
+					catch(Exception e)
+					{
+
+					}
+					this.OnpuSet2 = true;
+				}
+				else if(this.OnpuSet2 && !th.keyPressed)
+				{
+					this.OnpuSet2 = false;
+				}
+			}
+			else if(this.ParamB[5])
+			{
+				if(this.Param[5] != "")
+				{
+					VDUM = Integer.parseInt(this.Param[5]);
+				}
+				this.ParamB[5] = false;
+			}
+		}
+
 		this.Mouse(th);
 	}
 
@@ -318,7 +376,7 @@ public abstract class SuperTrack
 					if(th.kmState.IsMouseIn(1280/6, (i+1+j*12)*-20+this.ShiftY, 1280/6*5, 20))
 					{
 						music = true;
-						th.mm2.ChStat(th.mm2.Sn[j][i] + this.Fre, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel);
+						th.mm2.ChStat(th.mm2.Sn[j][i] + this.Fre, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel, this.VDUM);
 						if(!th.mv.enableMove) this.Norts(th, i, j, Channel);
 					}
 				}
@@ -335,7 +393,7 @@ public abstract class SuperTrack
 		{
 			this.Clicked = false;
 			temp = R.nextInt(50)+2;
-			if(!th.musics.start) th.mm2.ChStat(Channel == 3 ? 0 : -1, 0.5f, 16, 0, 0, false, 1, Channel);
+			if(!th.musics.start) th.mm2.ChStat(Channel == 3 ? 0 : -1, 0.5f, 16, 0, 0, false, 1, Channel, 16);
 		}
 
 		th.fill(255);

@@ -28,13 +28,13 @@ public class OneCh extends SuperTrack
 				{
 					music = true;
 					freq = i;
-					th.mm2.ChStat(th.mm2.Sn[4][th.mm2.C], fr[0][i], 16, 0, 1, false, 1, 0);
+					th.mm2.ChStat(th.mm2.Sn[4][th.mm2.C], fr[0][i], 16, 0, 1, false, 1, 0, 16);
 				}
 			}
 		}
 		if(!music && th.kmState.IsMouseIn(1280/6, 0, 1280/6*2, 720/8))
 		{
-			if(!th.musics.start) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, 0);
+			if(!th.musics.start) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, 0, 16);
 		}
 
 		this.Shift(th);

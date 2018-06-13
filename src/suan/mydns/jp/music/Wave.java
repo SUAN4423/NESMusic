@@ -32,10 +32,10 @@ public class Wave extends PApplet
 			for(int i = 0; i < 4; i++)
 			{
 				byte[] b = null;
+				this.MVolDUM[i] = th.mm2.MVolDUM[i];
 				if(i < 2) b = Square(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
 				else if(i == 2) b = Triangle(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
 				else if(i == 3) b = Noise(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
-
 
 				if(i < 2)
 				{
@@ -72,6 +72,7 @@ public class Wave extends PApplet
 	static boolean[] Mods      = {false, false, false, false};
 	static int[] Numbers       = {0, 0, 0, 0};
 	static byte[] MNum         = {0, 0, 0, 0};
+	static int[] MVolDUM       = {0, 0, 0, 0};
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -94,7 +95,7 @@ public class Wave extends PApplet
         {
             double phase = (i + (MM2.onecool * Numbers[Ch - 1])) / (MM2.HzMu / Frequencyss[Ch - 1]);
             phase -= Math.floor(phase);
-            b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.min(((byte)(Volumes[Ch - 1])*8), 127));
+            b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8));
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
 			Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
         }
@@ -175,7 +176,7 @@ public class Wave extends PApplet
 		{
 			reg >>>= 1;
 			reg |= ((reg ^ (reg >>> (Duty == 1.0f ? 6 : 1))) & 1) << 15;
-			b[(int) (i * Frequencyss[3])] = (byte) (((reg & 1) - 0.5) * 2 * Math.min((((byte)Volumes[3])*8), 127));
+			b[(int) (i * Frequencyss[3])] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
         	for(int j = 1; j < Frequencyss[3]; j++)
         	{
     			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);

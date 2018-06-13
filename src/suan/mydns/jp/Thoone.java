@@ -44,7 +44,7 @@ public class Thoone extends PApplet
 	public Move mv = new Move();
 	private boolean pressed = false;
 
-	public static final String Version = "1.2.4";
+	public static final String Version = "1.3.1";
 
 	DropTarget dropTarget;
 	Component component;
@@ -145,7 +145,7 @@ public class Thoone extends PApplet
 		{
 			for(int i = 0; i < 4; i++)
 			{
-				this.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, -1, i);
+				this.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, -1, i, 16);
 			}
 			pressed = false;
 		}
