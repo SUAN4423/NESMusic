@@ -1,6 +1,7 @@
 package suan.mydns.jp;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -13,6 +14,9 @@ import java.awt.dnd.DropTargetListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import processing.core.PApplet;
 import suan.mydns.jp.channel.Channel;
@@ -29,6 +33,7 @@ import suan.mydns.jp.track.OneCh;
 import suan.mydns.jp.track.SuperTrack;
 import suan.mydns.jp.track.ThreeCh;
 import suan.mydns.jp.track.TwoCh;
+import suan.mydns.jp.version.Version;
 
 public class Thoone extends PApplet
 {
@@ -43,17 +48,56 @@ public class Thoone extends PApplet
 	public State state = new State();
 	public Move mv = new Move();
 	private boolean pressed = false;
+	public static Version ver = new Version();
 
-	public static final String Version = "1.3.1";
+	public static final String Version = "1.3.2";
 
 	DropTarget dropTarget;
 	Component component;
 	String path = "";
 	boolean loads = false;
 
+	public static boolean newVersionAvairable = false;
+
 	public static void main(String[] args)
 	{
 		// TODO 自動生成されたメソッド・スタブ
+		String str = ver.VirsionCheck();
+		if(str != null)
+		{
+			int i = Integer.parseInt(Version.substring(0, Version.indexOf(".")));
+			int j = Integer.parseInt(str.substring(0, str.indexOf(".")));
+			if(i < j) newVersionAvairable = true;
+			int a = Version.indexOf(".");
+			int b = str.indexOf(".");
+			i = Integer.parseInt(Version.substring(a+1, Version.indexOf(".", a+1)));
+			j = Integer.parseInt(str.substring(b+1, str.indexOf(".", b+1)));
+			if(i < j) newVersionAvairable = true;
+			a = Version.indexOf(".", a+1);
+			b = str.indexOf(".", b+1);
+			i = Integer.parseInt(Version.substring(a+1));
+			j = Integer.parseInt(str.substring(b+1));
+			if(i < j) newVersionAvairable = true;
+		}
+
+		if(newVersionAvairable)
+		{
+			JFrame JF = new JFrame();
+			JF.setSize(200, 150);
+			JF.setLocationRelativeTo(null);
+			JF.setAlwaysOnTop(true);
+
+			JLabel JL = new JLabel();
+			JL.setFont(new Font(Font.DIALOG, Font.BOLD, 25));
+			JL.setText("<html>New version available<br>Version " + str + "</html>");
+			JL.setHorizontalAlignment(JLabel.CENTER);
+			JL.setVerticalAlignment(JLabel.CENTER);
+
+			JF.add(JL);
+
+			JF.setVisible(true);
+		}
+
 		PApplet.main("suan.mydns.jp.Thoone");
 	}
 
