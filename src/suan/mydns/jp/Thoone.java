@@ -62,48 +62,57 @@ public class Thoone extends PApplet
 	public static void main(String[] args)
 	{
 		// TODO 自動生成されたメソッド・スタブ
-		String str = ver.VirsionCheck();
-		if(str != null)
-		{
-			int i = Integer.parseInt(Version.substring(0, Version.indexOf(".")));
-			int j = Integer.parseInt(str.substring(0, str.indexOf(".")));
-			if(i < j) newVersionAvairable = true;
-			int a = Version.indexOf(".");
-			int b = str.indexOf(".");
-			i = Integer.parseInt(Version.substring(a+1, Version.indexOf(".", a+1)));
-			j = Integer.parseInt(str.substring(b+1, str.indexOf(".", b+1)));
-			if(i < j) newVersionAvairable = true;
-			a = Version.indexOf(".", a+1);
-			b = str.indexOf(".", b+1);
-			i = Integer.parseInt(Version.substring(a+1));
-			j = Integer.parseInt(str.substring(b+1));
-			if(i < j) newVersionAvairable = true;
-		}
-
-		if(newVersionAvairable)
-		{
-			JFrame JF = new JFrame();
-			JF.setSize(200, 150);
-			JF.setLocationRelativeTo(null);
-			JF.setAlwaysOnTop(true);
-
-			JLabel JL = new JLabel();
-			JL.setFont(new Font(Font.DIALOG, Font.BOLD, 25));
-			JL.setText("<html>New version available<br>Version " + str + "</html>");
-			JL.setHorizontalAlignment(JLabel.CENTER);
-			JL.setVerticalAlignment(JLabel.CENTER);
-
-			JF.add(JL);
-
-			JF.setVisible(true);
-		}
-
 		PApplet.main("suan.mydns.jp.Thoone");
+	}
+
+	class myThread extends Thread
+	{
+		@Override
+		public void run()
+		{
+			String str = ver.VirsionCheck();
+			if(str != null)
+			{
+				int i = Integer.parseInt(Version.substring(0, Version.indexOf(".")));
+				int j = Integer.parseInt(str.substring(0, str.indexOf(".")));
+				if(i < j) newVersionAvairable = true;
+				int a = Version.indexOf(".");
+				int b = str.indexOf(".");
+				i = Integer.parseInt(Version.substring(a+1, Version.indexOf(".", a+1)));
+				j = Integer.parseInt(str.substring(b+1, str.indexOf(".", b+1)));
+				if(i < j) newVersionAvairable = true;
+				a = Version.indexOf(".", a+1);
+				b = str.indexOf(".", b+1);
+				i = Integer.parseInt(Version.substring(a+1));
+				j = Integer.parseInt(str.substring(b+1));
+				if(i < j) newVersionAvairable = true;
+			}
+			System.out.println("Check Finished");
+			if(newVersionAvairable)
+			{
+				JFrame JF = new JFrame();
+				JF.setSize(200, 150);
+				JF.setLocationRelativeTo(null);
+				JF.setAlwaysOnTop(true);
+
+				JLabel JL = new JLabel();
+				JL.setFont(new Font(Font.DIALOG, Font.BOLD, 25));
+				JL.setText("<html>New version available<br>Version " + str + "</html>");
+				JL.setHorizontalAlignment(JLabel.CENTER);
+				JL.setVerticalAlignment(JLabel.CENTER);
+
+				JF.add(JL);
+
+				JF.setVisible(true);
+			}
+		}
 	}
 
 	@Override
 	public void settings()
 	{
+		myThread thre = new myThread();
+		thre.start();
 		size(1280, 720);
 	}
 
