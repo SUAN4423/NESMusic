@@ -50,7 +50,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.3.4";
+	public static final String Version = "1.3.5";
 
 	DropTarget dropTarget;
 	Component component;
@@ -86,8 +86,8 @@ public class Thoone extends PApplet
 				i = Integer.parseInt(Version.substring(a+1));
 				j = Integer.parseInt(str.substring(b+1));
 				if(i < j) newVersionAvairable = true;
+				System.out.println("Version Check Finished");
 			}
-			System.out.println("Check Finished");
 			if(newVersionAvairable)
 			{
 				JFrame JF = new JFrame();
