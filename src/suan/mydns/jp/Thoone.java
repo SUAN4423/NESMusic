@@ -50,7 +50,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.3.5";
+	public static final String Version = "1.3.6";
 
 	DropTarget dropTarget;
 	Component component;
@@ -76,16 +76,22 @@ public class Thoone extends PApplet
 				int i = Integer.parseInt(Version.substring(0, Version.indexOf(".")));
 				int j = Integer.parseInt(str.substring(0, str.indexOf(".")));
 				if(i < j) newVersionAvairable = true;
-				int a = Version.indexOf(".");
-				int b = str.indexOf(".");
-				i = Integer.parseInt(Version.substring(a+1, Version.indexOf(".", a+1)));
-				j = Integer.parseInt(str.substring(b+1, str.indexOf(".", b+1)));
-				if(i < j) newVersionAvairable = true;
-				a = Version.indexOf(".", a+1);
-				b = str.indexOf(".", b+1);
-				i = Integer.parseInt(Version.substring(a+1));
-				j = Integer.parseInt(str.substring(b+1));
-				if(i < j) newVersionAvairable = true;
+				if(i == j)
+				{
+					int a = Version.indexOf(".");
+					int b = str.indexOf(".");
+					i = Integer.parseInt(Version.substring(a+1, Version.indexOf(".", a+1)));
+					j = Integer.parseInt(str.substring(b+1, str.indexOf(".", b+1)));
+					if(i < j) newVersionAvairable = true;
+					if(i == j)
+					{
+						a = Version.indexOf(".", a+1);
+						b = str.indexOf(".", b+1);
+						i = Integer.parseInt(Version.substring(a+1));
+						j = Integer.parseInt(str.substring(b+1));
+						if(i < j) newVersionAvairable = true;
+					}
+				}
 				System.out.println("Version Check Finished");
 			}
 			if(newVersionAvairable)
