@@ -65,6 +65,7 @@ public class WaveOut extends Thread
 			boolean bb = false;
 
 			int kurikaeshi = 1;
+			int MAX = 0;
 
 			for(;;)
 			{
@@ -128,7 +129,8 @@ public class WaveOut extends Thread
 				{
 					for(int i = 0; i < MM2.onecool; i++)
 					{
-						Ch.add((a0[i]+b0[i]+c0[i]+d0[i])/4);
+						Ch.add(a0[i]+b0[i]+c0[i]+d0[i]);
+						if(MAX < Ch.get(Ch.size() - 1)) MAX = Ch.get(Ch.size() - 1);
 					}
 				}
 
@@ -159,7 +161,7 @@ public class WaveOut extends Thread
 
 			try
 			{
-				writer.putFrame(toArr(Ch));
+				writer.putFrame(toArr(Ch, MAX));
 				writer.close();
 			}
 			catch (IOException e)
@@ -172,12 +174,12 @@ public class WaveOut extends Thread
 		}
 	}
 
-	public static int[] toArr(List<Integer> list){
+	public static int[] toArr(List<Integer> list, int MAX){
 		// List<Integer> -> int[]
 		int l = list.size();
 		int[] arr = new int[l];
 		Iterator<Integer> iter = list.iterator();
-		for (int i=0;i<l;i++) arr[i] = iter.next();
+		for (int i=0;i<l;i++) arr[i] = (int) (iter.next() * (127.0 / MAX));
 		return arr;
 	}
 
