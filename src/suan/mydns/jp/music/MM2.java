@@ -50,7 +50,7 @@ public class MM2
 				Byte.SIZE,
 				1,
 				1,
-				44100.0f,
+				48000.0f,
 				false);
         try
         {

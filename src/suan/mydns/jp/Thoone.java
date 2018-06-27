@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import processing.core.PApplet;
 import suan.mydns.jp.channel.Channel;
 import suan.mydns.jp.io.SaveLoad;
+import suan.mydns.jp.io.WaveOut;
 import suan.mydns.jp.music.MM2;
 import suan.mydns.jp.music.MSTART;
 import suan.mydns.jp.state.DeleteOverlap;
@@ -50,12 +51,14 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.3.6";
+	public static final String Version = "1.4.0";
 
 	DropTarget dropTarget;
 	Component component;
 	String path = "";
 	boolean loads = false;
+	boolean FileWrite = false;
+	public static long FileWriteTime = 0;
 
 	public static boolean newVersionAvairable = false;
 
@@ -234,6 +237,23 @@ public class Thoone extends PApplet
 		{
 			SPT[ch.GetChannel()].ShiftY -= 20;
 			if(SPT[ch.GetChannel()].ShiftY < 720) SPT[ch.GetChannel()].ShiftY = 720;
+		}
+
+		if(kmState.KeyC.get('r') && !FileWrite)
+		{
+			FileWrite = true;
+			WaveOut wo = new WaveOut();
+			wo.start();
+		}
+		else if(!kmState.KeyC.get('r') && FileWrite)
+		{
+			FileWrite = false;
+		}
+		if(System.currentTimeMillis() - this.FileWriteTime < 1000)
+		{
+			this.textSize(50);
+			this.fill(0);
+			this.text("Wave Output Finish", 400, 400);
 		}
 	}
 

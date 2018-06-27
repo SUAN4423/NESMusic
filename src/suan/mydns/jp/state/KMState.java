@@ -35,6 +35,7 @@ public class KMState
 		this.Key.put(114, false);
 		this.KeyC.put(game.ENTER, false);
 		this.KeyC.put(' ', false);
+		this.KeyC.put('r', false);
 		this.Key.put(67, false);
 		this.Key.put(86, false);
 		this.Key.put(88, false);
