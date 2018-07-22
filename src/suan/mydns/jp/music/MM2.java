@@ -138,6 +138,8 @@ public class MM2
 		}
 	}
 
+	public static byte waves[][] = new byte[4][onecool];
+
 	class Audio1Task extends TimerTask
 	{
 		@Override
@@ -194,7 +196,8 @@ public class MM2
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
-		byte[] b = new byte[onecool];
+		//byte[] b = new byte[onecool];
+		byte[] b = waves[Ch - 1];
 		if(Frequency == -1)
 		{
 	        for(int i = 0; i < b.length; i++)
@@ -229,7 +232,8 @@ public class MM2
 
 	static byte[] Triangle(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
-		byte[] b = new byte[onecool];
+		//byte[] b = new byte[onecool];
+		byte[] b = waves[Ch - 1];
 		if(Frequency == -1)
 		{
 	        for(int i = 0; i < b.length; i++)
@@ -267,7 +271,8 @@ public class MM2
 
 	static byte[] Noise(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
-		byte[] b = new byte[onecool];
+		//byte[] b = new byte[onecool];
+		byte[] b = waves[Ch - 1];
 
 		if(Frequency == -1 || Frequency == 0.0)
 		{
@@ -291,12 +296,12 @@ public class MM2
 			Volumes[3] = (VolumeR+0.5) * 1.0;
 		}
 
-		for(int i = (int) (Nokori / Frequencyss[3]); i < b.length / Frequencyss[3]; i++)
+		for(int i = (int) (Nokori / (int)Frequencyss[3]); i < b.length / (int)Frequencyss[3]; i++)
 		{
 			reg >>>= 1;
 			reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
-			b[(int) (i * Frequencyss[3])] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
-        	for(int j = 1; j < Frequencyss[3]; j++)
+			b[(int) (i * (int)Frequencyss[3])] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
+        	for(int j = 1; j < (int)Frequencyss[3]; j++)
         	{
     			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
         		if(i * (int)Frequencyss[3] + j < onecool) b[(int) (i * (int)Frequencyss[3] + j)] = b[(int) (i * (int)Frequencyss[3])];
@@ -310,6 +315,8 @@ public class MM2
 		}
 
 		Frequencyss[3] *= Moderation;
+		if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
+
 		MusicNumbers[3] = MusicNumber;
 
 		return b;

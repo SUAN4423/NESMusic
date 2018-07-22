@@ -32,10 +32,12 @@ public class Wave extends PApplet
 			for(int i = 0; i < 4; i++)
 			{
 				byte[] b = null;
-				this.MVolDUM[i] = th.mm2.MVolDUM[i];
-				if(i < 2) b = Square(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
-				else if(i == 2) b = Triangle(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
-				else if(i == 3) b = Noise(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
+				//this.MVolDUM[i] = th.mm2.MVolDUM[i];
+				//if(i < 2) b = Square(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
+				//else if(i == 2) b = Triangle(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
+				//else if(i == 3) b = Noise(th.mm2.MFreq[i], th.mm2.MDuty[i], th.mm2.MVolu[i], th.mm2.MVDow[i], th.mm2.MModu[i], th.mm2.MMEna[i], th.mm2.MNumb[i], (byte)(i+1));
+
+				b = MM2.waves[i];
 
 				if(i < 2)
 				{
