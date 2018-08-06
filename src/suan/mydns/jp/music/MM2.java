@@ -82,6 +82,8 @@ public class MM2
 		T4.scheduleAtFixedRate(new Audio3Task(), 0, 1000 / (HzMu / onecool));
 		Timer T5 = new Timer();
 		T5.scheduleAtFixedRate(new Audio4Task(), 0, 1000 / (HzMu / onecool));
+		//Timer T6 = new Timer();
+		//T6.scheduleAtFixedRate(new TriChange(), 0, 1);
 	}
 
 	double[] MFreq = {0, 0, 0, 0};
@@ -230,6 +232,24 @@ public class MM2
 	static byte a = 1;
 	static int bbold = -128;
 
+	private static double change = 0;
+	private static int neiro = 0;
+	private static int susumi = 1;
+	static boolean resks = false;
+
+	class TriChange extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			// TODO 自動生成されたメソッド・スタブ
+			if(!resks)
+			{
+				change += Math.pow(2, 5);
+			}
+		}
+	}
+
 	static byte[] Triangle(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
 		//byte[] b = new byte[onecool];
@@ -238,16 +258,20 @@ public class MM2
 		{
 	        for(int i = 0; i < b.length; i++)
 	        {
-	        	b[i] = 0;
+	        	//b[i] = 0;
+	        	resks = true;
+	        	b[i] = (byte)(Tri[neiro] * a);
 	        }
 			return b;
 		}
+    	resks = false;
 		if(MusicNumbers[2] != MusicNumber)
 		{
 			Frequencyss[2] = Frequency;
 			Numbers[2] = 0;
 		}
 		Volumes[2] = 127.0;
+
 		for(int i = 0; i < b.length; i++)
 		{
             double phase = (i + (onecool * Numbers[2])) / (HzMu / (Frequencyss[2] / 1));
@@ -258,7 +282,29 @@ public class MM2
             b[i] = (byte)(Tri[((bb / 16) <= 7 ? (bb / 16) : ((bb / 16) * -1 + 15))] * a);
             bbold = bb;
     		Frequencyss[2] *= Moderation;
-		}
+		}//*/
+		/*for(int i = 0; i < b.length; i++)
+		{
+			if(change >= HzMu / Frequencyss[2])
+			{
+				System.out.println(change);
+				change = 0;
+				neiro += susumi;
+				if(neiro >= 8)
+				{
+					neiro = 7;
+					susumi *= -1;
+				}
+				else if(neiro < 0)
+				{
+					neiro = 0;
+					susumi *= -1;
+					a *= -1;
+				}
+			}
+            b[i] = (byte)(Tri[neiro] * a);
+			Frequencyss[2] *= Moderation;
+		}//*/
 		MusicNumbers[2] = MusicNumber;
 		Numbers[2]++;
 		return b;

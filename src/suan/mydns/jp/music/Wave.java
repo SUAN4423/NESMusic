@@ -26,8 +26,9 @@ public class Wave extends PApplet
 	{
 		if(this.Visible && th != null)
 		{
-			this.fill(255);
-			this.rect(0, 0, 1020, 600);
+			/*this.fill(255);
+			this.rect(0, 0, 1020, 600);//*/
+			background(255);
 			this.fill(0);
 			for(int i = 0; i < 4; i++)
 			{

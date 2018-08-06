@@ -51,7 +51,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.4.5";
+	public static final String Version = "1.4.6";
 
 	DropTarget dropTarget;
 	Component component;
@@ -176,8 +176,9 @@ public class Thoone extends PApplet
 	@Override
 	public void draw()
 	{
-		fill(255);
-		rect(0, 0, 1280, 720);
+		/*fill(255);
+		rect(0, 0, 1280, 720);//*/
+		background(255);
 		SPT[ch.GetChannel()].Draw(this);
 		sort.Draw(this);
 		DO.Draw(this);
