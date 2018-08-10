@@ -22,6 +22,7 @@ import processing.core.PApplet;
 import suan.mydns.jp.channel.Channel;
 import suan.mydns.jp.io.SaveLoad;
 import suan.mydns.jp.io.WaveOut;
+import suan.mydns.jp.io.filedown;
 import suan.mydns.jp.music.MM2;
 import suan.mydns.jp.music.MSTART;
 import suan.mydns.jp.state.DeleteOverlap;
@@ -51,7 +52,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.4.6";
+	public static final String Version = "1.5.0";
 
 	DropTarget dropTarget;
 	Component component;
@@ -112,8 +113,21 @@ public class Thoone extends PApplet
 
 				JF.add(JL);
 
+				//https://github.com/SUAN4423/NESMusic/raw/TEST/NESMusic.jar
+				newFileDownload download = new newFileDownload();
+				download.start();
+
 				JF.setVisible(true);
 			}
+		}
+	}
+
+	class newFileDownload extends Thread
+	{
+		@Override
+		public void run()
+		{
+			filedown.download("https://github.com/SUAN4423/NESMusic/raw/TEST/NESMusic.jar", "./NesMusic" + Version + ".jar");
 		}
 	}
 
