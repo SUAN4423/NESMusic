@@ -52,7 +52,8 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.5.0";
+	public static final String Version = "1.5.1";
+	public static String newVersion = Version;
 
 	DropTarget dropTarget;
 	Component component;
@@ -75,6 +76,7 @@ public class Thoone extends PApplet
 		public void run()
 		{
 			String str = ver.VirsionCheck();
+			newVersion = str;
 			if(str != null)
 			{
 				int i = Integer.parseInt(Version.substring(0, Version.indexOf(".")));
@@ -127,7 +129,8 @@ public class Thoone extends PApplet
 		@Override
 		public void run()
 		{
-			filedown.download("https://github.com/SUAN4423/NESMusic/raw/TEST/NESMusic.jar", "./NesMusic" + Version + ".jar");
+			filedown.download("https://github.com/SUAN4423/NESMusic/raw/TEST/NESMusic.jar", "./NESMusic" + newVersion + ".jar");
+			System.out.println("Download Finished");
 		}
 	}
 
