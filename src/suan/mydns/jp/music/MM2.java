@@ -272,7 +272,7 @@ public class MM2
 		}
 		Volumes[2] = 127.0;
 
-		for(int i = 0; i < b.length; i++)
+		/*for(int i = 0; i < b.length; i++)
 		{
             double phase = (i + (onecool * Numbers[2])) / (HzMu / (Frequencyss[2] / 1));
             phase -= Math.floor(phase);
@@ -283,12 +283,12 @@ public class MM2
             bbold = bb;
     		Frequencyss[2] *= Moderation;
 		}//*/
-		/*for(int i = 0; i < b.length; i++)
+		for(int i = 0; i < b.length; i++)
 		{
-			if(change >= HzMu / Frequencyss[2])
+			if((change += 32) >= HzMu / Frequencyss[2])
 			{
-				System.out.println(change);
-				change = 0;
+				//System.out.println(change);
+				change -= HzMu / Frequencyss[2];
 				neiro += susumi;
 				if(neiro >= 8)
 				{

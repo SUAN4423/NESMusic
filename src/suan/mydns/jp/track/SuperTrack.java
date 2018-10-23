@@ -206,24 +206,31 @@ public abstract class SuperTrack
 				{
 					if(this.Param[i] != "")
 					{
-						switch(i)
+						try
 						{
-						case 0:
-							this.Vol = Byte.parseByte(this.Param[i]);
-							break;
-						case 1:
-							this.Fre = Double.parseDouble(this.Param[i]);
-							break;
-						case 2:
-							this.VolD = Double.parseDouble(this.Param[i]);
-							break;
-						case 3:
-							this.FreD = Double.parseDouble(this.Param[i]);
-							break;
-						case 4:
-							this.Tempo = Double.parseDouble(this.Param[i]);
-							th.state.TempoSet(th, this.Tempo);
-							break;
+							switch(i)
+							{
+							case 0:
+								this.Vol = Byte.parseByte(this.Param[i]);
+								break;
+							case 1:
+								this.Fre = Double.parseDouble(this.Param[i]);
+								break;
+							case 2:
+								this.VolD = Double.parseDouble(this.Param[i]);
+								break;
+							case 3:
+								this.FreD = Double.parseDouble(this.Param[i]);
+								break;
+							case 4:
+								this.Tempo = Double.parseDouble(this.Param[i]);
+								th.state.TempoSet(th, this.Tempo);
+								break;
+							}
+						}
+						catch(NumberFormatException e)
+						{
+							e.printStackTrace();
 						}
 					}
 					this.ParamB[i] = false;

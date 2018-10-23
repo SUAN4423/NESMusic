@@ -95,8 +95,15 @@ public class State
 		{
 			if(this.NortsStr != "")
 			{
-				this.NortsSize = Double.parseDouble(this.NortsStr);
-				this.NortsStr = this.NortsSize + "";
+				try
+				{
+					this.NortsSize = Double.parseDouble(this.NortsStr);
+					this.NortsStr = this.NortsSize + "";
+				}
+				catch(NumberFormatException e)
+				{
+					e.printStackTrace();
+				}
 			}
 			this.pressed = false;
 		}
