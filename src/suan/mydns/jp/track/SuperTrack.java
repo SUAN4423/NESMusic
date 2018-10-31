@@ -74,7 +74,8 @@ public abstract class SuperTrack
 
 			this.Volume.add(this.Vol);
 			if(Channel != 3) this.Freque.add(th.mm2.Sn[j][i] + this.Fre);
-			else this.Freque.add(i+j*12 + this.Fre);
+			else this.Freque.add(((i + j * 12) > 0 && (i + j * 12) < 17) ? th.mm2.SnN[i + j * 12 - 1] : 0);
+			//else this.Freque.add(i+j*12 + this.Fre);
 			this.FrequI.add(i+j*12);
 			this.Time.add((long)(b));
 			this.SoundT.add((int) (((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag)*State.NortsSize));
