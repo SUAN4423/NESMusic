@@ -8,6 +8,10 @@ public class Channel
 	private int channel = 0;
 	public boolean loop = false;
 	private boolean pressed = false;
+	public int loopstartnum = 0;
+	public String loopstring = "0";
+	private boolean loopstart = false;
+	private boolean keyPressed = false;
 	public boolean[] canPlay = {true, true, true, true};
 
 	public void SetChannel(int Ch)
@@ -64,7 +68,7 @@ public class Channel
 		{
 			th.fill(0x00, 0xFF, 0x00);
 		}
-		if(th.kmState.IsMouseIn(1280/2, 0, 1280/12, 720/8))
+		if(th.kmState.IsMouseIn(1280/2, 0, 1280/12, 720/24))
 		{
 			th.fill(0xFF, 0x00, 0x00);
 			if(th.kmState.MLeft && !this.pressed)
@@ -77,9 +81,89 @@ public class Channel
 				this.pressed = false;
 			}
 		}
-		th.rect(1280/2, 0, 1280/12, 720/8);
+		th.rect(1280/2, 0, 1280/12, 720/24);
 		th.fill(0);
 		th.textSize(20);
-		th.text("Loop", 1280/2+10, 720/16+10);
+		th.text("Loop", 1280/2+10, 720/48+10);
+
+		th.fill(0xFF);
+		if(th.kmState.IsMouseIn(1280/2, 720/24, 1280/12, 720/12))
+		{
+			th.fill(0xFF, 0x00, 0x00);
+			if(th.kmState.MLeft && !this.loopstart)
+			{
+				this.loopstring = "";
+				this.loopstart = true;
+			}
+			else if(this.loopstart)
+			{
+				if(!this.keyPressed && th.keyPressed)
+				{
+					try
+					{
+						Integer.parseInt(th.key + "");
+						this.loopstring += th.key;
+					}
+					catch(Exception e)
+					{
+
+					}
+					this.keyPressed = true;
+				}
+				else if(this.keyPressed && !th.keyPressed)
+				{
+					this.keyPressed = false;
+				}
+			}
+		}
+		else
+		{
+			if(this.loopstring != "") this.loopstartnum = Integer.parseInt(this.loopstring);
+			this.loopstring = this.loopstartnum + "";
+			th.musics.loopBarTime = (long)(this.loopstartnum*(60.0 / th.SPT[th.ch.GetChannel()].Tempo * 4) * 1000);
+
+			if(this.loopstart)
+			{
+				for(int i = 0; i < 4; i++)
+				{
+					th.musics.loopNotes[i] = 0;
+					while(true)
+					{
+						if(th.musics.loopNotes[i] < th.SPT[i].Volume.size())
+						{
+							if(th.SPT[i].Time.get(th.musics.loopNotes[i]) <= th.musics.loopBarTime/1000.0*th.mm2.HzMu)
+							{
+								if(th.musics.loopBarTime/1000.0*th.mm2.HzMu >= th.SPT[i].Time.get(th.musics.loopNotes[i])+th.SPT[i].SoundT.get(th.musics.loopNotes[i]))
+								{
+									th.musics.loopNotes[i]++;
+								}
+								else
+								{
+									break;
+								}
+							}
+							else
+							{
+								break;
+							}
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+			}
+
+			this.loopstart = false;
+		}
+		if(this.loopstart)
+		{
+			th.fill(0x00, 0xFF, 0x00);
+		}
+		th.rect(1280/2, 720/24, 1280/12, 720/12);
+		th.fill(0);
+		th.textSize(20);
+		th.text(this.loopstring + " Bar\nLoop", 1280/2+10, 720/16+10);
 	}
 }

@@ -86,7 +86,8 @@ public class SaveLoad
 			String str = "";
 			for(int i = 0; i < 4; i++)
 			{
-				str += th.SPT[i].Tempo + "\r\n";
+				if(i == 2) str += th.ch.loopstartnum + "\r\n";
+				else str += th.SPT[i].Tempo + "\r\n";
 			}
 			for(int i = 0; i < 4; i++)
 			{
@@ -113,9 +114,11 @@ public class SaveLoad
 		{
 			br = new BufferedReader(new FileReader(file));
 			str = br.readLine();
+			int loop = 0;
 			for(int i = 0; i < 4; i++)
 			{
 				th.SPT[i].Tempo = Double.parseDouble(str);
+				if(i == 2 && str.indexOf(".") == -1) loop = Integer.parseInt(str);
 				str = br.readLine();
 			}
 			th.state.TempoSet(th, th.SPT[0].Tempo);
@@ -165,6 +168,7 @@ public class SaveLoad
 
 				str = br.readLine();
 			}
+			loopsetting(loop, th);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -186,9 +190,11 @@ public class SaveLoad
 		{
 			br = new BufferedReader(new FileReader(file));
 			str = br.readLine();
+			int loop = 0;
 			for(int i = 0; i < 4; i++)
 			{
 				th.SPT[i].Tempo = Double.parseDouble(str);
+				if(i == 2 && str.indexOf(".") == -1) loop = Integer.parseInt(str);
 				str = br.readLine();
 			}
 			th.state.TempoSet(th, th.SPT[0].Tempo);
@@ -251,6 +257,7 @@ public class SaveLoad
 
 				str = br.readLine();
 			}
+			loopsetting(loop, th);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -262,4 +269,41 @@ public class SaveLoad
 		}
 		this.time[1] = System.currentTimeMillis();
 	}
+
+	void loopsetting(int loopstart, Thoone th)
+	{
+		th.musics.loopBarTime = (long)(loopstart*(60.0 / th.SPT[th.ch.GetChannel()].Tempo * 4) * 1000);
+		th.ch.loopstring = loopstart + "";
+
+		for(int i = 0; i < 4; i++)
+		{
+			th.musics.loopNotes[i] = 0;
+			while(true)
+			{
+				if(th.musics.loopNotes[i] < th.SPT[i].Volume.size())
+				{
+					if(th.SPT[i].Time.get(th.musics.loopNotes[i]) <= th.musics.loopBarTime/1000.0*th.mm2.HzMu)
+					{
+						if(th.musics.loopBarTime/1000.0*th.mm2.HzMu >= th.SPT[i].Time.get(th.musics.loopNotes[i])+th.SPT[i].SoundT.get(th.musics.loopNotes[i]))
+						{
+							th.musics.loopNotes[i]++;
+						}
+						else
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+	}
+	//*/
 }

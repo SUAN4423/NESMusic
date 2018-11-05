@@ -17,10 +17,12 @@ public class MSTART
 	private boolean autoMove = false;
 	private int startBar = 0;
 	private int[] startNotes = {0, 0, 0, 0};
+	public int[] loopNotes = {0, 0, 0, 0};
 	private boolean startBarSet = false;
 	private String bar = "0";
 	private boolean keyPressed = false;
 	private long startBarTime = 0;
+	public long loopBarTime = 0;
 
 	public void Play(Thoone th)
 	{
@@ -205,10 +207,10 @@ public class MSTART
 				{
 					if(th.ch.loop)
 					{
-						starttime = System.currentTimeMillis();
+						starttime = System.currentTimeMillis() - loopBarTime;
 						for(int i = 0; i < 4; i++)
 						{
-							nowNotes[i] = 0;
+							nowNotes[i] = loopNotes[i];
 						}
 					}
 					else
