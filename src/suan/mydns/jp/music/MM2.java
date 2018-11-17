@@ -209,11 +209,11 @@ public class MM2
 
 	static byte[] MusicNumbers = {-1, -1, -1, -1};
 	static double[] Frequencys = {0, 0, 0, 0};
-	static double[] Frequencyss= {0, 0, 0, 0};
-	static float[] Dutys       = {0f, 0f, 0f, 0f};
+	public static double[] Frequencyss= {0, 0, 0, 0};
+	public static float[] Dutys       = {0f, 0f, 0f, 0f};
 	static byte[] Volume       = {0, 0, 0, 0};
 	static double[] VDown      = {0, 0, 0, 0};
-	static double[] Volumes    = {0, 0, 0, 0};
+	public static double[] Volumes    = {0, 0, 0, 0};
 	static double[] Mod        = {0, 0, 0, 0};
 	static boolean[] Mods      = {false, false, false, false};
 	static int[] Numbers       = {0, 0, 0, 0};
@@ -240,7 +240,10 @@ public class MM2
 		}
 		for(int i = 0; i < b.length; i++)
         {
-            double phase = (i + (onecool * Numbers[Ch - 1])) / (HzMu / Frequencyss[Ch - 1]);
+			double TempHZ = Frequencyss[Ch - 1];
+			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+			TempHZ = MM2.FamicomHz / ChangeRate;
+            double phase = (i + (onecool * Numbers[Ch - 1])) / (HzMu / TempHZ/*Frequencyss[Ch - 1]*/);
             phase -= Math.floor(phase);
             b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8));
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
@@ -295,7 +298,7 @@ public class MM2
 			Frequencyss[2] = Frequency;
 			Numbers[2] = 0;
 		}
-		Volumes[2] = 127.0;
+		Volumes[2] = 16.0;
 
 		/*for(int i = 0; i < b.length; i++)
 		{
@@ -310,10 +313,13 @@ public class MM2
 		}//*/
 		for(int i = 0; i < b.length; i++)
 		{
-			if((change += 32) >= HzMu / Frequencyss[2])
+			double TempHZ = Frequencyss[Ch - 1];
+			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+			TempHZ = MM2.FamicomHz / ChangeRate;
+			if((change += 32) >= HzMu / TempHZ/*Frequencyss[2]*/)
 			{
 				//System.out.println(change);
-				change -= HzMu / Frequencyss[2];
+				change -= HzMu / TempHZ/*Frequencyss[2]*/;
 				neiro += susumi;
 				if(neiro >= 8)
 				{

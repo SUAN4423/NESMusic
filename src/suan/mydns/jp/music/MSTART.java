@@ -10,7 +10,7 @@ public class MSTART
 	public boolean start = false;
 	private boolean starts = false;
 	private long starttime = 0;
-	private long time = 0;
+	public long time = 0;
 	public int[] nowNotes = {0, 0, 0, 0};
 	private Thoone th;
 	private boolean pressed = false;
@@ -23,6 +23,8 @@ public class MSTART
 	private boolean keyPressed = false;
 	private long startBarTime = 0;
 	public long loopBarTime = 0;
+
+	Timer T2 = new Timer();
 
 	public void Play(Thoone th)
 	{
@@ -38,7 +40,6 @@ public class MSTART
 				}
 				this.th = th;
 
-				Timer T2 = new Timer();
 				T2.scheduleAtFixedRate(new AudioTask(), 0, 1000 / (th.mm2.HzMu / th.mm2.onecool));
 			}
 
@@ -195,12 +196,12 @@ public class MSTART
 						}
 						else
 						{
-							th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i, 16);
+							th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
 						}
 					}
 					else
 					{
-						th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i, 16);
+						th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
 					}
 				}
 				if(!b)
@@ -217,7 +218,7 @@ public class MSTART
 					{
 						for(int i = 0; i < 4; i++)
 						{
-							th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i, 16);
+							th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
 						}
 						for(int i = 0; i < 4; i++)
 						{

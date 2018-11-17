@@ -25,6 +25,7 @@ import suan.mydns.jp.io.WaveOut;
 import suan.mydns.jp.io.filedown;
 import suan.mydns.jp.music.MM2;
 import suan.mydns.jp.music.MSTART;
+import suan.mydns.jp.play.PlayScreen;
 import suan.mydns.jp.state.DeleteOverlap;
 import suan.mydns.jp.state.KMState;
 import suan.mydns.jp.state.Move;
@@ -52,7 +53,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.8.0";
+	public static final String Version = "1.8.5";
 	public static String newVersion = Version;
 
 	DropTarget dropTarget;
@@ -190,89 +191,131 @@ public class Thoone extends PApplet
 				);
 	}
 
+	public static boolean Visible = true;
+
 	@Override
 	public void draw()
 	{
 		/*fill(255);
 		rect(0, 0, 1280, 720);//*/
-		background(255);
-		SPT[ch.GetChannel()].Draw(this);
-		sort.Draw(this);
-		DO.Draw(this);
-		state.Draw(this);
-		sl.Draw(this);
-		ch.Draw(this);
-		mv.Draw(this);
-		musics.Draw(this);
-		musics.Play(this);
-		kmState.Mouse[0] = this.mouseX;
-		kmState.Mouse[1] = this.mouseY;
-		if(!pressed && this.kmState.KeyC.get(' '))
+		if(Visible)
 		{
-			pressed = true;
-			this.musics.start = !this.musics.start;
-			if(!this.musics.start)
+			background(255);
+			SPT[ch.GetChannel()].Draw(this);
+			sort.Draw(this);
+			DO.Draw(this);
+			state.Draw(this);
+			sl.Draw(this);
+			ch.Draw(this);
+			mv.Draw(this);
+			musics.Draw(this);
+		}
+
+		musics.Play(this);
+
+		if(Visible)
+		{
+			kmState.Mouse[0] = this.mouseX;
+			kmState.Mouse[1] = this.mouseY;
+
+			if(!pressed && this.kmState.KeyC.get(' '))
+			{
+				pressed = true;
+				this.musics.start = !this.musics.start;
+				if(!this.musics.start)
+				{
+					for(int i = 0; i < 4; i++)
+					{
+						this.musics.nowNotes[i] = 0;
+					}
+					this.mm2.resk = true;
+					this.mm2.resktime = System.currentTimeMillis();
+				}
+			}
+			else if(pressed && !this.kmState.KeyC.get(' '))
 			{
 				for(int i = 0; i < 4; i++)
 				{
-					this.musics.nowNotes[i] = 0;
+					this.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, -1, i, 16);
 				}
-				this.mm2.resk = true;
-				this.mm2.resktime = System.currentTimeMillis();
+				pressed = false;
 			}
-		}
-		else if(pressed && !this.kmState.KeyC.get(' '))
-		{
-			for(int i = 0; i < 4; i++)
+			if(this.mm2.resk && System.currentTimeMillis() - this.mm2.resktime > 100) this.mm2.resk = false;
+
+			if(this.loads)
 			{
-				this.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, -1, i, 16);
+				this.loads = false;
+				sl.Load(this, path);
 			}
-			pressed = false;
-		}
-		if(this.mm2.resk && System.currentTimeMillis() - this.mm2.resktime > 100) this.mm2.resk = false;
 
-		if(this.loads)
-		{
-			this.loads = false;
-			sl.Load(this, path);
+			if(kmState.Key.get(this.LEFT))
+			{
+				SPT[ch.GetChannel()].ShiftX += 20;
+				if(SPT[ch.GetChannel()].ShiftX > 0) SPT[ch.GetChannel()].ShiftX = 0;
+			}
+			if(kmState.Key.get(this.RIGHT))
+			{
+				SPT[ch.GetChannel()].ShiftX -= 20;
+			}
+			if(kmState.Key.get(this.UP))
+			{
+				SPT[ch.GetChannel()].ShiftY += 20;
+				if(SPT[ch.GetChannel()].ShiftY > 2580) SPT[ch.GetChannel()].ShiftY = 2580;
+			}
+			if(kmState.Key.get(this.DOWN))
+			{
+				SPT[ch.GetChannel()].ShiftY -= 20;
+				if(SPT[ch.GetChannel()].ShiftY < 720) SPT[ch.GetChannel()].ShiftY = 720;
+			}
+
+			if(kmState.KeyC.get('r') && !FileWrite)
+			{
+				FileWrite = true;
+				WaveOut wo = new WaveOut();
+				wo.start();
+			}
+			else if(!kmState.KeyC.get('r') && FileWrite)
+			{
+				FileWrite = false;
+			}
+			if(System.currentTimeMillis() - this.FileWriteTime < 1000)
+			{
+				this.textSize(50);
+				this.fill(0);
+				this.text("Wave Output Finish", 400, 400);
+			}
 		}
 
-		if(kmState.Key.get(this.LEFT))
+		if(kmState.Key.get(115) && !keypressed)
 		{
-			SPT[ch.GetChannel()].ShiftX += 20;
-			if(SPT[ch.GetChannel()].ShiftX > 0) SPT[ch.GetChannel()].ShiftX = 0;
+			keypressed = true;
+			this.changeVisible();
+			if(!playscreen)
+			{
+				PlayScreen.th = this;
+				playscreen = true;
+				PApplet.main("suan.mydns.jp.play.PlayScreen");
+			}
+			else
+			{
+				ps.changeVisible();
+			}
+			if(Visible) kmState.Key.put(115, false);
 		}
-		if(kmState.Key.get(this.RIGHT))
+		else if(!kmState.Key.get(115) && keypressed)
 		{
-			SPT[ch.GetChannel()].ShiftX -= 20;
+			keypressed = false;
 		}
-		if(kmState.Key.get(this.UP))
-		{
-			SPT[ch.GetChannel()].ShiftY += 20;
-			if(SPT[ch.GetChannel()].ShiftY > 2580) SPT[ch.GetChannel()].ShiftY = 2580;
-		}
-		if(kmState.Key.get(this.DOWN))
-		{
-			SPT[ch.GetChannel()].ShiftY -= 20;
-			if(SPT[ch.GetChannel()].ShiftY < 720) SPT[ch.GetChannel()].ShiftY = 720;
-		}
+	}
 
-		if(kmState.KeyC.get('r') && !FileWrite)
-		{
-			FileWrite = true;
-			WaveOut wo = new WaveOut();
-			wo.start();
-		}
-		else if(!kmState.KeyC.get('r') && FileWrite)
-		{
-			FileWrite = false;
-		}
-		if(System.currentTimeMillis() - this.FileWriteTime < 1000)
-		{
-			this.textSize(50);
-			this.fill(0);
-			this.text("Wave Output Finish", 400, 400);
-		}
+	public PlayScreen ps;
+	boolean keypressed = false;
+	boolean playscreen = false;
+
+	public void changeVisible()
+	{
+		Visible = ! Visible;
+		getSurface().setVisible(Visible);
 	}
 
 	@Override
