@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import suan.mydns.jp.Thoone;
+import suan.mydns.jp.music.MM2;
 import suan.mydns.jp.state.State;
 
 public abstract class SuperTrack
@@ -73,7 +74,13 @@ public abstract class SuperTrack
 			long b = (long) ((k)*((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag));
 
 			this.Volume.add(this.Vol);
-			if(Channel != 3) this.Freque.add(th.mm2.Sn[j][i] + this.Fre);
+			if(Channel != 3)
+			{
+				double TempHZ = th.mm2.Sn[j][i] + this.Fre;
+				int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+				TempHZ = MM2.FamicomHz / ChangeRate;
+				this.Freque.add(TempHZ);
+			}
 			else this.Freque.add(((i + j * 12) > 0 && (i + j * 12) < 17) ? th.mm2.SnN[i + j * 12 - 1] : 0);
 			//else this.Freque.add(i+j*12 + this.Fre);
 			this.FrequI.add(i+j*12);
@@ -384,7 +391,10 @@ public abstract class SuperTrack
 					if(th.kmState.IsMouseIn(1280/6, (i+1+j*12)*-20+this.ShiftY, 1280/6*5, 20))
 					{
 						music = true;
-						th.mm2.ChStat(th.mm2.Sn[j][i] + this.Fre, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel, this.VDUM);
+						double TempHZ = th.mm2.Sn[j][i] + this.Fre;
+						int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+						TempHZ = MM2.FamicomHz / ChangeRate;
+						th.mm2.ChStat(TempHZ, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel, this.VDUM);
 						if(!th.mv.enableMove) this.Norts(th, i, j, Channel);
 					}
 				}

@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import suan.mydns.jp.Thoone;
+import suan.mydns.jp.music.MM2;
 
 public class SaveLoad
 {
@@ -243,6 +244,27 @@ public class SaveLoad
 					j = Double.parseDouble(str.substring(b+1));
 					if(i < 0) k = 0;
 					else k = 16;
+				}
+
+				if(a != 3)
+				{
+					int ChangeRate = (int)(MM2.FamicomHz / d + 0.5);
+					d = MM2.FamicomHz / ChangeRate;
+				}
+				else
+				{
+					double sa = Double.MAX_VALUE;
+					int No = 0;
+					for(int Z = 0; Z < MM2.SnN.length; Z++)
+					{
+						if(sa > Math.abs(MM2.SnN[Z] - d))
+						{
+							No = Z;
+							sa = Math.abs(MM2.SnN[Z] - d);
+						}
+					}
+					d = MM2.SnN[No];
+					e = No;
 				}
 
 				th.SPT[a].Volume.add((byte)c);
