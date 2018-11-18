@@ -12,7 +12,7 @@ public class Version
 		String str = null;
 		try
 		{
-			String adress="https://github.com/SUAN4423/NESMusic/blob/TEST/version.md";
+			String adress="https://github.com/SUAN4423/NESMusic/blob/master/version.md";
 			URL url = new URL(adress);//URLを設定
 			HttpURLConnection connect = (HttpURLConnection)url.openConnection();//サイトに接続
 			connect.setRequestMethod("GET");//プロトコルの設定
