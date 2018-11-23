@@ -212,13 +212,13 @@ public class MM2
 	public static double[] Frequencyss= {0, 0, 0, 0};
 	public static float[] Dutys       = {0f, 0f, 0f, 0f};
 	static byte[] Volume       = {0, 0, 0, 0};
-	static double[] VDown      = {0, 0, 0, 0};
+	public static double[] VDown      = {0, 0, 0, 0};
 	public static double[] Volumes    = {0, 0, 0, 0};
 	static double[] Mod        = {0, 0, 0, 0};
 	static boolean[] Mods      = {false, false, false, false};
 	static int[] Numbers       = {0, 0, 0, 0};
 	static byte[] MNum         = {0, 0, 0, 0};
-	static int[] MVolDUM       = {0, 0, 0, 0};
+	public static int[] MVolDUM       = {0, 0, 0, 0};
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{

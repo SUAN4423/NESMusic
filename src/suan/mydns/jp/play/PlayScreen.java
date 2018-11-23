@@ -55,7 +55,7 @@ public class PlayScreen extends PApplet
 						{
 							if(th.musics.nowNotes[i/2] < th.SPT[i/2].Freque.size())
 							{
-								temp[i/2] = (int)(MM2.Volumes[i/2] + ((int)((MM2.Dutys[i/2] == 1.0 ? 0.25 : MM2.Dutys[i/2]) * 4) << 5) + (th.musics.nowNotes[i/2] << 7));
+								temp[i/2] = (int)(Math.max(Math.min(MM2.Volumes[i/2], MM2.VDown[i/2] < 0 ? 16 : MM2.MVolDUM[i/2]), MM2.VDown[i/2] > 0 ? 0 : MM2.MVolDUM[i/2]) + ((int)((MM2.Dutys[i/2] == 1.0 ? 0.25 : MM2.Dutys[i/2]) * 4) << 5) + (th.musics.nowNotes[i/2] << 7));
 								this.text(String.format("Channel " + (i/2 + 1) +" : %06x", temp[i/2]).toUpperCase(), 20, 20 * (i + 1));
 							}
 							else
