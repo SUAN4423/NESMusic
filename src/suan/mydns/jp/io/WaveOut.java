@@ -280,7 +280,7 @@ public class WaveOut extends Thread
 		{
 	        for(int i = 0; i < b.length; i++)
 	        {
-	        	b[i] = 0;
+	        	b[i] = (byte)(Tri[neiro] * a);
 	        }
 			return b;
 		}
