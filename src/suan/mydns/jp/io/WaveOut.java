@@ -249,7 +249,10 @@ public class WaveOut extends Thread
 		}
 		for(int i = 0; i < b.length; i++)
         {
-            double phase = (i + (MM2.onecool * Numbers[Ch - 1])) / (MM2.HzMu / Frequencyss[Ch - 1]);
+			double TempHZ = Frequencyss[Ch - 1];
+			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+			TempHZ = MM2.FamicomHz / ChangeRate;
+            double phase = (i + (MM2.onecool * Numbers[Ch - 1])) / (MM2.HzMu / TempHZ);
             phase -= Math.floor(phase);
             b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8));
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
@@ -264,6 +267,11 @@ public class WaveOut extends Thread
 	static byte Trinum = 0;
 	static byte a = 1;
 	static int bbold = -128;
+
+	private static double change = 0;
+	private static int neiro = 0;
+	private static int susumi = 1;
+	static boolean resks = false;
 
 	static byte[] Triangle(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -281,8 +289,9 @@ public class WaveOut extends Thread
 			Frequencyss[2] = Frequency;
 			Numbers[2] = 0;
 		}
-		Volumes[2] = 127.0;
-		for(int i = 0; i < b.length; i++)
+		Volumes[2] = 16.0;
+
+		/*for(int i = 0; i < b.length; i++)
 		{
             double phase = (i + (MM2.onecool * Numbers[2])) / (MM2.HzMu / (Frequencyss[2] / 1));
             phase -= Math.floor(phase);
@@ -292,7 +301,34 @@ public class WaveOut extends Thread
             b[i] = (byte)(Tri[((bb / 16) <= 7 ? (bb / 16) : ((bb / 16) * -1 + 15))] * a);
             bbold = bb;
     		Frequencyss[2] *= Moderation;
-		}
+		}//*/
+
+		for(int i = 0; i < b.length; i++)
+		{
+			double TempHZ = Frequencyss[Ch - 1];
+			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+			TempHZ = MM2.FamicomHz / ChangeRate;
+			if((change += 32) >= MM2.HzMu / TempHZ/*Frequencyss[2]*/)
+			{
+				//System.out.println(change);
+				change -= MM2.HzMu / TempHZ/*Frequencyss[2]*/;
+				neiro += susumi;
+				if(neiro >= 8)
+				{
+					neiro = 7;
+					susumi *= -1;
+				}
+				else if(neiro < 0)
+				{
+					neiro = 0;
+					susumi *= -1;
+					a *= -1;
+				}
+			}
+            b[i] = (byte)(Tri[neiro] * a);
+			Frequencyss[2] *= Moderation;
+		}//*/
+
 		MusicNumbers[2] = MusicNumber;
 		Numbers[2]++;
 		return b;
@@ -331,8 +367,8 @@ public class WaveOut extends Thread
 		for(int i = (int) (Nokori / /*(int)*/Frequencyss[3]); i < b.length / /*(int)*/Frequencyss[3]; i++)
 		{
 			reg >>>= 1;
-			reg |= ((reg ^ (reg >>> (Duty == 1.0f ? 6 : 1))) & 1) << 15;
-			b[(int) (i * /*(int)*/Frequencyss[3])] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
+			reg |= ((reg ^ (reg >>> ((Duty + 2 - MM2.old) == 1.0f ? 6 : 1))) & 1) << 15;
+			b[(int) (i * /*(int)*/((Frequencyss[3] == MM2.SnN[15] && MM2.old != 2) ? MM2.SnN[14] : Frequencyss[3]))] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
         	for(int j = 1; j < /*(int)*/Frequencyss[3]; j++)
         	{
     			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
@@ -347,6 +383,8 @@ public class WaveOut extends Thread
 		}
 
 		Frequencyss[3] *= Moderation;
+		if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
+
 		MusicNumbers[3] = MusicNumber;
 
 		return b;
