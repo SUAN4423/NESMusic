@@ -264,7 +264,7 @@ public class SaveLoad
 						}
 					}
 					d = MM2.SnN[No];
-					e = No;
+					e = No + 1;
 				}
 
 				th.SPT[a].Volume.add((byte)c);
