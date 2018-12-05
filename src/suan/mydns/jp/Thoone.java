@@ -53,7 +53,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.9.2";
+	public static final String Version = "1.9.3";
 	public static String newVersion = Version;
 
 	DropTarget dropTarget;
