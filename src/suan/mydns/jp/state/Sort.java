@@ -131,6 +131,8 @@ public class Sort
 					th.SPT[i].Voldow.remove(n+1);
 					th.SPT[i].Fredow.add(j, th.SPT[i].Fredow.get(n));
 					th.SPT[i].Fredow.remove(n+1);
+					th.SPT[i].VolDUM.add(j, th.SPT[i].VolDUM.get(n));
+					th.SPT[i].VolDUM.remove(n+1);
 				}
 			}
 			Time = System.currentTimeMillis();
