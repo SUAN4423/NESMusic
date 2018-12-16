@@ -12,7 +12,7 @@ public class Wave extends PApplet
 	@Override
 	public void settings()
 	{
-		size(1020, 600);
+		size(1530/*1020*/, 600);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class Wave extends PApplet
 			this.rect(0, 0, 1020, 600);//*/
 			background(255);
 			this.fill(0);
-			for(int i = 0; i < 4; i++)
+			for(int i = 0; i < 5; i++)
 			{
 				byte[] b = null;
 				//this.MVolDUM[i] = th.mm2.MVolDUM[i];
@@ -40,7 +40,7 @@ public class Wave extends PApplet
 
 				b = MM2.waves[i];
 
-				if(i < 2)
+				if(i < 3)
 				{
 					for(int j = 0; j < MM2.onecool; j++)
 					{
@@ -51,7 +51,7 @@ public class Wave extends PApplet
 				{
 					for(int j = 0; j < MM2.onecool; j++)
 					{
-						this.point(20+MM2.onecool*(i-2)+j+20*(i-2), b[j]+420);
+						this.point(20+MM2.onecool*(i-3)+j+20*(i-3), b[j]+420);
 					}
 				}
 			}
