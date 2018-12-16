@@ -59,7 +59,7 @@ public class Sort
 	private void test(Thoone th)
 	{
 		isSort = true;
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 5; i++)
 		{
 			for(int j = 0; j < th.SPT[i].Volume.size(); j++)
 			{
@@ -101,7 +101,7 @@ public class Sort
 		public void run()
 		{
 			isSort = true;
-			for(int i = 0; i < 4; i++)
+			for(int i = 0; i < 5; i++)
 			{
 				for(int j = 0; j < th.SPT[i].Volume.size(); j++)
 				{

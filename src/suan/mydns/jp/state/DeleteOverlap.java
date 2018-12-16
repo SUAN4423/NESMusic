@@ -44,7 +44,7 @@ public class DeleteOverlap
 		@Override
 		public void run()
 		{
-			for(int i = 0; i < 4; i++)
+			for(int i = 0; i < 5; i++)
 			{
 				for(int j = 0; j < th.SPT[i].Time.size()-1; j++)
 				{

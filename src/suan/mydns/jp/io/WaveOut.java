@@ -58,8 +58,8 @@ public class WaveOut extends Thread
 			long frameLength = 0;
 
 			ArrayList<Integer> Ch = new ArrayList<>();
-			int[] startNotes = {0, 0, 0, 0};
-			int[] nowNotes = {0, 0, 0, 0};
+			int[] startNotes = {0, 0, 0, 0, 0};
+			int[] nowNotes = {0, 0, 0, 0, 0};
 
 			boolean b = false;
 			boolean bb = false;
@@ -70,7 +70,7 @@ public class WaveOut extends Thread
 			for(;;)
 			{
 				b = false;
-				for(int i = 0; i < 4; i++)
+				for(int i = 0; i < 5; i++)
 				{
 					if(nowNotes[i] < Wave.th.SPT[i].Volume.size())
 					{
@@ -99,7 +99,7 @@ public class WaveOut extends Thread
 					if((int) (Wave.th.state.NortsSize) > kurikaeshi)
 					{
 						this.time = -MM2.onecool;
-						for(int i = 0; i < 4; i++)
+						for(int i = 0; i < 5; i++)
 						{
 							nowNotes[i] = 0;
 						}
@@ -107,11 +107,11 @@ public class WaveOut extends Thread
 					}
 					else
 					{
-						for(int i = 0; i < 4; i++)
+						for(int i = 0; i < 5; i++)
 						{
 							this.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, 0, i, 16);
 						}
-						for(int i = 0; i < 4; i++)
+						for(int i = 0; i < 5; i++)
 						{
 							nowNotes[i] = 0;
 						}
@@ -124,12 +124,13 @@ public class WaveOut extends Thread
 				byte b0[] = Square(Frequencys[1], Dutys[1], Volume[1], VDown[1], Mod[1], Mods[1], MNum[1], (byte)2);
 				byte c0[] = Triangle(Frequencys[2], Dutys[2], Volume[2], VDown[2], Mod[2], Mods[2], MNum[2], (byte)3);
 				byte d0[] = Noise(Frequencys[3], Dutys[3], Volume[3], VDown[3], Mod[3], Mods[3], MNum[3], (byte)4);
+				byte e0[] = DPCM(Frequencys[4], Dutys[4], Volume[4], VDown[4], Mod[4], Mods[4], MNum[4], (byte)5);
 
 				if(b)
 				{
 					for(int i = 0; i < MM2.onecool; i++)
 					{
-						Ch.add(a0[i]+b0[i]+c0[i]+d0[i]);
+						Ch.add(a0[i]+b0[i]+c0[i]+d0[i]+e0[i]);
 						if(MAX < Ch.get(Ch.size() - 1)) MAX = Ch.get(Ch.size() - 1);
 					}
 				}
@@ -183,14 +184,14 @@ public class WaveOut extends Thread
 		return arr;
 	}
 
-	double[] MFreq = {0, 0, 0, 0};
-	float[] MDuty = {0f, 0f, 0f, 0f};
-	byte[] MVolu = {0, 0, 0, 0};
-	double[] MVDow = {0, 0, 0, 0};
-	double[] MModu = {0, 0, 0, 0};
-	boolean[] MMEna = {false, false, false, false};
-	byte[] MNumb = {-1, -1, -1, -1};
-	int[] MVDUM = {0, 0, 0, 0};
+	double[] MFreq = {0, 0, 0, 0, 0};
+	float[] MDuty = {0f, 0f, 0f, 0f, 0f};
+	byte[] MVolu = {0, 0, 0, 0, 0};
+	double[] MVDow = {0, 0, 0, 0, 0};
+	double[] MModu = {0, 0, 0, 0, 0};
+	boolean[] MMEna = {false, false, false, false, false};
+	byte[] MNumb = {-1, -1, -1, -1, -1};
+	int[] MVDUM = {0, 0, 0, 0, 0};
 
 	public void ChStat(double Fr, float Du, int Vo, double VD, double Mo, boolean ME, int Nu, int Ch, int vdum)
 	{
@@ -217,18 +218,18 @@ public class WaveOut extends Thread
 		MVolDUM[Ch] = MVDUM[Ch];
 	}
 
-	static byte[] MusicNumbers = {-1, -1, -1, -1};
-	static double[] Frequencys = {0, 0, 0, 0};
-	static double[] Frequencyss= {0, 0, 0, 0};
-	static float[] Dutys       = {0f, 0f, 0f, 0f};
-	static byte[] Volume       = {0, 0, 0, 0};
-	static double[] VDown      = {0, 0, 0, 0};
-	static double[] Volumes    = {0, 0, 0, 0};
-	static double[] Mod        = {0, 0, 0, 0};
-	static boolean[] Mods      = {false, false, false, false};
-	static int[] Numbers       = {0, 0, 0, 0};
-	static byte[] MNum         = {0, 0, 0, 0};
-	static int[] MVolDUM       = {0, 0, 0, 0};
+	static byte[] MusicNumbers = {-1, -1, -1, -1, -1};
+	static double[] Frequencys = {0, 0, 0, 0, 0};
+	static double[] Frequencyss= {0, 0, 0, 0, 0};
+	static float[] Dutys       = {0f, 0f, 0f, 0f, 0f};
+	static byte[] Volume       = {0, 0, 0, 0, 0};
+	static double[] VDown      = {0, 0, 0, 0, 0};
+	static double[] Volumes    = {0, 0, 0, 0, 0};
+	static double[] Mod        = {0, 0, 0, 0, 0};
+	static boolean[] Mods      = {false, false, false, false, false};
+	static int[] Numbers       = {0, 0, 0, 0, 0};
+	static byte[] MNum         = {0, 0, 0, 0, 0};
+	static int[] MVolDUM       = {0, 0, 0, 0, 0};
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -386,6 +387,70 @@ public class WaveOut extends Thread
 		if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
 
 		MusicNumbers[3] = MusicNumber;
+
+		return b;
+	}
+
+	static byte FirstWave = 0;
+	static double DPCMChange = 0;
+	static int DPCMindex = 1;
+
+	static byte[] DPCM(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
+	{
+		byte[] b =new byte[MM2.onecool];
+		try
+		{
+			if(Frequency == -1.0 || MM2.DPCMo[(int)Duty].size() <= 0 || DPCMWaveInport.LOADING)
+			{
+		        for(int i = 0; i < b.length; i++)
+		        {
+		        	b[i] = 0;
+		        }
+				return b;
+			}
+		}
+		catch(NullPointerException e)
+		{
+	        for(int i = 0; i < b.length; i++)
+	        {
+	        	b[i] = 0;
+	        }
+			return b;
+		}
+
+		if(MusicNumbers[Ch - 1] != MusicNumber)
+		{
+			DPCMindex = 1;
+			Frequencyss[Ch - 1] = Frequency;
+			Numbers[Ch - 1] = 0;
+			Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
+			if(MM2.DPCMo[(int)Duty].size() > 0) FirstWave = (byte) MM2.DPCMo[(int)Duty].get(0);
+			DPCMChange = 0;
+			//System.out.println(SnD[(int)Frequency] + " " + FirstWave);
+		}
+
+		for(int i = 0; i < b.length; i++)
+		{
+			//while((DPCMChange += 4096) >= HzMu / SnD[(int)Frequency])
+			DPCMChange += MM2.SnD[0];
+			while(DPCMChange >= MM2.SnD[(int)Frequency])
+			{
+				//DPCMChange -=  HzMu / SnD[(int)Frequency];
+				DPCMChange -=  MM2.SnD[(int)Frequency];
+				if(DPCMindex == 0) FirstWave = (byte) MM2.DPCMo[(int)Duty].get(0);
+				else FirstWave += MM2.DPCMo[(int)Duty].get(DPCMindex) * 2 - 1;
+				if(FirstWave > 32 || FirstWave < -32)System.out.println(FirstWave);
+				//System.out.println(DPCMo[(int)Duty].get(DPCMindex) * 2 - 1);
+				DPCMindex++;
+				//System.out.println(DPCMindex);
+				if(DPCMindex >= MM2.DPCMo[(int)Duty].size()) DPCMindex = 0;
+			}
+			b[i] = (byte) (FirstWave * 4 >= 128 ? 127 : FirstWave * 4 < -128 ? -128 : FirstWave * 4);
+			//System.out.println(b[i] + " " + DPCMindex);
+			Frequencyss[Ch - 1] *= Moderation;
+		}//*/
+		MusicNumbers[Ch - 1] = MusicNumber;
+		Numbers[Ch - 1]++;
 
 		return b;
 	}

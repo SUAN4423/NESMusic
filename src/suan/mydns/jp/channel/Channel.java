@@ -4,7 +4,7 @@ import suan.mydns.jp.Thoone;
 
 public class Channel
 {
-	private String[] Text = {"1Ch\nSquare", "2Ch\nSquare", "3Ch\nTriangle", "4Ch\nNoise"};
+	private String[] Text = {"1Ch\nSquare", "2Ch\nSquare", "3Ch\nTriangle", "4Ch\nNoise", "5Ch\nDPCM"};
 	private int channel = 0;
 	public boolean loop = false;
 	private boolean pressed = false;
@@ -12,7 +12,7 @@ public class Channel
 	public String loopstring = "0";
 	private boolean loopstart = false;
 	private boolean keyPressed = false;
-	public boolean[] canPlay = {true, true, true, true};
+	public boolean[] canPlay = {true, true, true, true, true};
 
 	public void SetChannel(int Ch)
 	{
@@ -26,19 +26,19 @@ public class Channel
 
 	public void Draw(Thoone th)
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 5; i++)
 		{
 			th.color(0);
 			th.fill(255);
 			if(this.canPlay[i]) th.fill(0x00, 0xFF, 0x00);
 			if(this.channel == i) th.fill(0xFF, 0x00, 0x00);
-			th.rect(0, 720/4*i, 1280/6, 720/4);
+			th.rect(0, 720/5*i, 1280/6, 720/5);
 			th.fill(0);
 			th.textSize(50);
-			th.text(Text[i], 10, 720/4*i+300/4);
+			th.text(Text[i], 10, 720/5*i+300/5);
 			if(th.kmState.MLeft)
 			{
-				if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4))
+				if(th.kmState.IsMouseIn(0, 720/5*i, 1280/6, 720/5))
 				{
 					if(i < 3) th.mm2.ChStat(th.mm2.Sn[4][th.mm2.C], 0.5f, 16, 0, 1, false, 1, i, 16);
 					else th.mm2.ChStat(5, 0.0f, 16, 0, 1, false, 1, i, 16);
@@ -46,18 +46,18 @@ public class Channel
 					this.canPlay[i] = true;
 				}
 			}
-			else if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4) && !th.musics.start)
+			else if(th.kmState.IsMouseIn(0, 720/5*i, 1280/6, 720/5) && !th.musics.start)
 			{
-				if(i < 3) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, i, 16);
+				if(i < 3 || i == 4) th.mm2.ChStat(-1, 0.5f, 16, 0, 1, false, -1, i, 16);
 				else th.mm2.ChStat(0, 0.5f, 16, 0, 1, false, -1, i, 16);
 			}
 
-			if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4) && th.kmState.MRight && !this.pressed)
+			if(th.kmState.IsMouseIn(0, 720/5*i, 1280/6, 720/5) && th.kmState.MRight && !this.pressed)
 			{
 				this.pressed = true;
 				this.canPlay[i] = !this.canPlay[i];
 			}
-			else if(th.kmState.IsMouseIn(0, 720/4*i, 1280/6, 720/4) && !th.kmState.MRight && this.pressed)
+			else if(th.kmState.IsMouseIn(0, 720/5*i, 1280/6, 720/5) && !th.kmState.MRight && this.pressed)
 			{
 				this.pressed = false;
 			}
@@ -124,7 +124,7 @@ public class Channel
 
 			if(this.loopstart)
 			{
-				for(int i = 0; i < 4; i++)
+				for(int i = 0; i < 5; i++)
 				{
 					th.musics.loopNotes[i] = 0;
 					while(true)

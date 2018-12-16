@@ -1,5 +1,6 @@
 package suan.mydns.jp.music;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,10 +9,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+import suan.mydns.jp.io.DPCMWaveInport;
+
 public class MM2
 {
 	public static double[][] Sn = new double[10][12];
 	public static double[] SnN = new double[16];
+	public static double[] SnD = new double[16];
 	public static String[] Onkai = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 	public static final int C = 0, Cs = 1, D = 2, Ds = 3, E = 4, F = 5, Fs = 6, G = 7, Gs = 8, A = 9, As = 10, B = 11;
 
@@ -19,6 +23,7 @@ public class MM2
 	public static SourceDataLine Tw = null;
 	public static SourceDataLine Th = null;
 	public static SourceDataLine Fo = null;
+	public static SourceDataLine Fi = null;
 
 	public boolean resk = false;
 	public long resktime = 0;
@@ -27,6 +32,9 @@ public class MM2
 
 	public static final double FamicomHz = 1789772.5;
 	public static final int NoiseClock[] = {0x002, 0x004, 0x008, 0x010, 0x020, 0x030, 0x040, 0x050, 0x065, 0x07F, 0x0BE, 0x0FE, 0x17D, 0x1FC, 0x3F9, 0x7F2};
+	public static final int DPCMClock[] = {428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106, 85, 72, 54};
+
+	public static ArrayList<Byte> DPCMo[] = new ArrayList[8];
 
 	public static int onecool = 480;
 
@@ -52,6 +60,8 @@ public class MM2
 		for(int i = 0; i < 16; i++)
 		{
 			SnN[i] = HzMu / (FamicomHz / NoiseClock[i]);
+			SnD[i] = HzMu / (FamicomHz / DPCMClock[i]);
+			//System.out.println(SnN[i] * HzMu + " " + SnD[i] * HzMu + " " + SnN[i] + " " + SnD[i]);
 		}
 		/*SnN[0] = HzMu / 901120.0;					//15A
 		SnN[1] = HzMu / 450560.0;					//14A
@@ -86,6 +96,8 @@ public class MM2
 			Th.open(format);
         	Fo = (SourceDataLine)AudioSystem.getSourceDataLine(format);
 			Fo.open(format);
+        	Fi = (SourceDataLine)AudioSystem.getSourceDataLine(format);
+			Fi.open(format);
 		}
         catch (LineUnavailableException e)
         {
@@ -97,6 +109,7 @@ public class MM2
         Tw.start();
         Th.start();
         Fo.start();
+        Fi.start();
 
 		Timer T2 = new Timer();
 		T2.scheduleAtFixedRate(new Audio1Task(), 0, 1000 / (HzMu / onecool));
@@ -106,18 +119,20 @@ public class MM2
 		T4.scheduleAtFixedRate(new Audio3Task(), 0, 1000 / (HzMu / onecool));
 		Timer T5 = new Timer();
 		T5.scheduleAtFixedRate(new Audio4Task(), 0, 1000 / (HzMu / onecool));
+		Timer T6 = new Timer();
+		T6.scheduleAtFixedRate(new Audio5Task(), 0, 1000 / (HzMu / onecool));
 		//Timer T6 = new Timer();
 		//T6.scheduleAtFixedRate(new TriChange(), 0, 1);
 	}
 
-	double[] MFreq = {0, 0, 0, 0};
-	float[] MDuty = {0f, 0f, 0f, 0f};
-	byte[] MVolu = {0, 0, 0, 0};
-	double[] MVDow = {0, 0, 0, 0};
-	double[] MModu = {0, 0, 0, 0};
-	boolean[] MMEna = {false, false, false, false};
-	byte[] MNumb = {-1, -1, -1, -1};
-	int[] MVDUM = {0, 0, 0, 0};
+	double[] MFreq = {0, 0, 0, 0, 0};
+	float[] MDuty = {0f, 0f, 0f, 0f, 0f};
+	byte[] MVolu = {0, 0, 0, 0, 0};
+	double[] MVDow = {0, 0, 0, 0, 0};
+	double[] MModu = {0, 0, 0, 0, 0};
+	boolean[] MMEna = {false, false, false, false, false};
+	byte[] MNumb = {-1, -1, -1, -1, -1};
+	int[] MVDUM = {0, 0, 0, 0, 0};
 	private long Tempsample = 0;
 
 	public void ChStat(double Fr, float Du, int Vo, double VD, double Mo, boolean ME, int Nu, int Ch, int vdum)
@@ -164,7 +179,7 @@ public class MM2
 		}
 	}
 
-	public static byte waves[][] = new byte[4][onecool];
+	public static byte waves[][] = new byte[5][onecool];
 
 	class Audio1Task extends TimerTask
 	{
@@ -207,18 +222,29 @@ public class MM2
 		}
 	}
 
-	static byte[] MusicNumbers = {-1, -1, -1, -1};
-	static double[] Frequencys = {0, 0, 0, 0};
-	public static double[] Frequencyss= {0, 0, 0, 0};
-	public static float[] Dutys       = {0f, 0f, 0f, 0f};
-	static byte[] Volume       = {0, 0, 0, 0};
-	public static double[] VDown      = {0, 0, 0, 0};
-	public static double[] Volumes    = {0, 0, 0, 0};
-	static double[] Mod        = {0, 0, 0, 0};
-	static boolean[] Mods      = {false, false, false, false};
-	static int[] Numbers       = {0, 0, 0, 0};
-	static byte[] MNum         = {0, 0, 0, 0};
-	public static int[] MVolDUM       = {0, 0, 0, 0};
+	class Audio5Task extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			// TODO 自動生成されたメソッド・スタブ
+			//System.out.println(Frequencys[3] + " " + Dutys[3] + " " + Volume[3] + " " + VDown[3] + " " + Mod[3] + " " + Mods[3] + " " + MNum[3] + " " + (byte)4);
+			if(!resk) Fi.write(DPCM(Frequencys[4], Dutys[4], Volume[4], VDown[4], Mod[4], Mods[4], MNum[4], (byte)5), 0, onecool);
+		}
+	}
+
+	static byte[] MusicNumbers = {-1, -1, -1, -1, -1};
+	static double[] Frequencys = {0, 0, 0, 0, 0};
+	public static double[] Frequencyss= {0, 0, 0, 0, 0};
+	public static float[] Dutys       = {0f, 0f, 0f, 0f, 0f};
+	static byte[] Volume       = {0, 0, 0, 0, 0};
+	public static double[] VDown      = {0, 0, 0, 0, 0};
+	public static double[] Volumes    = {0, 0, 0, 0, 0};
+	static double[] Mod        = {0, 0, 0, 0, 0};
+	static boolean[] Mods      = {false, false, false, false, false};
+	static int[] Numbers       = {0, 0, 0, 0, 0};
+	static byte[] MNum         = {0, 0, 0, 0, 0};
+	public static int[] MVolDUM       = {0, 0, 0, 0, 0};
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -395,6 +421,70 @@ public class MM2
 		if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
 
 		MusicNumbers[3] = MusicNumber;
+
+		return b;
+	}
+
+	static byte FirstWave = 0;
+	static double DPCMChange = 0;
+	static int DPCMindex = 1;
+
+	static byte[] DPCM(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
+	{
+		byte[] b = waves[Ch - 1];
+		try
+		{
+			if(Frequency == -1.0 || DPCMo[(int)Duty].size() <= 0 || DPCMWaveInport.LOADING)
+			{
+		        for(int i = 0; i < b.length; i++)
+		        {
+		        	b[i] = 0;
+		        }
+				return b;
+			}
+		}
+		catch(NullPointerException e)
+		{
+	        for(int i = 0; i < b.length; i++)
+	        {
+	        	b[i] = 0;
+	        }
+			return b;
+		}
+
+		if(MusicNumbers[Ch - 1] != MusicNumber)
+		{
+			DPCMindex = 1;
+			Frequencyss[Ch - 1] = Frequency;
+			Numbers[Ch - 1] = 0;
+			Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
+			if(DPCMo[(int)Duty].size() > 0) FirstWave = (byte) DPCMo[(int)Duty].get(0);
+			DPCMChange = 0;
+			//System.out.println(SnD[(int)Frequency] + " " + FirstWave);
+		}
+
+		for(int i = 0; i < b.length; i++)
+		{
+			//while((DPCMChange += 4096) >= HzMu / SnD[(int)Frequency])
+			DPCMChange += SnD[0];
+			while(DPCMChange >= SnD[(int)Frequency])
+			{
+				//DPCMChange -=  HzMu / SnD[(int)Frequency];
+				DPCMChange -=  SnD[(int)Frequency];
+				if(DPCMindex == 0) FirstWave = (byte) DPCMo[(int)Duty].get(0);
+				else FirstWave += DPCMo[(int)Duty].get(DPCMindex) * 2 - 1;
+				if(FirstWave > 32 || FirstWave < -32)System.out.println(FirstWave);
+				//System.out.println(DPCMo[(int)Duty].get(DPCMindex) * 2 - 1);
+				DPCMindex++;
+				//System.out.println(DPCMindex);
+				if(DPCMindex >= DPCMo[(int)Duty].size()) DPCMindex = 0;
+			}
+			b[i] = (byte) (FirstWave * 4 >= 128 ? 127 : FirstWave * 4 < -128 ? -128 : FirstWave * 4);
+			//System.out.println(b[i] + " " + DPCMindex);
+			Frequencyss[Ch - 1] *= Moderation;
+		}//*/
+		MusicNumbers[Ch - 1] = MusicNumber;
+		Numbers[Ch - 1]++;
 
 		return b;
 	}

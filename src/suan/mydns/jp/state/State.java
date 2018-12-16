@@ -10,7 +10,7 @@ public class State
 
 	public void TempoSet(Thoone th, double Tempo)
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 5; i++)
 		{
 			th.SPT[i].Tempo = Tempo;
 			th.SPT[i].Param[4] = Tempo + "";

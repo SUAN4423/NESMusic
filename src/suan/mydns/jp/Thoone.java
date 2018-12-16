@@ -13,6 +13,7 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ import javax.swing.JLabel;
 
 import processing.core.PApplet;
 import suan.mydns.jp.channel.Channel;
+import suan.mydns.jp.io.DPCMWaveInport;
 import suan.mydns.jp.io.SaveLoad;
 import suan.mydns.jp.io.WaveOut;
 import suan.mydns.jp.io.filedown;
@@ -31,6 +33,7 @@ import suan.mydns.jp.state.KMState;
 import suan.mydns.jp.state.Move;
 import suan.mydns.jp.state.Sort;
 import suan.mydns.jp.state.State;
+import suan.mydns.jp.track.FiveCh;
 import suan.mydns.jp.track.FourCh;
 import suan.mydns.jp.track.OneCh;
 import suan.mydns.jp.track.SuperTrack;
@@ -43,17 +46,18 @@ public class Thoone extends PApplet
 	public MM2 mm2 = new MM2();
 	public KMState kmState = new KMState(this);
 	public Channel ch = new Channel();
-	public SuperTrack[] SPT = new SuperTrack[4];
+	public SuperTrack[] SPT = new SuperTrack[5];
 	public MSTART musics = new MSTART();
 	public Sort sort = new Sort();
 	public SaveLoad sl = new SaveLoad();
 	public DeleteOverlap DO = new DeleteOverlap();
 	public State state = new State();
 	public Move mv = new Move();
+	public DPCMWaveInport wi = new DPCMWaveInport();
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.9.5";
+	public static final String Version = "1.10.0";
 	public static String newVersion = Version;
 
 	DropTarget dropTarget;
@@ -61,6 +65,7 @@ public class Thoone extends PApplet
 	String path = "";
 	boolean loads = false;
 	boolean FileWrite = false;
+	boolean DPCMLoad = false;
 	public static long FileWriteTime = 0;
 
 	public static boolean newVersionAvairable = false;
@@ -151,6 +156,12 @@ public class Thoone extends PApplet
 		SPT[1] = new TwoCh();
 		SPT[2] = new ThreeCh();
 		SPT[3] = new FourCh();
+		SPT[4] = new FiveCh();
+
+		for(int i = 0; i < MM2.DPCMo.length; i++)
+		{
+			MM2.DPCMo[i] = new ArrayList<Byte>();
+		}
 
 		component = (Component)this.surface.getNative();
 
@@ -185,7 +196,8 @@ public class Thoone extends PApplet
 					println(f.getAbsolutePath());
 					path = f.getAbsolutePath();
 				}
-				loads = true;
+				if(path.contains(".thh")) loads = true;
+				else if(path.contains(".wav")) DPCMLoad = true;
 			}
 		}
 				);
@@ -224,7 +236,7 @@ public class Thoone extends PApplet
 				this.musics.start = !this.musics.start;
 				if(!this.musics.start)
 				{
-					for(int i = 0; i < 4; i++)
+					for(int i = 0; i < 5; i++)
 					{
 						this.musics.nowNotes[i] = 0;
 					}
@@ -234,7 +246,7 @@ public class Thoone extends PApplet
 			}
 			else if(pressed && !this.kmState.KeyC.get(' '))
 			{
-				for(int i = 0; i < 4; i++)
+				for(int i = 0; i < 5; i++)
 				{
 					this.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, -1, i, 16);
 				}
@@ -246,6 +258,12 @@ public class Thoone extends PApplet
 			{
 				this.loads = false;
 				sl.Load(this, path);
+			}
+
+			if(this.DPCMLoad)
+			{
+				this.DPCMLoad = false;
+				wi.Load(this, path);
 			}
 
 			if(kmState.Key.get(this.LEFT))

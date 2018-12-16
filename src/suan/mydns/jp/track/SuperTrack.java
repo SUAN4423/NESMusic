@@ -21,9 +21,9 @@ public abstract class SuperTrack
 	public int ShiftX = 0;
 	public int ShiftY = 720;
 	String[] Move = {"Å™", "Å´", "Å©", "Å®"};
-	int freq = 0;
-	String[][] Dutys = {{"1:7", "1:3", "1:1", "3:1"},{"Long", "Short", "New", "Old"}};
-	float[][] fr = {{0.125f, 0.25f, 0.5f, 0.75f},{0.0f, 1.0f, 0.0f, 0.0f}};
+	public int freq = 0;
+	String[][] Dutys = {{"1:7", "1:3", "1:1", "3:1", "", "", "", ""},{"Long", "Short", "New", "Old", "", "", "", ""},{"1","2","3","4","5","6","7","8"}};
+	float[][] fr = {{0.125f, 0.25f, 0.5f, 0.75f, 0.0f, 0.0f, 0.0f, 0.0f},{0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},{0,1,2,3,4,5,6,7}};
 	public int Nag = 4;
 	protected boolean OnpuSet = false;
 	protected boolean OnpuSet2 = false;
@@ -74,19 +74,20 @@ public abstract class SuperTrack
 			long b = (long) ((k)*((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag));
 
 			this.Volume.add(this.Vol);
-			if(Channel != 3)
+			if(Channel < 3)
 			{
 				double TempHZ = th.mm2.Sn[j][i] + this.Fre;
 				int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
 				TempHZ = MM2.FamicomHz / ChangeRate;
 				this.Freque.add(TempHZ);
 			}
-			else this.Freque.add(((i + j * 12) > 0 && (i + j * 12) < 17) ? th.mm2.SnN[i + j * 12 - 1] : 0);
+			else if(Channel == 3)this.Freque.add(((i + j * 12) > 0 && (i + j * 12) < 17) ? th.mm2.SnN[i + j * 12 - 1] : 0);
+			else this.Freque.add(((i + j * 12) > 0 && (i + j * 12) < 17) ? i + j * 12.0 - 1 : 0);
 			//else this.Freque.add(i+j*12 + this.Fre);
 			this.FrequI.add(i+j*12);
 			this.Time.add((long)(b));
 			this.SoundT.add((int) (((60.0 / this.Tempo) * th.mm2.HzMu * 4 / this.Nag)*State.NortsSize));
-			this.Duty.add(this.fr[Channel == 3 ? 1 : 0][this.freq]);
+			this.Duty.add(this.fr[Channel == 3 ? 1 : Channel == 4 ? 2 : 0][this.freq]);
 			this.Voldow.add(this.VolD);
 			this.Fredow.add(this.FreD);
 			this.VolDUM.add(this.VDUM);

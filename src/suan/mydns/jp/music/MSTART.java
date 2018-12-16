@@ -11,13 +11,13 @@ public class MSTART
 	private boolean starts = false;
 	private long starttime = 0;
 	public long time = 0;
-	public int[] nowNotes = {0, 0, 0, 0};
+	public int[] nowNotes = {0, 0, 0, 0, 0};
 	private Thoone th;
 	private boolean pressed = false;
 	private boolean autoMove = false;
 	private int startBar = 0;
-	private int[] startNotes = {0, 0, 0, 0};
-	public int[] loopNotes = {0, 0, 0, 0};
+	private int[] startNotes = {0, 0, 0, 0, 0};
+	public int[] loopNotes = {0, 0, 0, 0, 0};
 	private boolean startBarSet = false;
 	private String bar = "0";
 	private boolean keyPressed = false;
@@ -34,7 +34,7 @@ public class MSTART
 			{
 				this.starts = true;
 				this.starttime = System.currentTimeMillis() - this.startBarTime;
-				for(int i = 0; i < 4; i++)
+				for(int i = 0; i < 5; i++)
 				{
 					this.nowNotes[i] = this.startNotes[i];
 				}
@@ -180,7 +180,7 @@ public class MSTART
 			{
 				boolean b = false;
 				time = (long) (((System.currentTimeMillis() - starttime)/1000.0)*th.mm2.HzMu);
-				for(int i = 0; i < 4; i++)
+				for(int i = 0; i < 5; i++)
 				{
 					if(nowNotes[i] < th.SPT[i].Volume.size())
 					{
@@ -210,18 +210,18 @@ public class MSTART
 					if(th.ch.loop)
 					{
 						starttime = System.currentTimeMillis() - loopBarTime;
-						for(int i = 0; i < 4; i++)
+						for(int i = 0; i < 5; i++)
 						{
 							nowNotes[i] = loopNotes[i];
 						}
 					}
 					else
 					{
-						for(int i = 0; i < 4; i++)
+						for(int i = 0; i < 5; i++)
 						{
 							th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
 						}
-						for(int i = 0; i < 4; i++)
+						for(int i = 0; i < 5; i++)
 						{
 							nowNotes[i] = 0;
 						}
