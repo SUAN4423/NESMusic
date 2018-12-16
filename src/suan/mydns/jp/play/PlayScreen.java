@@ -15,7 +15,7 @@ public class PlayScreen extends PApplet
 	@Override
 	public void settings()
 	{
-		size(300, 200);
+		size(300, 250);
 	}
 
 	@Override
@@ -24,8 +24,8 @@ public class PlayScreen extends PApplet
 		th.ps = this;
 	}
 
-	int temp[] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
-	double temp2[] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
+	int temp[] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
+	double temp2[] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
 
 	@Override
 	public void draw()
@@ -35,7 +35,7 @@ public class PlayScreen extends PApplet
 			/*this.fill(255);
 			this.rect(0, 0, 1020, 600);//*/
 			boolean rewrite = false;
-			for(int i = 0; i < 4; i++)
+			for(int i = 0; i < 5; i++)
 			{
 				if(temp[i] != (int)(MM2.Volumes[i] + (int)(MM2.Volumes[i] + ((int)((MM2.Dutys[i] == 1.0 ? 0.25 : MM2.Dutys[i]) * 4) << 5)) + (th.musics.nowNotes[i] << 7))) rewrite = true;
 				if(temp2[i] != MM2.Frequencyss[i]) rewrite = true;
@@ -47,7 +47,7 @@ public class PlayScreen extends PApplet
 
 				this.fill(0);
 				this.textSize(20);
-				for(int i = 0; i < 8; i++)
+				for(int i = 0; i < 10; i++)
 				{
 					if(i % 2 == 0)
 					{
@@ -75,7 +75,7 @@ public class PlayScreen extends PApplet
 							if(th.musics.nowNotes[i/2] < th.SPT[i/2].Freque.size())
 							{
 								int ChangeRate = (int)(MM2.FamicomHz / MM2.Frequencyss[i/2] + 0.5);
-								if(i / 2 == 3) ChangeRate = (int)(th.SPT[i/2].FrequI.get(th.musics.nowNotes[i/2]));// + 16 * th.SPT[i/2].Duty.get(th.musics.nowNotes[i/2]));
+								if(i / 2 >= 3) ChangeRate = (int)(th.SPT[i/2].FrequI.get(th.musics.nowNotes[i/2]));// + 16 * th.SPT[i/2].Duty.get(th.musics.nowNotes[i/2]));
 								if(th.SPT[i/2].Time.get(th.musics.nowNotes[i/2]) > th.musics.time) ChangeRate = 0;
 								this.text(String.format("Channel " + (i/2 + 1) +" : %04x", ChangeRate == 0x7FFFFFFF ? 0 : ChangeRate).toUpperCase(), 20, 20 * (i + 1));
 							}

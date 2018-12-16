@@ -57,7 +57,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.10.1";
+	public static final String Version = "1.10.2";
 	public static String newVersion = Version;
 
 	DropTarget dropTarget;
@@ -224,6 +224,9 @@ public class Thoone extends PApplet
 		}
 
 		musics.Play(this);
+
+		if(this.SPT[4].Volume.size() > 0) MM2.percent = 0.5f;
+		else MM2.percent = 1.0f;
 
 		if(Visible)
 		{

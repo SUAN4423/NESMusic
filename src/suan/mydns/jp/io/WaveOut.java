@@ -255,7 +255,7 @@ public class WaveOut extends Thread
 			TempHZ = MM2.FamicomHz / ChangeRate;
             double phase = (i + (MM2.onecool * Numbers[Ch - 1])) / (MM2.HzMu / TempHZ);
             phase -= Math.floor(phase);
-            b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8));
+            b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * MM2.percent);
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
 			Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
         }
@@ -281,7 +281,7 @@ public class WaveOut extends Thread
 		{
 	        for(int i = 0; i < b.length; i++)
 	        {
-	        	b[i] = (byte)(Tri[neiro] * a);
+	        	b[i] = (byte)(Tri[neiro] * a * MM2.percent);
 	        }
 			return b;
 		}
@@ -326,7 +326,7 @@ public class WaveOut extends Thread
 					a *= -1;
 				}
 			}
-            b[i] = (byte)(Tri[neiro] * a);
+            b[i] = (byte)(Tri[neiro] * a * MM2.percent);
 			Frequencyss[2] *= Moderation;
 		}//*/
 
@@ -369,7 +369,7 @@ public class WaveOut extends Thread
 		{
 			reg >>>= 1;
 			reg |= ((reg ^ (reg >>> ((Duty + 2 - MM2.old) == 1.0f ? 6 : 1))) & 1) << 15;
-			b[(int) (i * /*(int)*/((Frequencyss[3] == MM2.SnN[15] && MM2.old != 2) ? MM2.SnN[14] : Frequencyss[3]))] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
+			b[(int) (i * /*(int)*/((Frequencyss[3] == MM2.SnN[15] && MM2.old != 2) ? MM2.SnN[14] : Frequencyss[3]))] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * MM2.percent);
         	for(int j = 1; j < /*(int)*/Frequencyss[3]; j++)
         	{
     			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
