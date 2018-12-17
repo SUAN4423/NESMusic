@@ -103,7 +103,7 @@ public class SaveLoad
 				{
 					for(int j = 0; j < MM2.DPCMo[i].size(); j++)
 					{
-						if(j == 0) str += "DPCM" + MM2.DPCMo[i].get(j) + "D" + j + "M";
+						if(j == 0) str += "DPCM" + MM2.DPCMo[i].get(j) + "D" + i + "M";
 						else str += MM2.DPCMo[i].get(j);
 					}
 					str += "\r\n";

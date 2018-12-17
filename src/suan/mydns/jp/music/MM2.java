@@ -444,49 +444,50 @@ public class MM2
 		        }
 				return b;
 			}
+
+			if(MusicNumbers[Ch - 1] != MusicNumber)
+			{
+				DPCMindex = 1;
+				Frequencyss[Ch - 1] = Frequency;
+				Numbers[Ch - 1] = 0;
+				Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
+				if(DPCMo[(int)Duty].size() > 0) FirstWave = (byte) DPCMo[(int)Duty].get(0);
+				DPCMChange = 0;
+				//System.out.println(SnD[(int)Frequency] + " " + FirstWave);
+			}
+
+			for(int i = 0; i < b.length; i++)
+			{
+				//while((DPCMChange += 4096) >= HzMu / SnD[(int)Frequency])
+				DPCMChange += SnD[0];
+				while(DPCMChange >= SnD[(int)Frequency])
+				{
+					//DPCMChange -=  HzMu / SnD[(int)Frequency];
+					DPCMChange -=  SnD[(int)Frequency];
+					if(DPCMindex == 0) FirstWave = (byte) DPCMo[(int)Duty].get(0);
+					else FirstWave += DPCMo[(int)Duty].get(DPCMindex) * 2 - 1;
+					if(FirstWave > 32 || FirstWave < -32)System.out.println(FirstWave);
+					//System.out.println(DPCMo[(int)Duty].get(DPCMindex) * 2 - 1);
+					DPCMindex++;
+					//System.out.println(DPCMindex);
+					if(DPCMindex >= DPCMo[(int)Duty].size()) DPCMindex = 0;
+				}
+				b[i] = (byte) (FirstWave * 4 >= 128 ? 127 : FirstWave * 4 < -128 ? -128 : FirstWave * 4);
+				//System.out.println(b[i] + " " + DPCMindex);
+				Frequencyss[Ch - 1] *= Moderation;
+			}//*/
+			MusicNumbers[Ch - 1] = MusicNumber;
+			Numbers[Ch - 1]++;
+
+			return b;
 		}
-		catch(NullPointerException e)
+		catch(NullPointerException | IndexOutOfBoundsException e)
 		{
 	        for(int i = 0; i < b.length; i++)
 	        {
 	        	b[i] = 0;
 	        }
-			return b;
 		}
-
-		if(MusicNumbers[Ch - 1] != MusicNumber)
-		{
-			DPCMindex = 1;
-			Frequencyss[Ch - 1] = Frequency;
-			Numbers[Ch - 1] = 0;
-			Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
-			if(DPCMo[(int)Duty].size() > 0) FirstWave = (byte) DPCMo[(int)Duty].get(0);
-			DPCMChange = 0;
-			//System.out.println(SnD[(int)Frequency] + " " + FirstWave);
-		}
-
-		for(int i = 0; i < b.length; i++)
-		{
-			//while((DPCMChange += 4096) >= HzMu / SnD[(int)Frequency])
-			DPCMChange += SnD[0];
-			while(DPCMChange >= SnD[(int)Frequency])
-			{
-				//DPCMChange -=  HzMu / SnD[(int)Frequency];
-				DPCMChange -=  SnD[(int)Frequency];
-				if(DPCMindex == 0) FirstWave = (byte) DPCMo[(int)Duty].get(0);
-				else FirstWave += DPCMo[(int)Duty].get(DPCMindex) * 2 - 1;
-				if(FirstWave > 32 || FirstWave < -32)System.out.println(FirstWave);
-				//System.out.println(DPCMo[(int)Duty].get(DPCMindex) * 2 - 1);
-				DPCMindex++;
-				//System.out.println(DPCMindex);
-				if(DPCMindex >= DPCMo[(int)Duty].size()) DPCMindex = 0;
-			}
-			b[i] = (byte) (FirstWave * 4 >= 128 ? 127 : FirstWave * 4 < -128 ? -128 : FirstWave * 4);
-			//System.out.println(b[i] + " " + DPCMindex);
-			Frequencyss[Ch - 1] *= Moderation;
-		}//*/
-		MusicNumbers[Ch - 1] = MusicNumber;
-		Numbers[Ch - 1]++;
 
 		return b;
 	}
