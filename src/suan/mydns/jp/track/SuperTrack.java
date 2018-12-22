@@ -28,12 +28,12 @@ public abstract class SuperTrack
 	protected boolean OnpuSet = false;
 	protected boolean OnpuSet2 = false;
 	protected String OnpuSetA = "4";
-	public String[] Param = {"16", "0.0", "0.0", "1.0", "140.0", "16"};
+	public String[] Param = {"16", "1.0", "0.0", "1.0", "140.0", "16"};
 	protected String[] ParamName = {"Volume", "Frequency", "VolChange", "FreChange", "Tempo", ""};
 	protected boolean[] ParamB = {false, false, false, false, false, false};
 	protected int VDUM = 16;
 	protected byte Vol = 16;
-	protected double Fre = 0.0, VolD = 0.0, FreD = 1.0;
+	protected double Fre = 1.0, VolD = 0.0, FreD = 1.0;
 	public double Tempo = 140.0;
 
 	public void Draw(Thoone th)
@@ -76,7 +76,7 @@ public abstract class SuperTrack
 			this.Volume.add(this.Vol);
 			if(Channel < 3)
 			{
-				double TempHZ = th.mm2.Sn[j][i] + this.Fre;
+				double TempHZ = th.mm2.Sn[j][i] * this.Fre;
 				int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
 				TempHZ = MM2.FamicomHz / ChangeRate;
 				this.Freque.add(TempHZ);
@@ -392,7 +392,7 @@ public abstract class SuperTrack
 					if(th.kmState.IsMouseIn(1280/6, (i+1+j*12)*-20+this.ShiftY, 1280/6*5, 20))
 					{
 						music = true;
-						double TempHZ = th.mm2.Sn[j][i] + this.Fre;
+						double TempHZ = th.mm2.Sn[j][i] * this.Fre;
 						int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
 						TempHZ = MM2.FamicomHz / ChangeRate;
 						th.mm2.ChStat(TempHZ, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel, this.VDUM);
