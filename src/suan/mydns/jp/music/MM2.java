@@ -139,6 +139,7 @@ public class MM2
 
 	public void ChStat(double Fr, float Du, int Vo, double VD, double Mo, boolean ME, int Nu, int Ch, int vdum)
 	{
+		//System.out.println(Ch + " " + Fr);
 		MFreq[Ch] = Fr;
 		MDuty[Ch] = Du;
 		MVolu[Ch] = (byte) Vo;
@@ -236,8 +237,8 @@ public class MM2
 	}
 
 	static byte[] MusicNumbers = {-1, -1, -1, -1, -1};
-	static double[] Frequencys = {0, 0, 0, 0, 0};
-	public static double[] Frequencyss= {0, 0, 0, 0, 0};
+	static double[] Frequencys = {-1, -1, -1, 0, -1};
+	public static double[] Frequencyss= {-1, -1, -1, 0, -1};
 	public static float[] Dutys       = {0f, 0f, 0f, 0f, 0f};
 	static byte[] Volume       = {0, 0, 0, 0, 0};
 	public static double[] VDown      = {0, 0, 0, 0, 0};
@@ -247,6 +248,9 @@ public class MM2
 	static int[] Numbers       = {0, 0, 0, 0, 0};
 	static byte[] MNum         = {0, 0, 0, 0, 0};
 	public static int[] MVolDUM       = {0, 0, 0, 0, 0};
+
+	static int ringing[] = {0, 0};
+	static boolean ringed[] = {false, false};
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -258,20 +262,28 @@ public class MM2
 	        {
 	        	b[i] = 0;
 	        }
+	        //if(ringing[Ch - 1] != 0 && Ch == 1) System.out.println(ringing[Ch - 1]);
+	        ringing[Ch - 1] = 0;
+	        ringed[Ch - 1] = false;
 			return b;
 		}
 		if(MusicNumbers[Ch - 1] != MusicNumber)
 		{
+			if(ringed[Ch - 1]) ringing[Ch - 1] += Numbers[Ch - 1];
+			//System.out.print(Numbers[Ch - 1] + " ");
+			ringed[Ch - 1] = true;
 			Frequencyss[Ch - 1] = Frequency;
 			Numbers[Ch - 1] = 0;
+	        //if(Ch == 1) System.out.println(ringing[Ch - 1] + " " + Numbers[Ch - 1] + " " + (ringing[Ch - 1] + Numbers[Ch - 1]));
 			Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
 		}
 		for(int i = 0; i < b.length; i++)
         {
 			double TempHZ = Frequencyss[Ch - 1];
 			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+			if(ChangeRate > 0xFFFF) ChangeRate = 0xFFFF;
 			TempHZ = MM2.FamicomHz / ChangeRate;
-            double phase = (i + (onecool * Numbers[Ch - 1])) / (HzMu / TempHZ/*Frequencyss[Ch - 1]*/);
+            double phase = (i + (onecool * (Numbers[Ch - 1] + ringing[Ch - 1]))) / (HzMu / TempHZ/*Frequencyss[Ch - 1]*/);
             phase -= Math.floor(phase);
             b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * percent);
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
@@ -343,6 +355,7 @@ public class MM2
 		{
 			double TempHZ = Frequencyss[Ch - 1];
 			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+			if(ChangeRate > 0xFFFF) ChangeRate = 0xFFFF;
 			TempHZ = MM2.FamicomHz / ChangeRate;
 			if((change += 32) >= HzMu / TempHZ/*Frequencyss[2]*/)
 			{

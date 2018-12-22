@@ -188,7 +188,7 @@ public class SaveLoad
 					int b = str.indexOf("D", a);
 					int c = Integer.parseInt(str.substring(a, b));
 					int d = Integer.parseInt(str.substring(b + 1, b + 2));
-					System.out.println(a + " " + b + " " + c + " " + d);
+					//System.out.println(a + " " + b + " " + c + " " + d);
 					MM2.DPCMo[d].clear();
 					MM2.DPCMo[d].add((byte) c);
 					for(int i = b + 3; i < str.length(); i++)
@@ -316,7 +316,7 @@ public class SaveLoad
 					int b = str.indexOf("D", a);
 					int c = Integer.parseInt(str.substring(a, b));
 					int d = Integer.parseInt(str.substring(b + 1, b + 2));
-					System.out.println(a + " " + b + " " + c + " " + d);
+					//System.out.println(a + " " + b + " " + c + " " + d);
 					MM2.DPCMo[d].clear();
 					MM2.DPCMo[d].add((byte) c);
 					for(int i = b + 3; i < str.length(); i++)

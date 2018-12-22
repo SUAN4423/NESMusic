@@ -83,12 +83,12 @@ public class DPCMWaveInport
 									last += MM2.DPCMo[th.SPT[4].freq].get(times + 1) * 2 - 1;
 									if(last > 32)
 									{
-										System.out.println(times + " " + last + " " + (frameBuf[i] / wa + 0.5));
+										//System.out.println(times + " " + last + " " + (frameBuf[i] / wa + 0.5));
 										last = 32;
 									}
 									if(last < -32)
 									{
-										System.out.println(times + " " + last + " " + (frameBuf[i] / wa + 0.5));
+										//System.out.println(times + " " + last + " " + (frameBuf[i] / wa + 0.5));
 										last = -32;
 									}
 									inrate -= changerate * waru;

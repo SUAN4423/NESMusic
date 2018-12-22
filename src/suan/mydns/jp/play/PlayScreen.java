@@ -77,7 +77,7 @@ public class PlayScreen extends PApplet
 								int ChangeRate = (int)(MM2.FamicomHz / MM2.Frequencyss[i/2] + 0.5);
 								if(i / 2 >= 3) ChangeRate = (int)(th.SPT[i/2].FrequI.get(th.musics.nowNotes[i/2]));// + 16 * th.SPT[i/2].Duty.get(th.musics.nowNotes[i/2]));
 								if(th.SPT[i/2].Time.get(th.musics.nowNotes[i/2]) > th.musics.time) ChangeRate = 0;
-								this.text(String.format("Channel " + (i/2 + 1) +" : %04x", ChangeRate == 0x7FFFFFFF ? 0 : ChangeRate).toUpperCase(), 20, 20 * (i + 1));
+								this.text(String.format("Channel " + (i/2 + 1) +" : %04x", ChangeRate == 0x7FFFFFFF ? 0 : ChangeRate > 0xFFFF ? 0xFFFF : ChangeRate).toUpperCase(), 20, 20 * (i + 1));
 							}
 							else
 							{
@@ -98,7 +98,7 @@ public class PlayScreen extends PApplet
 				th.musics.start = !th.musics.start;
 				if(!th.musics.start)
 				{
-					for(int i = 0; i < 4; i++)
+					for(int i = 0; i < 5; i++)
 					{
 						//System.out.print(th.musics.nowNotes[i] + " ");
 						th.musics.nowNotes[i] = 0;
@@ -110,7 +110,7 @@ public class PlayScreen extends PApplet
 			}
 			else if(pressed && !th.kmState.KeyC.get(' '))
 			{
-				for(int i = 0; i < 4; i++)
+				for(int i = 0; i < 5; i++)
 				{
 					th.mm2.ChStat(i == 3 ? 0 : -1, 0.5f, 16, 0.0f, 1.0f, true, -1, i, 16);
 				}
