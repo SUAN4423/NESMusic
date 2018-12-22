@@ -251,6 +251,9 @@ public class MM2
 
 	static int ringing[] = {0, 0};
 	static boolean ringed[] = {false, false};
+	static double changes[] = {0.0, 0.0};
+	static byte hakei[] = {127, 127};
+	static byte kais[] = {0, 0};
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -262,31 +265,57 @@ public class MM2
 			{
 				b[i] = 0;
 			}
-			if(ringing[Ch - 1] != 0 && Ch == 1) System.out.println(ringing[Ch - 1]);
+			/*if(ringing[Ch - 1] != 0 && Ch == 1) System.out.println(ringing[Ch - 1]);
 			ringing[Ch - 1] = 0;
-			ringed[Ch - 1] = false;
+			ringed[Ch - 1] = false;//*/
+			changes[Ch - 1] = 0;
+			kais[Ch - 1] = 0;
 			return b;
 		}
 		if(MusicNumbers[Ch - 1] != MusicNumber)
 		{
-			if(ringed[Ch - 1]) ringing[Ch - 1] += Numbers[Ch - 1];
+			/*if(ringed[Ch - 1]) ringing[Ch - 1] += Numbers[Ch - 1];
 			if(Moderation != 0.0) ringing[Ch - 1] = 0;
-			ringed[Ch - 1] = true;
+			ringed[Ch - 1] = true;//*/
+			//System.out.println(Frequency + " " + Moderation);
 			Frequencyss[Ch - 1] = Frequency;
+			//System.out.println(Frequencyss[Ch - 1]);
 			Numbers[Ch - 1] = 0;
 			Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
 		}
 		for(int i = 0; i < b.length; i++)
 		{
+			//System.out.println(Frequencyss[Ch - 1]);
 			double TempHZ = Frequencyss[Ch - 1];
 			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
 			if(ChangeRate > 0xFFFF) ChangeRate = 0xFFFF;
 			TempHZ = MM2.FamicomHz / ChangeRate;
-			double phase = (i + (onecool * (Numbers[Ch - 1] + ringing[Ch - 1]))) / (HzMu / TempHZ/*Frequencyss[Ch - 1]*/);
-			phase -= Math.floor(phase);
-			b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * percent);
+			//double phase = (i + (onecool * (Numbers[Ch - 1] + ringing[Ch - 1]))) / (HzMu / TempHZ/*Frequencyss[Ch - 1]*/);
+			//phase -= Math.floor(phase);
+			//b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * percent);
+
+			if((changes[Ch - 1] += 8) >= HzMu / TempHZ/*Frequencyss[2]*/)
+			{
+				//System.out.println(change);
+				changes[Ch - 1] -= HzMu / TempHZ/*Frequencyss[2]*/;
+				kais[Ch - 1]++;
+				if(hakei[Ch - 1] == 127 && kais[Ch - 1] >= (int)(8*Duty))
+				{
+					hakei[Ch - 1] = -128;
+					kais[Ch - 1] = 0;
+				}
+				else if(hakei[Ch - 1] == -128 && kais[Ch - 1] >= 8-(int)(8*Duty))
+				{
+					hakei[Ch - 1] = 127;
+					kais[Ch - 1] = 0;
+				}
+			}
+
+			b[i] = (byte)((hakei[Ch - 1] / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * percent);
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
-			Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
+			if(!ModerationEnable || (Numbers[Ch - 1] + 5) % 20 < 10) Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
+			else Frequencyss[Ch - 1] = Frequencyss[Ch - 1] / Moderation;
+			//System.out.println(Frequencyss[Ch - 1]);
 		}
 		MusicNumbers[Ch - 1] = MusicNumber;
 		Numbers[Ch - 1]++;
@@ -329,6 +358,7 @@ public class MM2
 	        	resks = true;
 	        	b[i] = (byte)(Tri[neiro] * a * percent);
 	        }
+	        change = 0;
 			return b;
 		}
     	resks = false;
@@ -358,7 +388,7 @@ public class MM2
 			TempHZ = MM2.FamicomHz / ChangeRate;
 			if((change += 32) >= HzMu / TempHZ/*Frequencyss[2]*/)
 			{
-				//System.out.println(change);
+				//System.out.println(change + " " + (HzMu / TempHZ) + " " + TempHZ + " " + Frequencyss[Ch - 1]);
 				change -= HzMu / TempHZ/*Frequencyss[2]*/;
 				neiro += susumi;
 				if(neiro >= 8)
@@ -374,7 +404,8 @@ public class MM2
 				}
 			}
             b[i] = (byte)(Tri[neiro] * a * percent);
-			Frequencyss[2] *= Moderation;
+			if(!ModerationEnable || (Numbers[Ch - 1] + 5) % 20 < 10) Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
+			else Frequencyss[Ch - 1] = Frequencyss[Ch - 1] / Moderation;
 		}//*/
 		MusicNumbers[2] = MusicNumber;
 		Numbers[2]++;
@@ -431,7 +462,7 @@ public class MM2
 			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
 		}
 
-		Frequencyss[3] *= Moderation;
+		//Frequencyss[3] *= Moderation;
 		if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
 
 		MusicNumbers[3] = MusicNumber;
@@ -486,7 +517,7 @@ public class MM2
 				}
 				b[i] = (byte) (FirstWave * 4 >= 128 ? 127 : FirstWave * 4 < -128 ? -128 : FirstWave * 4);
 				//System.out.println(b[i] + " " + DPCMindex);
-				Frequencyss[Ch - 1] *= Moderation;
+				//Frequencyss[Ch - 1] *= Moderation;
 			}//*/
 			MusicNumbers[Ch - 1] = MusicNumber;
 			Numbers[Ch - 1]++;

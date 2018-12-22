@@ -84,7 +84,7 @@ public class FourCh extends SuperTrack
 					if(th.kmState.IsMouseIn(1280/6, (i+1+j*12)*-20+this.ShiftY, 1280/6*5, 20))
 					{
 						music = true;
-						th.mm2.ChStat(((i + j * 12) > 0 && (i + j * 12) < 17) ? th.mm2.SnN[i + j * 12 - 1] : 0, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, true, temp, Channel, this.VDUM);
+						th.mm2.ChStat(((i + j * 12) > 0 && (i + j * 12) < 17) ? th.mm2.SnN[i + j * 12 - 1] : 0, fr[(Channel == 0 ? 0 : Channel == 1 ? 0 : 1)][freq], this.Vol, this.VolD, this.FreD, this.mod, temp, Channel, this.VDUM);
 						//if((i + j * 12) > 0 && (i + j * 12) < 17)System.out.println(i + " " + j + " " + th.mm2.SnN[i + j * 12 - 1]);
 						if(!th.mv.enableMove) this.Norts(th, i, j, Channel);
 					}

@@ -110,7 +110,7 @@ public class SaveLoad
 				{
 					for(int j = 0; j < th.SPT[i].Volume.size(); j++)
 					{
-						str += i + "," + th.SPT[i].Volume.get(j) + "," + th.SPT[i].Freque.get(j) + "," + th.SPT[i].FrequI.get(j) + "," + th.SPT[i].Time.get(j) + "," + th.SPT[i].SoundT.get(j) + "," + th.SPT[i].Duty.get(j) + "," + th.SPT[i].Voldow.get(j) + "," + th.SPT[i].Fredow.get(j) + "," + th.SPT[i].VolDUM.get(j) + "\r\n";
+						str += i + "," + th.SPT[i].Volume.get(j) + "," + th.SPT[i].Freque.get(j) + "," + th.SPT[i].FrequI.get(j) + "," + th.SPT[i].Time.get(j) + "," + th.SPT[i].SoundT.get(j) + "," + th.SPT[i].Duty.get(j) + "," + th.SPT[i].Voldow.get(j) + "," + th.SPT[i].Fredow.get(j) + "," + th.SPT[i].VolDUM.get(j) + "," + (th.SPT[i].Moduration.get(j) ? 1 : 0) + "\r\n";
 					}
 					fw2.write(str);
 					str = "";
@@ -221,17 +221,40 @@ public class SaveLoad
 					b = str.indexOf(",", b+1);
 					double j;
 					int k;
+					int l;
+					int b2 = b;
 					try
 					{
 						j = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+						b2 = b;
 						b = str.indexOf(",", b+1);
-						k = Integer.parseInt(str.substring(b+1));
+						k = Integer.parseInt(str.substring(b+1, str.indexOf(",", b+1)));
 					}
 					catch(Exception es)
 					{
-						j = Double.parseDouble(str.substring(b+1));
-						if(i < 0) k = 0;
-						else k = 16;
+						try
+						{
+							b = b2;
+							j = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+							b = str.indexOf(",", b+1);
+							k = Integer.parseInt(str.substring(b+1));
+						}
+						catch(Exception es2)
+						{
+							b = b2;
+							j = Double.parseDouble(str.substring(b+1));
+							if(i < 0) k = 0;
+							else k = 16;
+						}
+					}
+					try
+					{
+						b = str.indexOf(",", b+1);
+						l = Integer.parseInt(str.substring(b+1));
+					}
+					catch(Exception es)
+					{
+						l = 0;
 					}
 
 					th.SPT[a].Volume.add((byte)c);
@@ -243,6 +266,7 @@ public class SaveLoad
 					th.SPT[a].Voldow.add(i);
 					th.SPT[a].Fredow.add(j);
 					th.SPT[a].VolDUM.add(k);
+					th.SPT[a].Moduration.add(l == 0 ? false : true);
 				}
 				else
 				{
@@ -330,17 +354,40 @@ public class SaveLoad
 					b = str.indexOf(",", b+1);
 					double j;
 					int k;
+					int l;
+					int b2 = b;
 					try
 					{
 						j = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+						b2 = b;
 						b = str.indexOf(",", b+1);
-						k = Integer.parseInt(str.substring(b+1));
+						k = Integer.parseInt(str.substring(b+1, str.indexOf(",", b+1)));
 					}
 					catch(Exception es)
 					{
-						j = Double.parseDouble(str.substring(b+1));
-						if(i < 0) k = 0;
-						else k = 16;
+						try
+						{
+							b = b2;
+							j = Double.parseDouble(str.substring(b+1, str.indexOf(",", b+1)));
+							b = str.indexOf(",", b+1);
+							k = Integer.parseInt(str.substring(b+1));
+						}
+						catch(Exception es2)
+						{
+							b = b2;
+							j = Double.parseDouble(str.substring(b+1));
+							if(i < 0) k = 0;
+							else k = 16;
+						}
+					}
+					try
+					{
+						b = str.indexOf(",", b+1);
+						l = Integer.parseInt(str.substring(b+1));
+					}
+					catch(Exception es)
+					{
+						l = 0;
 					}
 
 					if(a < 3)
@@ -373,6 +420,8 @@ public class SaveLoad
 					th.SPT[a].Voldow.add(i);
 					th.SPT[a].Fredow.add(j);
 					th.SPT[a].VolDUM.add(k);
+					//System.out.println(l);
+					th.SPT[a].Moduration.add(l == 0 ? false : true);
 				}
 				else
 				{
