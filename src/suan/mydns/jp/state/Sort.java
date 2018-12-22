@@ -133,6 +133,8 @@ public class Sort
 					th.SPT[i].Fredow.remove(n+1);
 					th.SPT[i].VolDUM.add(j, th.SPT[i].VolDUM.get(n));
 					th.SPT[i].VolDUM.remove(n+1);
+					th.SPT[i].Moduration.add(j, th.SPT[i].Moduration.get(n));
+					th.SPT[i].Moduration.remove(n+1);
 				}
 			}
 			Time = System.currentTimeMillis();

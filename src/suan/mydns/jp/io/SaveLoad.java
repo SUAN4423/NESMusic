@@ -330,6 +330,7 @@ public class SaveLoad
 				th.SPT[i].Voldow.clear();
 				th.SPT[i].Fredow.clear();
 				th.SPT[i].VolDUM.clear();
+				th.SPT[i].Moduration.clear();
 			}
 
 			while(str != null)

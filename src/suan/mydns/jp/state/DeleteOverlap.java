@@ -59,6 +59,7 @@ public class DeleteOverlap
 						th.SPT[i].Voldow.remove(j+1);
 						th.SPT[i].Fredow.remove(j+1);
 						th.SPT[i].VolDUM.remove(j+1);
+						th.SPT[i].Moduration.remove(j+1);
 						j--;
 					}
 				}
