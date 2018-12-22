@@ -17,6 +17,8 @@ public class SaveLoad
 	private long[] time = {0, 0};
 	private boolean[] pressed = {false, false};
 
+	Thoone th;
+
 	public void Draw(Thoone th)
 	{
 		th.fill(0xFF);
@@ -57,9 +59,12 @@ public class SaveLoad
 		else th.text("LOAD", 1280/6*5+1280/12+10, 720/16+25);
 	}
 
+	FileWriter fw2;
+
 	private void Save(Thoone th)
 	{
-		FileWriter fw2 = null;
+		this.th = th;
+		fw2 = null;
 		try
 		{
 			fw2 = new FileWriter("./MUSIC.thh");
@@ -76,10 +81,61 @@ public class SaveLoad
 				e1.printStackTrace();
 			}
 		}
-		this.write(fw2, th);
-		this.time[0] = System.currentTimeMillis();
+		Write write = new Write();
+		write.start();
+		//this.write(fw2, th);
+		//this.time[0] = System.currentTimeMillis();
 	}
 
+	class Write extends Thread
+	{
+		@Override
+		public void run()
+		{
+			try
+			{
+				String str = "";
+				for(int i = 0; i < 4; i++)
+				{
+					if(i == 2) str += th.ch.loopstartnum + "\r\n";
+					else str += th.SPT[i].Tempo + "\r\n";
+					fw2.write(str);
+					str = "";
+				}
+				for(int i = 0; i < 5; i++)
+				{
+					for(int j = 0; j < th.SPT[i].Volume.size(); j++)
+					{
+						str += i + "," + th.SPT[i].Volume.get(j) + "," + th.SPT[i].Freque.get(j) + "," + th.SPT[i].FrequI.get(j) + "," + th.SPT[i].Time.get(j) + "," + th.SPT[i].SoundT.get(j) + "," + th.SPT[i].Duty.get(j) + "," + th.SPT[i].Voldow.get(j) + "," + th.SPT[i].Fredow.get(j) + "," + th.SPT[i].VolDUM.get(j) + "\r\n";
+					}
+					fw2.write(str);
+					str = "";
+				}
+				for(int i = 0; i < 8; i++)
+				{
+					if(MM2.DPCMo[i].size() > 0)
+					{
+						for(int j = 0; j < MM2.DPCMo[i].size(); j++)
+						{
+							if(j == 0) str += "DPCM" + MM2.DPCMo[i].get(j) + "D" + i + "M";
+							else str += MM2.DPCMo[i].get(j);
+							fw2.write(str);
+							str = "";
+						}
+						str += "\r\n";
+					}
+				}
+				fw2.write(str);
+				fw2.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+
+			time[0] = System.currentTimeMillis();
+		}
+	}
 	private void write(FileWriter file, Thoone th)
 	{
 		try
