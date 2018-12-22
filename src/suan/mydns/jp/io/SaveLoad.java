@@ -16,12 +16,14 @@ public class SaveLoad
 {
 	private long[] time = {0, 0};
 	private boolean[] pressed = {false, false};
+	private boolean[] saveload = {false, false};
 
 	Thoone th;
 
 	public void Draw(Thoone th)
 	{
 		th.fill(0xFF);
+		if(saveload[0]) th.fill(0x00, 0xFF, 0x00);
 		if(th.kmState.IsMouseIn(1280/6*5+1280/12, 0, 1280/12, 720/16))
 		{
 			th.fill(0xFF, 0x00, 0x00);
@@ -37,6 +39,7 @@ public class SaveLoad
 		}
 		th.rect(1280/6*5+1280/12, 0, 1280/12, 720/16);
 		th.fill(0xFF);
+		if(saveload[1]) th.fill(0x00, 0xFF, 0x00);
 		if(th.kmState.IsMouseIn(1280/6*5+1280/12, 720/16, 1280/12, 720/16))
 		{
 			th.fill(0xFF, 0x00, 0x00);
@@ -63,6 +66,7 @@ public class SaveLoad
 
 	private void Save(Thoone th)
 	{
+		saveload[0] = true;
 		this.th = th;
 		fw2 = null;
 		try
@@ -134,6 +138,7 @@ public class SaveLoad
 			}
 
 			time[0] = System.currentTimeMillis();
+			saveload[0] = false;
 		}
 	}
 	private void write(FileWriter file, Thoone th)
@@ -176,6 +181,7 @@ public class SaveLoad
 
 	private void Load(Thoone th)
 	{
+		saveload[1] = true;
 		File file = new File("./MUSIC.thh");
 		BufferedReader br = null;
 		String str = null;
@@ -266,10 +272,12 @@ public class SaveLoad
 			e.printStackTrace();
 		}
 		this.time[1] = System.currentTimeMillis();
+		saveload[1] = false;
 	}
 
 	public void Load(Thoone th, String path)
 	{
+		saveload[1] = true;
 		File file = new File(path);
 		BufferedReader br = null;
 		String str = null;
@@ -394,6 +402,7 @@ public class SaveLoad
 			e.printStackTrace();
 		}
 		this.time[1] = System.currentTimeMillis();
+		saveload[1] = false;
 	}
 
 	void loopsetting(int loopstart, Thoone th)
