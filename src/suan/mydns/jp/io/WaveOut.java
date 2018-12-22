@@ -231,8 +231,11 @@ public class WaveOut extends Thread
 	static byte[] MNum         = {0, 0, 0, 0, 0};
 	static int[] MVolDUM       = {0, 0, 0, 0, 0};
 
-	static int ringing[] = {0, 0};
-	static boolean ringed[] = {false, false};
+	/*static int ringing[] = {0, 0};
+	static boolean ringed[] = {false, false};//*/
+	static double changes[] = {0.0, 0.0};
+	static byte hakei[] = {127, 127};
+	static byte kais[] = {0, 0};
 
 	static byte[] Square(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -243,16 +246,12 @@ public class WaveOut extends Thread
 	        {
 	        	b[i] = 0;
 	        }
-	        if(ringing[Ch - 1] != 0 && Ch == 1) System.out.println(ringing[Ch - 1]);
-			ringing[Ch - 1] = 0;
-			ringed[Ch - 1] = false;
+			changes[Ch - 1] = 0;
+			kais[Ch - 1] = 0;
 			return b;
 		}
 		if(MusicNumbers[Ch - 1] != MusicNumber)
 		{
-			if(ringed[Ch - 1]) ringing[Ch - 1] += Numbers[Ch - 1];
-			if(Moderation != 0.0) ringing[Ch - 1] = 0;
-			ringed[Ch - 1] = true;
 			Frequencyss[Ch - 1] = Frequency;
 			Numbers[Ch - 1] = 0;
 			Volumes[Ch - 1] = (VolumeR+0.5) * 1.0;
@@ -263,9 +262,22 @@ public class WaveOut extends Thread
 			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
 			if(ChangeRate > 0xFFFF) ChangeRate = 0xFFFF;
 			TempHZ = MM2.FamicomHz / ChangeRate;
-            double phase = (i + (MM2.onecool * (Numbers[Ch - 1] + ringing[Ch - 1]))) / (MM2.HzMu / TempHZ);
-            phase -= Math.floor(phase);
-            b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * MM2.percent);
+			if((changes[Ch - 1] += 8) >= MM2.HzMu / TempHZ/*Frequencyss[2]*/)
+			{
+				changes[Ch - 1] -= MM2.HzMu / TempHZ/*Frequencyss[2]*/;
+				kais[Ch - 1]++;
+				if(hakei[Ch - 1] == 127 && kais[Ch - 1] >= (int)(8*Duty))
+				{
+					hakei[Ch - 1] = -128;
+					kais[Ch - 1] = 0;
+				}
+				else if(hakei[Ch - 1] == -128 && kais[Ch - 1] >= 8-(int)(8*Duty))
+				{
+					hakei[Ch - 1] = 127;
+					kais[Ch - 1] = 0;
+				}
+			}
+            b[i] = (byte)((hakei[Ch - 1] / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * MM2.percent);
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
 			Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
         }

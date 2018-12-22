@@ -249,8 +249,8 @@ public class MM2
 	static byte[] MNum         = {0, 0, 0, 0, 0};
 	public static int[] MVolDUM       = {0, 0, 0, 0, 0};
 
-	static int ringing[] = {0, 0};
-	static boolean ringed[] = {false, false};
+	/*static int ringing[] = {0, 0};
+	static boolean ringed[] = {false, false};//*/
 	static double changes[] = {0.0, 0.0};
 	static byte hakei[] = {127, 127};
 	static byte kais[] = {0, 0};
