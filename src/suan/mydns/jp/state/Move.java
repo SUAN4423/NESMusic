@@ -104,6 +104,7 @@ public class Move
 						th.SPT[th.ch.GetChannel()].Voldow.add(th.SPT[th.ch.GetChannel()].Voldow.get(this.copy.get(i)));
 						th.SPT[th.ch.GetChannel()].Fredow.add(th.SPT[th.ch.GetChannel()].Fredow.get(this.copy.get(i)));
 						th.SPT[th.ch.GetChannel()].VolDUM.add(th.SPT[th.ch.GetChannel()].VolDUM.get(this.copy.get(i)));
+						th.SPT[th.ch.GetChannel()].Moduration.add(th.SPT[th.ch.GetChannel()].Moduration.get(this.copy.get(i)));
 					}
 				}
 				else if(this.shori == 2)
@@ -147,6 +148,7 @@ public class Move
 					th.SPT[th.ch.GetChannel()].Voldow.remove(i);
 					th.SPT[th.ch.GetChannel()].Fredow.remove(i);
 					th.SPT[th.ch.GetChannel()].VolDUM.remove(i);
+					th.SPT[th.ch.GetChannel()].Moduration.remove(i);
 					i--;
 				}
 			}
