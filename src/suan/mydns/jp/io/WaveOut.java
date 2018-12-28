@@ -77,8 +77,8 @@ public class WaveOut extends Thread
 						b = true;
 						if(Wave.th.SPT[i].Time.get(nowNotes[i]) <= time)
 						{
-							if(Wave.th.ch.canPlay[i]) this.ChStat(Wave.th.SPT[i].Freque.get(nowNotes[i]), Wave.th.SPT[i].Duty.get(nowNotes[i]), Wave.th.SPT[i].Volume.get(nowNotes[i]), Wave.th.SPT[i].Voldow.get(nowNotes[i]), Wave.th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i, Wave.th.SPT[i].VolDUM.get(nowNotes[i]));
-							else this.ChStat(i == 3 ? 0 : -1, Wave.th.SPT[i].Duty.get(nowNotes[i]), Wave.th.SPT[i].Volume.get(nowNotes[i]), Wave.th.SPT[i].Voldow.get(nowNotes[i]), Wave.th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i, Wave.th.SPT[i].VolDUM.get(i));
+							if(Wave.th.ch.canPlay[i]) this.ChStat(Wave.th.SPT[i].Freque.get(nowNotes[i]), Wave.th.SPT[i].Duty.get(nowNotes[i]), Wave.th.SPT[i].Volume.get(nowNotes[i]), Wave.th.SPT[i].Voldow.get(nowNotes[i]), Wave.th.SPT[i].Fredow.get(nowNotes[i]), Wave.th.SPT[i].Moduration.get(nowNotes[i]), nowNotes[i], i, Wave.th.SPT[i].VolDUM.get(nowNotes[i]));
+							else this.ChStat(i == 3 ? 0 : -1, Wave.th.SPT[i].Duty.get(nowNotes[i]), Wave.th.SPT[i].Volume.get(nowNotes[i]), Wave.th.SPT[i].Voldow.get(nowNotes[i]), Wave.th.SPT[i].Fredow.get(nowNotes[i]), Wave.th.SPT[i].Moduration.get(nowNotes[i]), nowNotes[i], i, Wave.th.SPT[i].VolDUM.get(i));
 							if(time >= Wave.th.SPT[i].Time.get(nowNotes[i])+Wave.th.SPT[i].SoundT.get(nowNotes[i]))
 							{
 								nowNotes[i]++;
@@ -279,7 +279,8 @@ public class WaveOut extends Thread
 			}
             b[i] = (byte)((hakei[Ch - 1] / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * MM2.percent);
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
-			Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
+			if(!ModerationEnable || (Numbers[Ch - 1] + 5) % 20 < 10) Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
+			else Frequencyss[Ch - 1] = Frequencyss[Ch - 1] / Moderation;
         }
 		MusicNumbers[Ch - 1] = MusicNumber;
 		Numbers[Ch - 1]++;
@@ -350,7 +351,8 @@ public class WaveOut extends Thread
 				}
 			}
             b[i] = (byte)(Tri[neiro] * a * MM2.percent);
-			Frequencyss[2] *= Moderation;
+			if(!ModerationEnable || (Numbers[Ch - 1] + 5) % 20 < 10) Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
+			else Frequencyss[Ch - 1] = Frequencyss[Ch - 1] / Moderation;
 		}//*/
 
 		MusicNumbers[2] = MusicNumber;
