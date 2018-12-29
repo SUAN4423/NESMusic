@@ -17,12 +17,12 @@ public class MSTART
 	private boolean autoMove = false;
 	private int startBar = 0;
 	private int[] startNotes = {0, 0, 0, 0, 0};
-	public int[] loopNotes = {0, 0, 0, 0, 0};
+	public static int[] loopNotes = {0, 0, 0, 0, 0};
 	private boolean startBarSet = false;
 	private String bar = "0";
 	private boolean keyPressed = false;
 	private long startBarTime = 0;
-	public long loopBarTime = 0;
+	public static long loopBarTime = 0;
 
 	Timer T2 = new Timer();
 

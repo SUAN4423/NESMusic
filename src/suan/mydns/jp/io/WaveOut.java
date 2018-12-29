@@ -16,6 +16,7 @@ import javax.sound.sampled.AudioInputStream;
 
 import suan.mydns.jp.Thoone;
 import suan.mydns.jp.music.MM2;
+import suan.mydns.jp.music.MSTART;
 import suan.mydns.jp.music.WavFileWriter;
 import suan.mydns.jp.music.Wave;
 
@@ -98,10 +99,10 @@ public class WaveOut extends Thread
 				{
 					if((int) (Wave.th.state.NortsSize) > kurikaeshi)
 					{
-						this.time = -MM2.onecool;
+						this.time = -MM2.onecool + (int)(MSTART.loopBarTime / 1000.0 * MM2.HzMu);
 						for(int i = 0; i < 5; i++)
 						{
-							nowNotes[i] = 0;
+							nowNotes[i] = MSTART.loopNotes[i];
 						}
 						kurikaeshi++;
 					}
