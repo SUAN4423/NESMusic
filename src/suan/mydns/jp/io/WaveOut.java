@@ -181,7 +181,7 @@ public class WaveOut extends Thread
 		int l = list.size();
 		int[] arr = new int[l];
 		Iterator<Integer> iter = list.iterator();
-		for (int i=0;i<l;i++) arr[i] = (int) (iter.next() * (127.0 / MAX));
+		for (int i=0;i<l;i++) arr[i] = (int) Math.min(Math.max(iter.next() * (128.0 / MAX), -128),127);
 		return arr;
 	}
 
@@ -278,7 +278,7 @@ public class WaveOut extends Thread
 					kais[Ch - 1] = 0;
 				}
 			}
-            b[i] = (byte)((hakei[Ch - 1] / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * MM2.percent);
+            b[i] = (byte) ((hakei[Ch - 1] / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp < 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * MM2.percent);
 			Volumes[Ch - 1] = Math.max(Math.min(Volumes[Ch - 1] + VolumeDownUp, 16), 0);
 			if(!ModerationEnable || (Numbers[Ch - 1] + 5) % 20 < 10) Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
 			else Frequencyss[Ch - 1] = Frequencyss[Ch - 1] / Moderation;
@@ -351,7 +351,7 @@ public class WaveOut extends Thread
 					a *= -1;
 				}
 			}
-            b[i] = (byte)(Tri[neiro] * a * MM2.percent);
+            b[i] = (byte) (Tri[neiro] * a * MM2.percent);
 			if(!ModerationEnable || (Numbers[Ch - 1] + 5) % 20 < 10) Frequencyss[Ch - 1] = Frequencyss[Ch - 1] * Moderation;
 			else Frequencyss[Ch - 1] = Frequencyss[Ch - 1] / Moderation;
 		}//*/

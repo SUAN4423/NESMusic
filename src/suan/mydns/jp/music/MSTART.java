@@ -127,7 +127,7 @@ public class MSTART
 
 			if(this.startBarSet)
 			{
-				for(int i = 0; i < 4; i++)
+				for(int i = 0; i < 5; i++)
 				{
 					this.startNotes[i] = 0;
 					while(true)
