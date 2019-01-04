@@ -44,14 +44,14 @@ public class Wave extends PApplet
 				{
 					for(int j = 0; j < MM2.onecool; j++)
 					{
-						this.point(20+MM2.onecool*i+j+20*i, b[j]+150);
+						this.point(20+MM2.onecool*i+j+20*i, (b[j] / MM2.percent)+150);
 					}
 				}
 				else
 				{
 					for(int j = 0; j < MM2.onecool; j++)
 					{
-						this.point(20+MM2.onecool*(i-3)+j+20*(i-3), b[j]+420);
+						this.point(20+MM2.onecool*(i-3)+j+20*(i-3), (b[j] / (j == 0 ? MM2.percent : 1))+420);
 					}
 				}
 			}
