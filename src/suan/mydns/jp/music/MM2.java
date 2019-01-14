@@ -293,8 +293,8 @@ public class MM2
 			//double phase = (i + (onecool * (Numbers[Ch - 1] + ringing[Ch - 1]))) / (HzMu / TempHZ/*Frequencyss[Ch - 1]*/);
 			//phase -= Math.floor(phase);
 			//b[i] = (byte)(((phase <= Duty ? 127 : -128) / 127.0) * Math.max(Math.min(((byte)(Volumes[Ch - 1])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[Ch - 1] == 16 ? 127 : MVolDUM[Ch - 1] * 8) * percent);
-
-			if((changes[Ch - 1] += 8) >= HzMu / TempHZ/*Frequencyss[2]*/)
+			changes[Ch - 1] += 8;
+			while(changes[Ch - 1] >= HzMu / TempHZ/*Frequencyss[2]*/)
 			{
 				//System.out.println(change);
 				changes[Ch - 1] -= HzMu / TempHZ/*Frequencyss[2]*/;
@@ -386,9 +386,11 @@ public class MM2
 			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
 			if(ChangeRate > 0xFFFF) ChangeRate = 0xFFFF;
 			TempHZ = MM2.FamicomHz / ChangeRate;
-			if((change += 32) >= HzMu / TempHZ/*Frequencyss[2]*/)
+			change += 32;
+			while(change >= HzMu / TempHZ/*Frequencyss[2]*/)
 			{
 				//System.out.println(change + " " + (HzMu / TempHZ) + " " + TempHZ + " " + Frequencyss[Ch - 1]);
+				//System.out.println(i + " " + neiro + " " + susumi);
 				change -= HzMu / TempHZ/*Frequencyss[2]*/;
 				neiro += susumi;
 				if(neiro >= 8)
@@ -416,6 +418,7 @@ public class MM2
 	static byte TempN = 0;
 	static int Nokori = 0;
 	public static int old = 2;
+	static double count = 0;
 
 	static byte[] Noise(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -431,10 +434,10 @@ public class MM2
 			return b;
 		}
 
-		for(int i = 0; i < Nokori && i < onecool; i++)
+		/*for(int i = 0; i < Nokori && i < onecool; i++)
 		{
 			b[i] = TempN;
-		}
+		}//*/
 
 		if(MusicNumbers[3] != MusicNumber)
 		{
@@ -444,26 +447,42 @@ public class MM2
 			Volumes[3] = (VolumeR+0.5) * 1.0;
 		}
 
-		for(int i = (int) (Nokori / /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3])); i < b.length / /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]); i++)
+		for(int i = 0; i < b.length; i++)
 		{
-			reg >>>= 1;
-			reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
-			b[(int) (i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]))] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
-        	for(int j = 1; j < /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]); j++)
-        	{
-    			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
-        		if(i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j < onecool) b[(int) (i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j)] = b[(int) (i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]))];
-        		else
-        		{
-        			TempN = b[b.length-1];
-        			Nokori = (int)(i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j - onecool);
-        		}
-        	}
+			count++;
+
+			while(count >= ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]))
+			{
+				count -= ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]);
+				reg >>>= 1;
+				reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
+				//System.out.println(reg + " " + count + " " + Frequencyss[3]);
+			}
+			b[i] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
+
 			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
 		}
 
+		/*for(int i = (int) (Nokori / ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3])); i < b.length / ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]); i++)
+		{
+			reg >>>= 1;
+			reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
+			b[(int) (i * ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]))] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
+        	for(int j = 1; j < ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]); j++)
+        	{
+    			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
+        		if(i * ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j < onecool) b[(int) (i * ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j)] = b[(int) (i * ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]))];
+        		else
+        		{
+        			TempN = b[b.length-1];
+        			Nokori = (int)(i * ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j - onecool);
+        		}
+        	}
+			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
+		}//*/
+
 		//Frequencyss[3] *= Moderation;
-		if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
+		//if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
 
 		MusicNumbers[3] = MusicNumber;
 
