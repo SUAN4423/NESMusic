@@ -12,6 +12,11 @@ public class State
 	{
 		for(int i = 0; i < 5; i++)
 		{
+			for(int j = 0; j < th.SPT[i].Volume.size(); j++)
+			{
+				th.SPT[i].Time.set(j, (long) (th.SPT[i].Time.get(j) * (th.SPT[i].Tempo / Tempo)));
+				th.SPT[i].SoundT.set(j, (int) (th.SPT[i].SoundT.get(j) * (th.SPT[i].Tempo / Tempo)));
+			}
 			th.SPT[i].Tempo = Tempo;
 			th.SPT[i].Param[4] = Tempo + "";
 		}

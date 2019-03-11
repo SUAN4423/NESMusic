@@ -236,8 +236,9 @@ public abstract class SuperTrack
 								this.FreD = Double.parseDouble(this.Param[i]);
 								break;
 							case 4:
-								this.Tempo = Double.parseDouble(this.Param[i]);
-								th.state.TempoSet(th, this.Tempo);
+								//this.Tempo = Double.parseDouble(this.Param[i]);
+								//th.state.TempoSet(th, this.Tempo);
+								th.state.TempoSet(th, Double.parseDouble(this.Param[i]));
 								break;
 							}
 						}
