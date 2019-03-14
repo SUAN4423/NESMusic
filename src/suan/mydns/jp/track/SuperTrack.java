@@ -48,9 +48,13 @@ public abstract class SuperTrack
 	{
 		for(int i = 0; i < this.Volume.size(); i++)
 		{
-			if(this.Duty.get(i) == 0.75) th.fill(0xFF, 0xB7, 0x4C);
-			else if(this.Duty.get(i) == 0.5) th.fill(0x00, 0xFF, 0xFF);
-			else if(this.Duty.get(i) == 0.25) th.fill(0xFF, 0xFF, 0x00);
+			if(this.Duty.get(i) == 0.75 || this.Duty.get(i) == 1.0) th.fill(0xFF, 0xB7, 0x4C);
+			else if(this.Duty.get(i) == 0.5 || this.Duty.get(i) == 2.0) th.fill(0x00, 0xFF, 0xFF);
+			else if(this.Duty.get(i) == 0.25 || this.Duty.get(i) == 3.0) th.fill(0xFF, 0xFF, 0x00);
+			else if(this.Duty.get(i) == 4.0) th.fill(0x32, 0xCC, 0xB6);
+			else if(this.Duty.get(i) == 5.0) th.fill(0xEA, 0xC2, 0x47);
+			else if(this.Duty.get(i) == 6.0) th.fill(0xD1, 0xE8, 0x29);
+			else if(this.Duty.get(i) == 7.0) th.fill(0x19, 0x87, 0xE5);
 			else th.fill(0x00, 0xFF, 0x00);
 			th.rect(this.Time.get(i)/((60.0f / (float)this.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + this.ShiftX, this.FrequI.get(i)*-20+this.ShiftY-20, (1280/6.0f)*(this.SoundT.get(i)/((60.0f/(float)this.Tempo)*th.mm2.HzMu*4)), 20);
 			th.fill(0);

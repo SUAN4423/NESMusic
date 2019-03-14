@@ -176,23 +176,30 @@ public class MSTART
 		public void run()
 		{
 			// TODO 自動生成されたメソッド・スタブ
-			if(start)
+			try
 			{
-				boolean b = false;
-				time = (long) (((System.currentTimeMillis() - starttime)/1000.0)*th.mm2.HzMu);
-				for(int i = 0; i < 5; i++)
+				if(start)
 				{
-					if(nowNotes[i] < th.SPT[i].Volume.size())
+					boolean b = false;
+					time = (long) (((System.currentTimeMillis() - starttime)/1000.0)*th.mm2.HzMu);
+					for(int i = 0; i < 5; i++)
 					{
-						b = true;
-						if(th.SPT[i].Time.get(nowNotes[i]) <= time)
+						if(nowNotes[i] < th.SPT[i].Volume.size())
 						{
-							if(th.ch.canPlay[i]) th.mm2.ChStat(th.SPT[i].Freque.get(nowNotes[i]), th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), th.SPT[i].Moduration.get(nowNotes[i]), nowNotes[i], i, th.SPT[i].VolDUM.get(nowNotes[i]));
-							//else th.mm2.ChStat(i == 3 ? 0 : -1, th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i, th.SPT[i].VolDUM.get(i));
-							else th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 0, 0.0, 1.0, true, nowNotes[i], i, 0);
-							if(time >= th.SPT[i].Time.get(nowNotes[i])+th.SPT[i].SoundT.get(nowNotes[i]))
+							b = true;
+							if(th.SPT[i].Time.get(nowNotes[i]) <= time)
 							{
-								nowNotes[i]++;
+								if(th.ch.canPlay[i]) th.mm2.ChStat(th.SPT[i].Freque.get(nowNotes[i]), th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), th.SPT[i].Moduration.get(nowNotes[i]), nowNotes[i], i, th.SPT[i].VolDUM.get(nowNotes[i]));
+								//else th.mm2.ChStat(i == 3 ? 0 : -1, th.SPT[i].Duty.get(nowNotes[i]), th.SPT[i].Volume.get(nowNotes[i]), th.SPT[i].Voldow.get(nowNotes[i]), th.SPT[i].Fredow.get(nowNotes[i]), true, nowNotes[i], i, th.SPT[i].VolDUM.get(i));
+								else th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 0, 0.0, 1.0, true, nowNotes[i], i, 0);
+								if(time >= th.SPT[i].Time.get(nowNotes[i])+th.SPT[i].SoundT.get(nowNotes[i]))
+								{
+									nowNotes[i]++;
+								}
+							}
+							else
+							{
+								th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
 							}
 						}
 						else
@@ -200,37 +207,37 @@ public class MSTART
 							th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
 						}
 					}
-					else
+					if(!b)
 					{
-						th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
+						if(th.ch.loop)
+						{
+							starttime = System.currentTimeMillis() - loopBarTime;
+							for(int i = 0; i < 5; i++)
+							{
+								nowNotes[i] = loopNotes[i];
+							}
+						}
+						else
+						{
+							for(int i = 0; i < 5; i++)
+							{
+								th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
+							}
+							for(int i = 0; i < 5; i++)
+							{
+								nowNotes[i] = 0;
+							}
+							th.mm2.resk = true;
+							th.mm2.resktime = System.currentTimeMillis();
+							start = false;
+							this.cancel();
+						}
 					}
 				}
-				if(!b)
-				{
-					if(th.ch.loop)
-					{
-						starttime = System.currentTimeMillis() - loopBarTime;
-						for(int i = 0; i < 5; i++)
-						{
-							nowNotes[i] = loopNotes[i];
-						}
-					}
-					else
-					{
-						for(int i = 0; i < 5; i++)
-						{
-							th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
-						}
-						for(int i = 0; i < 5; i++)
-						{
-							nowNotes[i] = 0;
-						}
-						th.mm2.resk = true;
-						th.mm2.resktime = System.currentTimeMillis();
-						start = false;
-						this.cancel();
-					}
-				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}
