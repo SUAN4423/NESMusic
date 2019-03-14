@@ -57,7 +57,7 @@ public class Thoone extends PApplet
 	private boolean pressed = false;
 	public static Version ver = new Version();
 
-	public static final String Version = "1.14.1";
+	public static final String Version = "1.14.2";
 	public static String newVersion = Version;
 
 	DropTarget dropTarget;
@@ -151,7 +151,8 @@ public class Thoone extends PApplet
 	@Override
 	public void setup()
 	{
-		this.getSurface().setTitle("Thoone  Ver " + Version);
+		String cd = new File(".").getAbsoluteFile().getParent();
+		this.getSurface().setTitle("Thoone  Ver " + Version + "   CurrentDirectory " + cd);
 		SPT[0] = new OneCh();
 		SPT[1] = new TwoCh();
 		SPT[2] = new ThreeCh();
