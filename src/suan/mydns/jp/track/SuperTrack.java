@@ -48,7 +48,10 @@ public abstract class SuperTrack
 	{
 		for(int i = 0; i < this.Volume.size(); i++)
 		{
-			th.fill(0x00, 0xFF, 0x00);
+			if(this.Duty.get(i) == 0.75) th.fill(0xFF, 0xB7, 0x4C);
+			else if(this.Duty.get(i) == 0.5) th.fill(0x00, 0xFF, 0xFF);
+			else if(this.Duty.get(i) == 0.25) th.fill(0xFF, 0xFF, 0x00);
+			else th.fill(0x00, 0xFF, 0x00);
 			th.rect(this.Time.get(i)/((60.0f / (float)this.Tempo) * th.mm2.HzMu * 4) * (1280 / 6) + 1280/6 + 60 + this.ShiftX, this.FrequI.get(i)*-20+this.ShiftY-20, (1280/6.0f)*(this.SoundT.get(i)/((60.0f/(float)this.Tempo)*th.mm2.HzMu*4)), 20);
 			th.fill(0);
 			th.textSize(15);
