@@ -12,7 +12,7 @@ public class Version
 		String str = null;
 		try
 		{
-			String adress="https://github.com/SUAN4423/NESMusic/blob/master/version.md";
+			String adress="https://raw.githubusercontent.com/SUAN4423/NESMusic/master/version2.md";
 			URL url = new URL(adress);//URLを設定
 			HttpURLConnection connect = (HttpURLConnection)url.openConnection();//サイトに接続
 			connect.setRequestMethod("GET");//プロトコルの設定
@@ -27,7 +27,8 @@ public class Version
 			{
 				// コマンドプロンプトに表示
 				//System.out.println(line_buffer);
-				if(line_buffer.indexOf("<article class=\"markdown-body entry-content\" itemprop=\"text\"><p>") > 0) str = line_buffer.substring(line_buffer.indexOf("<article class=\"markdown-body entry-content\" itemprop=\"text\"><p>") + 64, line_buffer.indexOf("</p>"));
+				//if(line_buffer.indexOf("<article class=\"markdown-body entry-content\" itemprop=\"text\"><p>") > 0) str = line_buffer.substring(line_buffer.indexOf("<article class=\"markdown-body entry-content\" itemprop=\"text\"><p>") + 64, line_buffer.indexOf("</p>"));
+				str = line_buffer;
 			}
 
 			// 各々受け持ちクラスを閉じる
