@@ -199,12 +199,12 @@ public class MSTART
 							}
 							else
 							{
-								th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
+								th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 0);
 							}
 						}
 						else
 						{
-							th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 16);
+							th.mm2.ChStat(i == 3 ? 0 : -1, 0.0f, 16, 0.0f, 1.0f, true, 0, i, 0);
 						}
 					}
 					if(!b)

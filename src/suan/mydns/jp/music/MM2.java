@@ -148,6 +148,10 @@ public class MM2
 		MMEna[Ch] = ME;
 		MNumb[Ch] = (byte) Nu;
 		MVDUM[Ch] = vdum;
+		/*if(Ch == 3)
+		{
+			System.out.println(vdum);
+		}//*/
 		this.Set(Ch);
 	}
 
@@ -458,8 +462,9 @@ public class MM2
 				reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
 				//System.out.println(reg + " " + count + " " + Frequencyss[3]);
 			}
+			//System.out.println(Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) + " " + VolumeDownUp + " " + MVolDUM[3] + " " + Volumes[3]);
 			b[i] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
-
+			//b[i] = (byte) (((reg & 1) - 0.5) * 2 * calcVolume(Volumes[3], VolumeDownUp, MVolDUM[3]) * percent);
 			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
 		}
 
@@ -553,4 +558,31 @@ public class MM2
 
 		return b;
 	}
+
+	private static byte calcVolume(double Volumes, double VolumeDownUp, int MVolDUM)
+	{
+		byte volume = 0;
+		byte tempVolume = (byte)((int)(Volumes)*8 == 128 ? 127 : (int)(Volumes)*8);
+		byte Downline = 0;
+		byte Upline = 0;
+		if(VolumeDownUp < 0)
+		{
+			Downline = 127;
+			Upline = (byte) (MVolDUM == 16 ? 127 : MVolDUM * 8);
+		}
+		else if(VolumeDownUp > 0)
+		{
+			Downline = (byte) (MVolDUM == 16 ? 127 : MVolDUM * 8);
+			Upline = 0;
+		}
+		else
+		{
+			Downline = 127;
+			Upline = 0;
+		}
+		volume = (byte)Math.max(Math.min(tempVolume, Downline), Upline);
+		//System.out.println(volume + " " + Downline + " " + Upline + " " + tempVolume + " " + Volumes + " " + MVolDUM);
+		return volume;
+	}
+
 }
