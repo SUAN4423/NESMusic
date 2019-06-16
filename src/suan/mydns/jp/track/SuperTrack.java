@@ -380,7 +380,8 @@ public abstract class SuperTrack
 			{
 				if(this.OnpuSetA != "")
 				{
-					this.Nag = Integer.parseInt(this.OnpuSetA);
+					this.Nag = Math.max(Integer.parseInt(this.OnpuSetA), 1);
+					this.OnpuSetA = this.Nag + "";
 				}
 				this.OnpuSet = false;
 			}

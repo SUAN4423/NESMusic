@@ -288,7 +288,7 @@ public class MM2
 			//System.out.println(Frequencyss[Ch - 1]);
 			double TempHZ = Frequencyss[Ch - 1];
 			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
-			if(ChangeRate > 0xFFFF) ChangeRate = 0xFFFF;
+			ChangeRate = Math.max(Math.min(ChangeRate, 0xFFFF), 0x0001);
 			TempHZ = MM2.FamicomHz / ChangeRate;
 			//double phase = (i + (onecool * (Numbers[Ch - 1] + ringing[Ch - 1]))) / (HzMu / TempHZ/*Frequencyss[Ch - 1]*/);
 			//phase -= Math.floor(phase);
@@ -384,7 +384,7 @@ public class MM2
 		{
 			double TempHZ = Frequencyss[Ch - 1];
 			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
-			if(ChangeRate > 0xFFFF) ChangeRate = 0xFFFF;
+			ChangeRate = Math.max(Math.min(ChangeRate, 0xFFFF), 0x0001);
 			TempHZ = MM2.FamicomHz / ChangeRate;
 			change += 32;
 			while(change >= HzMu / TempHZ/*Frequencyss[2]*/)
