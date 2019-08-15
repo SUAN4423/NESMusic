@@ -423,11 +423,25 @@ public class MM2
 	static int Nokori = 0;
 	public static int old = 2;
 	static double count = 0;
+	static int noisetype = 0;
+
+	static byte in1, in2, out1, out2;
+	static float q = 1.0f; //(float) (1 / Math.sqrt(2));
+	static float omega = 2.0f * 3.14159265f *  3500 / HzMu;
+	static float alpha = (float) (Math.sin(omega) / (2.0f * q));
+
+	static float a_0 =   1.0f + alpha;
+	static float a_1 =  (float) (-2.0f * Math.cos(omega));
+	static float a_2 =   1.0f - alpha;
+	static float b_0 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
+	static float b_1 = (float) -(1.0f + Math.cos(omega));
+	static float b_2 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
 
 	static byte[] Noise(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
 		//byte[] b = new byte[onecool];
 		byte[] b = waves[Ch - 1];
+		byte[] b2 = waves[Ch - 1];
 
 		if(Frequency == -1 || Frequency == 0.0)
 		{
@@ -449,6 +463,42 @@ public class MM2
 			Frequencyss[3] = Frequency;
 			Numbers[3] = 0;
 			Volumes[3] = (VolumeR+0.5) * 1.0;
+			/*for(int i = 0; i < SnN.length; i++)
+			{
+				if(Frequencyss[3] == SnN[i])
+				{
+					noisetype = i;
+					break;
+				}
+			}
+			switch(noisetype)
+			{
+				case 0:
+				{
+					omega = (float) (2.0f * Math.PI *  21000 / HzMu);
+					alpha = (float) (Math.sin(omega) / (2.0f * q));
+					a_0 =   1.0f + alpha;
+					a_1 =  (float) (-2.0f * Math.cos(omega));
+					a_2 =   1.0f - alpha;
+					b_0 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
+					b_1 = (float) -(1.0f + Math.cos(omega));
+					b_2 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
+					break;
+				}
+				case 1:
+				{
+					omega = (float) (2.0f * Math.PI *  18100 / HzMu);
+					alpha = (float) (Math.sin(omega) / (2.0f * q));
+					a_0 =   1.0f + alpha;
+					a_1 =  (float) (-2.0f * Math.cos(omega));
+					a_2 =   1.0f - alpha;
+					b_0 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
+					b_1 = (float) -(1.0f + Math.cos(omega));
+					b_2 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
+					break;
+				}
+			}//*/
+			//System.out.println(noisetype);
 		}
 
 		for(int i = 0; i < b.length; i++)
@@ -464,6 +514,18 @@ public class MM2
 			}
 			//System.out.println(Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) + " " + VolumeDownUp + " " + MVolDUM[3] + " " + Volumes[3]);
 			b[i] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
+
+			/*if(noisetype >= 0 && noisetype <= 3)
+			{
+				b2[i] = (byte) (b_0/a_0 * b[i] + b_1/a_0 * in1  + b_2/a_0 * in2 - a_1/a_0 * out1 - a_2/a_0 * out2);
+
+				in2  = in1;       // 2つ前の入力信号を更新
+				in1  = b[i];  // 1つ前の入力信号を更新
+
+				out2 = out1;      // 2つ前の出力信号を更新
+				out1 = b2[i]; // 1つ前の出力信号を更新
+			}//*/
+
 			//b[i] = (byte) (((reg & 1) - 0.5) * 2 * calcVolume(Volumes[3], VolumeDownUp, MVolDUM[3]) * percent);
 			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
 		}
@@ -490,6 +552,8 @@ public class MM2
 		//if(Frequencyss[3] < 1)Frequencyss[3] = 1.0;
 
 		MusicNumbers[3] = MusicNumber;
+
+		//if(noisetype >= 0 && noisetype <= 3) return b2;
 
 		return b;
 	}
