@@ -22,6 +22,18 @@ public class PlayScreen extends PApplet
 	public void setup()
 	{
 		th.ps = this;
+		/*String str[] = PFont.list();
+		for(String a : str)
+		{
+			System.out.println(a);
+		}//*/
+		try
+		{
+			this.textFont(this.createFont("ÇlÇr ÉSÉVÉbÉN", 16));
+		}
+		catch(Exception e)
+		{
+		}
 	}
 
 	int temp[] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
@@ -37,7 +49,7 @@ public class PlayScreen extends PApplet
 			boolean rewrite = false;
 			for(int i = 0; i < 5; i++)
 			{
-				if(temp[i] != (int)(MM2.Volumes[i] + (int)(MM2.Volumes[i] + ((int)((MM2.Dutys[i] == 1.0 ? 0.25 : MM2.Dutys[i]) * 4) << 5)) + (th.musics.nowNotes[i] << 7))) rewrite = true;
+				if(temp[i] != (int)(MM2.Volumes[i] + (int)(MM2.Volumes[i] + ((int)((MM2.Dutys[i] == 1.0 ? 0.25 : MM2.Dutys[i]) * 4) << 8)) + (th.musics.nowNotes[i] << 16))) rewrite = true;
 				if(temp2[i] != MM2.Frequencyss[i]) rewrite = true;
 			}
 			if(rewrite)
@@ -55,12 +67,13 @@ public class PlayScreen extends PApplet
 						{
 							if(th.musics.nowNotes[i/2] < th.SPT[i/2].Freque.size())
 							{
-								temp[i/2] = (int)(Math.max(Math.min(MM2.Volumes[i/2], MM2.VDown[i/2] <= 0 ? 16 : MM2.MVolDUM[i/2]), MM2.VDown[i/2] >= 0 ? 0 : MM2.MVolDUM[i/2]) + ((int)((MM2.Dutys[i/2] == 1.0 ? 0.25 : MM2.Dutys[i/2]) * 4) << 5) + (th.musics.nowNotes[i/2] << 7));
-								this.text(String.format("Channel " + (i/2 + 1) +" : %06x", temp[i/2]).toUpperCase(), 20, 20 * (i + 1));
+								temp[i/2] = (int)(Math.max(Math.min(MM2.Volumes[i/2], MM2.VDown[i/2] <= 0 ? 16 : MM2.MVolDUM[i/2]), MM2.VDown[i/2] >= 0 ? 0 : MM2.MVolDUM[i/2]) + ((int)((MM2.Dutys[i/2] == 1.0 ? 0.25 : MM2.Dutys[i/2]) * 4) << 8) + (th.musics.nowNotes[i/2] << 16));
+
+								this.text(String.format("Channel " + (i/2 + 1) +" : %08x", temp[i/2]).toUpperCase(), 20, 20 * (i + 1));
 							}
 							else
 							{
-								this.text(String.format("Channel " + (i/2 + 1) +" : %06x", temp[i/2]).toUpperCase(), 20, 20 * (i + 1));
+								this.text(String.format("Channel " + (i/2 + 1) +" : %08x", temp[i/2]).toUpperCase(), 20, 20 * (i + 1));
 							}
 						}
 						catch(IndexOutOfBoundsException e)
