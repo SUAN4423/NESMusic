@@ -33,6 +33,7 @@ public class MM2
 	public static final double FamicomHz = 1789772.5;
 	public static final int NoiseClock[] = {0x002, 0x004, 0x008, 0x010, 0x020, 0x030, 0x040, 0x050, 0x065, 0x07F, 0x0BE, 0x0FE, 0x17D, 0x1FC, 0x3F9, 0x7F2};
 	public static final int DPCMClock[] = {428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106, 85, 72, 54};
+	public static final int NoiseHz[] = {894886, 447443, 223722, 111861, 55930, 37287, 27965, 22372, 17721, 14093, 9420, 7046, 4698, 3523, 1760, 880};
 
 	public static ArrayList<Byte> DPCMo[] = new ArrayList[8];
 
@@ -64,6 +65,7 @@ public class MM2
 			SnN[i] = HzMu / (FamicomHz / NoiseClock[i]);
 			SnD[i] = HzMu / (FamicomHz / DPCMClock[i]);
 			//System.out.println(SnN[i] * HzMu + " " + SnD[i] * HzMu + " " + SnN[i] + " " + SnD[i]);
+			//System.out.println(HzMu / SnN[i] + " " + HzMu / SnD[i]);
 		}
 		/*SnN[0] = HzMu / 901120.0;					//15A
 		SnN[1] = HzMu / 450560.0;					//14A
@@ -425,8 +427,10 @@ public class MM2
 	static double count = 0;
 	static int noisetype = 0;
 
-	static byte in1, in2, out1, out2;
-	static float q = 1.0f; //(float) (1 / Math.sqrt(2));
+	static double noisetemp[] = {0, 0, 0};
+
+	static double in1, in2, out1, out2;
+	static float q = (float) (1 / Math.sqrt(2));
 	static float omega = 2.0f * 3.14159265f *  3500 / HzMu;
 	static float alpha = (float) (Math.sin(omega) / (2.0f * q));
 
@@ -463,6 +467,29 @@ public class MM2
 			Frequencyss[3] = Frequency;
 			Numbers[3] = 0;
 			Volumes[3] = (VolumeR+0.5) * 1.0;
+
+			for(int i = 0; i < SnN.length; i++)
+			{
+				if(Frequencyss[3] == SnN[i])
+				{
+					noisetype = i;
+					break;
+				}
+			}
+
+			in1 = in2 = out1 = out2 = 0;
+
+			omega = (float) (2.0f * Math.PI *  (HzMu/2.0) / (NoiseHz[noisetype]/1.0));
+			alpha = (float) (Math.sin(omega) / (2.0f * q));
+			a_0 =   1.0f + alpha;
+			a_1 =  (float) (-2.0f * Math.cos(omega));
+			a_2 =   1.0f - alpha;
+			b_0 =  (float) ((1.0f - Math.cos(omega)) / 2.0f);
+			b_1 = (float) (1.0f + Math.cos(omega));
+			b_2 =  (float) ((1.0f - Math.cos(omega)) / 2.0f);
+
+			//System.out.println(omega + " " + alpha + " " + a_0 + " " + a_1 + " " + a_2 + " " + b_0 + " " + b_1 + " " + b_2);
+
 			/*for(int i = 0; i < SnN.length; i++)
 			{
 				if(Frequencyss[3] == SnN[i])
@@ -510,10 +537,24 @@ public class MM2
 				count -= ((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]);
 				reg >>>= 1;
 				reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
+
+				/*noisetemp[0] = reg & 0x01;
+
+				noisetemp[1] = (b_0/a_0 * noisetemp[0] + b_1/a_0 * in1  + b_2/a_0 * in2 - a_1/a_0 * out1 - a_2/a_0 * out2);
+
+				in2  = in1;       // 2つ前の入力信号を更新
+				in1  = noisetemp[0];  // 1つ前の入力信号を更新
+
+				out2 = out1;      // 2つ前の出力信号を更新
+				out1 = noisetemp[1]; // 1つ前の出力信号を更新
+
+				//noisetemp[2] = /*noisetemp[0] -*/ //noisetemp[1];
 				//System.out.println(reg + " " + count + " " + Frequencyss[3]);
+				//System.out.println(noisetemp[0] + " " + noisetemp[1] + " " + noisetemp[2]);
 			}
 			//System.out.println(Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) + " " + VolumeDownUp + " " + MVolDUM[3] + " " + Volumes[3]);
-			b[i] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
+			if(noisetype <= -1) b[i] = (byte) (((/*reg & 1*/noisetemp[1]) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
+			else b[i] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
 
 			/*if(noisetype >= 0 && noisetype <= 3)
 			{
