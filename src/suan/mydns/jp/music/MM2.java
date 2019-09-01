@@ -389,9 +389,9 @@ public class MM2
 		for(int i = 0; i < b.length; i++)
 		{
 			double TempHZ = Frequencyss[Ch - 1];
-			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5);
+			int ChangeRate = (int)(MM2.FamicomHz / TempHZ + 0.5)/2;
 			ChangeRate = Math.max(Math.min(ChangeRate, 0xFFFF), 0x0001);
-			TempHZ = MM2.FamicomHz / ChangeRate;
+			TempHZ = MM2.FamicomHz / (ChangeRate*2);
 			change += 32;
 			while(change >= HzMu / TempHZ/*Frequencyss[2]*/)
 			{

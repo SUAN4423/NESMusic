@@ -87,8 +87,9 @@ public class PlayScreen extends PApplet
 						{
 							if(th.musics.nowNotes[i/2] < th.SPT[i/2].Freque.size())
 							{
-								int ChangeRate = (int)(MM2.FamicomHz / MM2.Frequencyss[i/2] + 0.5);
-								if(i / 2 >= 3) ChangeRate = (int)(th.SPT[i/2].FrequI.get(th.musics.nowNotes[i/2]));// + 16 * th.SPT[i/2].Duty.get(th.musics.nowNotes[i/2]));
+								int ChangeRate = 0;
+								if(i / 2 < 3) ChangeRate = (int)(MM2.FamicomHz / MM2.Frequencyss[i/2] + 0.5)/(i / 2 == 2 ? 2 : 1);
+								else ChangeRate = (int)(th.SPT[i/2].FrequI.get(th.musics.nowNotes[i/2]));// + 16 * th.SPT[i/2].Duty.get(th.musics.nowNotes[i/2]));
 								if(th.SPT[i/2].Time.get(th.musics.nowNotes[i/2]) > th.musics.time) ChangeRate = 0;
 								this.text(String.format("Channel " + (i/2 + 1) +" : %04x", ChangeRate == 0x7FFFFFFF ? 0 : ChangeRate > 0xFFFF ? 0xFFFF : ChangeRate).toUpperCase(), 20, 20 * (i + 1));
 							}
