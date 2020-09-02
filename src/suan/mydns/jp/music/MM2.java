@@ -566,7 +566,7 @@ public class MM2
 			//*
 			if((Duty + (2 - old)) == 1.0f && noisetype >= 0 && noisetype <= 3)
 			{
-				System.out.println((Duty + (2 - old)) + " " + Duty);
+//				System.out.println((Duty + (2 - old)) + " " + Duty);
 				double temp = noisetemp[1] / noiseMax[noisetype] * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent;
 				b[i] = (byte)(temp);//noisetemp[1] * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
 //				if(Math.abs(temp) >= 128.0f) System.out.println(temp);
