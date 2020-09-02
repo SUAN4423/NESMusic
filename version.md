@@ -1,1 +1,1 @@
-<article class="markdown-body entry-content" itemprop="text"><p>1.15.5</p>
+<article class="markdown-body entry-content" itemprop="text"><p>1.16.0</p>

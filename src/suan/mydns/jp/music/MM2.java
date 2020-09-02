@@ -28,7 +28,7 @@ public class MM2
 	public boolean resk = false;
 	public long resktime = 0;
 
-	public static int HzMu = 48000;
+	public static final int HzMu = 48000;
 
 	public static final double FamicomHz = 1789772.5;
 	public static final int NoiseClock[] = {0x002, 0x004, 0x008, 0x010, 0x020, 0x030, 0x040, 0x050, 0x065, 0x07F, 0x0BE, 0x0FE, 0x17D, 0x1FC, 0x3F9, 0x7F2};
@@ -428,9 +428,11 @@ public class MM2
 	static int noisetype = 0;
 
 	static double noisetemp[] = {0, 0, 0};
+	static double noiseMax[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+	static float coef[] = {0.005f, 0.05f, 0.25f, 0.95f};
 
 	static double in1, in2, out1, out2;
-	static float q = (float) (1 / Math.sqrt(2));
+	static float q = 0.3f;//(float) (1 / Math.sqrt(2));
 	static float omega = 2.0f * 3.14159265f *  3500 / HzMu;
 	static float alpha = (float) (Math.sin(omega) / (2.0f * q));
 
@@ -440,6 +442,8 @@ public class MM2
 	static float b_0 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
 	static float b_1 = (float) -(1.0f + Math.cos(omega));
 	static float b_2 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
+
+	static byte[] b3 = new byte[onecool];
 
 	static byte[] Noise(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -477,9 +481,10 @@ public class MM2
 				}
 			}
 
+			noiseMax[noisetype] = 1;
 			in1 = in2 = out1 = out2 = 0;
 
-			omega = (float) (2.0f * Math.PI *  (HzMu/2.0) / (NoiseHz[noisetype]/1.0));
+			omega = (float) (2.0 * Math.PI * (HzMu/4.0) / (FamicomHz/NoiseClock[noisetype]));
 			alpha = (float) (Math.sin(omega) / (2.0f * q));
 			a_0 =   1.0f + alpha;
 			a_1 =  (float) (-2.0f * Math.cos(omega));
@@ -490,7 +495,8 @@ public class MM2
 
 			//System.out.println(omega + " " + alpha + " " + a_0 + " " + a_1 + " " + a_2 + " " + b_0 + " " + b_1 + " " + b_2);
 
-			/*for(int i = 0; i < SnN.length; i++)
+			/*
+			for(int i = 0; i < SnN.length; i++)
 			{
 				if(Frequencyss[3] == SnN[i])
 				{
@@ -508,7 +514,7 @@ public class MM2
 					a_1 =  (float) (-2.0f * Math.cos(omega));
 					a_2 =   1.0f - alpha;
 					b_0 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
-					b_1 = (float) -(1.0f + Math.cos(omega));
+					b_1 = (float) (1.0f + Math.cos(omega));
 					b_2 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
 					break;
 				}
@@ -520,7 +526,7 @@ public class MM2
 					a_1 =  (float) (-2.0f * Math.cos(omega));
 					a_2 =   1.0f - alpha;
 					b_0 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
-					b_1 = (float) -(1.0f + Math.cos(omega));
+					b_1 = (float) (1.0f + Math.cos(omega));
 					b_2 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
 					break;
 				}
@@ -538,8 +544,7 @@ public class MM2
 				reg >>>= 1;
 				reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
 
-				/*noisetemp[0] = reg & 0x01;
-
+				noisetemp[0] = ((reg & 0x01) - 0.5) * 2;
 				noisetemp[1] = (b_0/a_0 * noisetemp[0] + b_1/a_0 * in1  + b_2/a_0 * in2 - a_1/a_0 * out1 - a_2/a_0 * out2);
 
 				in2  = in1;       // 2つ前の入力信号を更新
@@ -548,23 +553,40 @@ public class MM2
 				out2 = out1;      // 2つ前の出力信号を更新
 				out1 = noisetemp[1]; // 1つ前の出力信号を更新
 
+				if(noisetype <= 3)
+					noiseMax[noisetype] = Math.max(noiseMax[noisetype], Math.abs(noisetemp[1]));
 				//noisetemp[2] = /*noisetemp[0] -*/ //noisetemp[1];
 				//System.out.println(reg + " " + count + " " + Frequencyss[3]);
-				//System.out.println(noisetemp[0] + " " + noisetemp[1] + " " + noisetemp[2]);
+//				System.out.println(noisetemp[0] + " " + noisetemp[1] + " " + noisetemp[2]);
 			}
 			//System.out.println(Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) + " " + VolumeDownUp + " " + MVolDUM[3] + " " + Volumes[3]);
 			if(noisetype <= -1) b[i] = (byte) (((/*reg & 1*/noisetemp[1]) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
 			else b[i] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
 
-			/*if(noisetype >= 0 && noisetype <= 3)
+			//*
+			if((Duty + (2 - old)) == 1.0f && noisetype >= 0 && noisetype <= 3)
 			{
-				b2[i] = (byte) (b_0/a_0 * b[i] + b_1/a_0 * in1  + b_2/a_0 * in2 - a_1/a_0 * out1 - a_2/a_0 * out2);
+				System.out.println((Duty + (2 - old)) + " " + Duty);
+				double temp = noisetemp[1] / noiseMax[noisetype] * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent;
+				b[i] = (byte)(temp);//noisetemp[1] * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * percent);
+//				if(Math.abs(temp) >= 128.0f) System.out.println(temp);
+//				if(i != 0 || MusicNumbers[3] == MusicNumber)
+//				{
+//					b3[i] = b[i];
+//					b[i] = (byte) (coef[noisetype] * b3[i] + (1.0f - coef[noisetype]) * b3[i-1 == -1 ? b3.length - 1 : i - 1]);
+//					b[i] = (byte) ((b3[i] - b[i]) * 0.5f);
+//					if(Math.abs(b3[i] - b[i]) * 0.5f >= 128.0f){
+//						System.out.println("OVER");
+//					}
+//				}
 
-				in2  = in1;       // 2つ前の入力信号を更新
-				in1  = b[i];  // 1つ前の入力信号を更新
+//				b2[i] = (byte) (b_0/a_0 * b[i] + b_1/a_0 * in1  + b_2/a_0 * in2 - a_1/a_0 * out1 - a_2/a_0 * out2);
 
-				out2 = out1;      // 2つ前の出力信号を更新
-				out1 = b2[i]; // 1つ前の出力信号を更新
+//				in2  = in1;       // 2つ前の入力信号を更新
+//				in1  = b[i];  // 1つ前の入力信号を更新
+
+//				out2 = out1;      // 2つ前の出力信号を更新
+//				out1 = b2[i]; // 1つ前の出力信号を更新
 			}//*/
 
 			//b[i] = (byte) (((reg & 1) - 0.5) * 2 * calcVolume(Volumes[3], VolumeDownUp, MVolDUM[3]) * percent);
