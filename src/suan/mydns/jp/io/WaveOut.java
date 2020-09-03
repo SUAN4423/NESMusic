@@ -367,6 +367,22 @@ public class WaveOut extends Thread
 	static byte TempN = 0;
 	static int Nokori = 0;
 	static double count = 0;
+	static int noisetype = 0;
+
+	static double noisetemp[] = {0, 0, 0};
+	static double noiseMax[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+
+	static double in1, in2, out1, out2;
+	static float q = 0.3f;//(float) (1 / Math.sqrt(2));
+	static float omega = 2.0f * 3.14159265f *  3500 / MM2.HzMu;
+	static float alpha = (float) (Math.sin(omega) / (2.0f * q));
+
+	static float a_0 =   1.0f + alpha;
+	static float a_1 =  (float) (-2.0f * Math.cos(omega));
+	static float a_2 =   1.0f - alpha;
+	static float b_0 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
+	static float b_1 = (float) -(1.0f + Math.cos(omega));
+	static float b_2 =  (float) ((1.0f + Math.cos(omega)) / 2.0f);
 
 	static byte[] Noise(double Frequency, float Duty, byte VolumeR, double VolumeDownUp, double Moderation, boolean ModerationEnable, byte MusicNumber, byte Ch)
 	{
@@ -387,6 +403,27 @@ public class WaveOut extends Thread
 			Frequencyss[3] = Frequency;
 			Numbers[3] = 0;
 			Volumes[3] = (VolumeR+0.5) * 1.0;
+
+			for(int i = 0; i < MM2.SnN.length; i++)
+			{
+				if(Frequencyss[3] == MM2.SnN[i])
+				{
+					noisetype = i;
+					break;
+				}
+			}
+
+			noiseMax[noisetype] = 1;
+			in1 = in2 = out1 = out2 = 0;
+
+			omega = (float) (2.0 * Math.PI * (MM2.HzMu/4.0) / (MM2.FamicomHz/MM2.NoiseClock[noisetype]));
+			alpha = (float) (Math.sin(omega) / (2.0f * q));
+			a_0 =   1.0f + alpha;
+			a_1 =  (float) (-2.0f * Math.cos(omega));
+			a_2 =   1.0f - alpha;
+			b_0 =  (float) ((1.0f - Math.cos(omega)) / 2.0f);
+			b_1 = (float) (1.0f + Math.cos(omega));
+			b_2 =  (float) ((1.0f - Math.cos(omega)) / 2.0f);
 		}
 
 		for(int i = 0; i < b.length; i++)
@@ -398,9 +435,28 @@ public class WaveOut extends Thread
 				count -= ((Frequencyss[3] == MM2.SnN[15] && MM2.old != 2) ? MM2.SnN[14] : Frequencyss[3]);
 				reg >>>= 1;
 				reg |= ((reg ^ (reg >>> ((Duty + 2 - MM2.old) == 1.0f ? 6 : 1))) & 1) << 15;
-				//System.out.println(reg + " " + count + " " + Frequencyss[3]);
+
+				noisetemp[0] = ((reg & 0x01) - 0.5) * 2;
+				noisetemp[1] = (b_0/a_0 * noisetemp[0] + b_1/a_0 * in1  + b_2/a_0 * in2 - a_1/a_0 * out1 - a_2/a_0 * out2);
+
+				in2  = in1;
+				in1  = noisetemp[0];
+
+				out2 = out1;
+				out1 = noisetemp[1];
+
+				if(noisetype <= 3)
+					noiseMax[noisetype] = Math.max(noiseMax[noisetype], Math.abs(noisetemp[1]));
 			}
 			b[i] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * MM2.percent);
+
+
+			if((Duty + (2 - MM2.old)) == 1.0f && noisetype >= 0 && noisetype <= 3)
+			{
+//				System.out.println((Duty + (2 - old)) + " " + Duty);
+				double temp = noisetemp[1] / noiseMax[noisetype] * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp <= 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8) * MM2.percent;
+				b[i] = (byte)(temp);
+			}
 
 			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
 		}
